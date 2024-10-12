@@ -539,7 +539,7 @@ const NewHome = () => {
                                                 // href="#custom-select-toggle"
                                                 className="custom-select-toggle search-options-toggle"
                                             >
-                                                <span>�&nbsp;</span>
+                                                <span>Search</span>
                                             </div>
                                         </div>
                                         <div className="site-search__search-query-input-wrap search-suggest-preview">
@@ -555,15 +555,15 @@ const NewHome = () => {
                                         type="button"
                                         className="btn btn-lg btn-primary search-execute"
                                     >
-                                        �&nbsp;
+                                        Search
                                     </button>
                                 </div>
                             </form>
                         </div>
                         <p className="page-hero__info">
-                            New to Thomas?{" "}
+                            New to Thomas?
                             <a href="/account/register">
-                                Join Free for Full Access{" "}
+                                Join Free for Full Access
                                 <svg
                                     viewBox="0 0 32 32"
                                     xmlns="http://www.w3.org/2000/svg"
@@ -624,8 +624,7 @@ const NewHome = () => {
                                             Discover Suppliers{" "}
                                         </h4>
                                         <p className="tsmi-text-ibe">
-                                            Upload a CAD model to get a quote within seconds for CNC
-                                            machining, 3D printing, sheet metal fabrication, and more.
+                                        Find and compare suppliers in over 70,000 categories. Our team keeps listings up to date and assists with strategic sourcing opportunities.
                                         </p>
                                     </div>
                                     <div className="text-center py-2">
