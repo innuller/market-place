@@ -9,6 +9,7 @@ import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import '@/public/css/E7526FBA320375AFB.css'
 import Script from "next/script";
+import { HeaderComponent } from "@/components/header";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -61,6 +62,7 @@ export default function RootLayout({
                   {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}
                 </div>
               </nav> */}
+              {/* <HeaderComponent/> */}
 
               {/* <div className="flex flex-col gap-20 max-w-5xl p-5"> */}
               <div>
