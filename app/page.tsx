@@ -1,4 +1,5 @@
 import Hero from "@/components/hero";
+import { ThemeSwitcher } from "@/components/theme-switcher";
 import ConnectSupabaseSteps from "@/components/tutorial/connect-supabase-steps";
 import SignUpUserSteps from "@/components/tutorial/sign-up-user-steps";
 import { hasEnvVars } from "@/utils/supabase/check-env-vars";
@@ -14,6 +15,7 @@ export default async function Index() {
         <Link href={"/NewHome"} className="bg-gradient-to-br from-green-400 to-secondary text-black font-bold py-2 px-4 rounded">
         Click to Go to New Redesigned Home Page
         </Link>
+        <ThemeSwitcher/>
       </main>
     </>
   );
