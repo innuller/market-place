@@ -1,4 +1,5 @@
-import { ExtendedRegistrationFormComponent } from '@/components/extended-registration-form'
+
+import ExtendedRegistrationForm from '@/components/extended-registration-form'
 import { HeaderComponent } from '@/components/header'
 import React from 'react'
 
@@ -9,7 +10,7 @@ const page = (props: Props) => {
     <>
       <HeaderComponent />
       {/* <RegistrationFormComponent /> */}
-      <ExtendedRegistrationFormComponent/>
+      <ExtendedRegistrationForm/>
     </>
   )
 }

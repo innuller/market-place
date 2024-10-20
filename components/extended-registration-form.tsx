@@ -23,9 +23,10 @@ import {
 } from "@/components/ui/form"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { useForm, useFieldArray } from "react-hook-form"
 import * as z from "zod"
 import { Badge } from "@/components/ui/badge"
+import { X, Plus } from "lucide-react"
 
 const categories = [
   "Manufacturing",
@@ -54,9 +55,79 @@ const weekdays = [
   "Sunday",
 ]
 
+const employeeRanges = [
+  "1-49",
+  "50-100",
+  "101-250",
+  "251-1000",
+  "1001-2000",
+  "2001+",
+]
+
+const departments = [
+  "Marketing",
+  "Sales",
+  "Engineering",
+  "Planning",
+  "Project",
+  "Quality/Inspection",
+  "Production",
+  "Dispatch & Logistics",
+  "Research & Development",
+  "IT & Admin",
+  "Human Resource",
+  "Finance",
+  "Legal",
+]
+
+const manpowerCategories = [
+  "Engineers",
+  "Skilled Operators",
+  "Welders/Fitters",
+  "Unskilled Labour",
+  "Separate Quality Inspectors",
+]
+
+const standardOrganizations = [
+  "ASME",
+  "EN",
+  "JIS",
+  "GOST",
+  "Other",
+]
+
+const complianceStandards = [
+  "ISO 9001:2015",
+  "ISO 14001:2015",
+  "ISO 45001:2018",
+  "ISO 50001:2018",
+  "ISO 27001:2013",
+  "ISO 17025",
+  "OHSAS 18001",
+  "EN 1090-1",
+  "Machine directive 2006/42/EC",
+  "ISO 9100:2016",
+  "Other",
+]
+
+const reputedEPCs = [
+  "EIL",
+  "Toyo",
+  "Technip",
+  "Thyssenkrupp",
+  "Tecnimont",
+  "Sabic",
+  "Aramco",
+]
+
+
+
 const formSchema = z.object({
   organizationName: z.string().min(2, {
     message: "Organization name must be at least 2 characters.",
+  }),
+  email: z.string().email({
+    message: "Please enter a valid email address.",
   }),
   categories: z.array(z.string()).min(1, {
     message: "Please select at least one category.",
@@ -100,13 +171,55 @@ const formSchema = z.object({
   website: z.string().url({ message: "Please enter a valid URL" }),
   contactNumber: z.string(),
   fax: z.string().optional(),
+  directorName: z.string(),
+  directorEmail: z.string().email({
+    message: "Please enter a valid email address for the director.",
+  }),
+  directorContactNumber: z.string(),
+  managementName: z.string(),
+  managementEmail: z.string().email({
+    message: "Please enter a valid email address for the management.",
+  }),
+  managementContactNumber: z.string(),
+  emergencyPersonName: z.string(),
+  emergencyPersonEmail: z.string().email({
+    message: "Please enter a valid email address for the emergency contact.",
+  }),
+  emergencyPersonContactNumber: z.string(),
+  totalEmployees: z.string(),
+  departments: z.array(z.string()).min(1, {
+    message: "Please select at least one department.",
+  }),
+  manpowerDetails: z.record(z.string(), z.string().regex(/^\d+$/, {
+    message: "Please enter a valid number.",
+  })),
+  productsServices: z.array(z.object({
+    name: z.string().min(1, { message: "Product/Service name is required" }),
+    catalog: z.any().optional(),
+  })).min(1, { message: "Please add at least one product or service" }),
+  standardOrganization: z.string(),
+  otherStandardOrganization: z.string().optional(),
+  complianceStandards: z.array(z.string()),
+  otherComplianceStandard: z.string().optional(),
+  hsnCodes: z.array(z.object({
+    code: z.string().min(1, { message: "HSN Code is required" }),
+    description: z.string().min(1, { message: "Description is required" }),
+  })),
+  hasDocumentedProcedures: z.enum(["yes", "no"]),
+  experienceWithEPCs: z.array(z.string()),
+  majorCustomers: z.array(z.object({
+    name: z.string().min(1, { message: "Customer name is required" }),
+    location: z.string().min(1, { message: "Customer location is required" }),
+    businessPercentage: z.number().min(0).max(100, { message: "Percentage must be between 0 and 100" }),
+  })),
 })
 
-export function ExtendedRegistrationFormComponent() {
+export default function ExtendedRegistrationForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       organizationName: "",
+      email: "",
       categories: [],
       subCategories: [],
       officeAddress: "",
@@ -120,7 +233,42 @@ export function ExtendedRegistrationFormComponent() {
       legalStatus: [],
       isPartOfLargerOrg: "no",
       isMSME: "no",
+      directorName: "",
+      directorEmail: "",
+      directorContactNumber: "",
+      managementName: "",
+      managementEmail: "",
+      managementContactNumber: "",
+      emergencyPersonName: "",
+      emergencyPersonEmail: "",
+      emergencyPersonContactNumber: "",
+      totalEmployees: "",
+      departments: [],
+      manpowerDetails: {},
+      productsServices: [{ name: "", catalog: null }],
+      standardOrganization: "",
+      otherStandardOrganization: "",
+      complianceStandards: [],
+      otherComplianceStandard: "",
+      hsnCodes: [{ code: "", description: "" }],
+      hasDocumentedProcedures: "no",
+      experienceWithEPCs: [],
     },
+  })
+
+  const { fields: productFields, append: appendProduct, remove: removeProduct } = useFieldArray({
+    control: form.control,
+    name: "productsServices",
+  })
+
+  const { fields: hsnFields, append: appendHsn, remove: removeHsn } = useFieldArray({
+    control: form.control,
+    name: "hsnCodes",
+  })
+
+  const { fields: customerFields, append: appendCustomer, remove: removeCustomer } = useFieldArray({
+    control: form.control,
+    name: "majorCustomers",
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -148,6 +296,20 @@ export function ExtendedRegistrationFormComponent() {
 
           <FormField
             control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input type="email" placeholder="Enter organization email" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
             name="categories"
             render={({ field }) => (
               <FormItem>
@@ -155,9 +317,12 @@ export function ExtendedRegistrationFormComponent() {
                 <FormControl>
                   <Select
                     onValueChange={(value) => {
-                      if (!field.value.includes(value)) {
-                        field.onChange([...field.value, value]);
-                      }
+                      const currentValues = Array.isArray(field.value) ? field.value : [];
+                      field.onChange(
+                        currentValues.includes(value)
+                          ? currentValues.filter((v) => v !== value)
+                          : [...currentValues, value]
+                      );
                     }}
                   >
                     <SelectTrigger>
@@ -203,9 +368,12 @@ export function ExtendedRegistrationFormComponent() {
                 <FormControl>
                   <Select
                     onValueChange={(value) => {
-                      if (!field.value.includes(value)) {
-                        field.onChange([...field.value, value]);
-                      }
+                      const currentValues = Array.isArray(field.value) ? field.value : [];
+                      field.onChange(
+                        currentValues.includes(value)
+                          ? currentValues.filter((v) => v !== value)
+                          : [...currentValues, value]
+                      );
                     }}
                   >
                     <SelectTrigger>
@@ -365,10 +533,10 @@ export function ExtendedRegistrationFormComponent() {
                                 return checked
                                   ? field.onChange([...field.value, item])
                                   : field.onChange(
-                                      field.value?.filter(
-                                        (value) => value !== item
-                                      )
+                                    field.value?.filter(
+                                      (value) => value !== item
                                     )
+                                  )
                               }}
                             />
                           </FormControl>
@@ -379,6 +547,7 @@ export function ExtendedRegistrationFormComponent() {
                       )
                     }}
                   />
+
                 ))}
                 <FormMessage />
               </FormItem>
@@ -408,9 +577,12 @@ export function ExtendedRegistrationFormComponent() {
                 <FormControl>
                   <Select
                     onValueChange={(value) => {
-                      if (!field.value.includes(value)) {
-                        field.onChange([...field.value, value]);
-                      }
+                      const currentValues = Array.isArray(field.value) ? field.value : [];
+                      field.onChange(
+                        currentValues.includes(value)
+                          ? currentValues.filter((v) => v !== value)
+                          : [...currentValues, value]
+                      );
                     }}
                   >
                     <SelectTrigger>
@@ -487,7 +659,7 @@ export function ExtendedRegistrationFormComponent() {
               <FormField
                 control={form.control}
                 name="largerOrgName"
-                render={({ field })   => (
+                render={({ field }) => (
                   <FormItem>
                     <FormLabel>Name of the larger organization</FormLabel>
                     <FormControl>
@@ -704,6 +876,586 @@ export function ExtendedRegistrationFormComponent() {
               </FormItem>
             )}
           />
+
+          <FormField
+            control={form.control}
+            name="directorName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Director's Name</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="directorEmail"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Director's Email</FormLabel>
+                <FormControl>
+                  <Input type="email" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="directorContactNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Director's Contact Number</FormLabel>
+                <FormControl>
+                  <Input type="tel" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="managementName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Management's Name</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="managementEmail"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Management's Email</FormLabel>
+                <FormControl>
+                  <Input type="email" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="managementContactNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Management's Contact Number</FormLabel>
+                <FormControl>
+                  <Input type="tel" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="emergencyPersonName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Emergency Contact Person's Name</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="emergencyPersonEmail"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Emergency Contact Person's Email</FormLabel>
+                <FormControl>
+                  <Input type="email" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="emergencyPersonContactNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Emergency Contact Person's Number</FormLabel>
+                <FormControl>
+                  <Input type="tel" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="totalEmployees"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Total Number of Employees</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select employee range" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {employeeRanges.map((range) => (
+                      <SelectItem key={range} value={range}>
+                        {range}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="departments"
+            render={({ field }) => (
+              <FormItem>
+                <div className="mb-4">
+                  <FormLabel className="text-base">Departments</FormLabel>
+                  <FormDescription>
+                    Select the departments present in your organization.
+                  </FormDescription>
+                </div>
+                {departments.map((department) => (
+                  <FormItem
+                    key={department}
+                    className="flex flex-row items-start space-x-3 space-y-0"
+                  >
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value.includes(department)}
+                        onCheckedChange={(checked) => {
+                          const updatedValue = checked
+                            ? [...field.value, department]
+                            : field.value.filter((value) => value !== department);
+                          field.onChange(updatedValue);
+                        }}
+                      />
+                    </FormControl>
+                    <FormLabel className="font-normal">{department}</FormLabel>
+                  </FormItem>
+                ))}
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="manpowerDetails"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Manpower Details</FormLabel>
+                <FormDescription>
+                  Enter the number of employees for each category.
+                </FormDescription>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {manpowerCategories.map((category) => (
+                    <FormItem key={category}>
+                      <FormLabel>{category}</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          placeholder="Enter number"
+                          {...field}
+                          value={field.value[category] || ""}
+                          onChange={(e) => {
+                            const updatedValue = { ...field.value, [category]: e.target.value };
+                            field.onChange(updatedValue);
+                          }}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  ))}
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Products/Services Offered</h3>
+            {productFields.map((field, index) => (
+              <div key={field.id} className="flex items-end gap-4 mb-4">
+                <FormField
+                  control={form.control}
+                  name={`productsServices.${index}.name`}
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Product/Service Name</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name={`productsServices.${index}.catalog`}
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Catalog</FormLabel>
+                      <FormControl>
+                        <Input type="file" {...field} value={field.value?.filename} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  onClick={() => removeProduct(index)}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="mt-2"
+              onClick={() => appendProduct({ name: "", catalog: null })}
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Add Product/Service
+            </Button>
+          </div>
+
+          <FormField
+            control={form.control}
+            name="standardOrganization"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Standard Organization Follow</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select standard organization" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {standardOrganizations.map((org) => (
+                      <SelectItem key={org} value={org}>
+                        {org}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {form.watch("standardOrganization") === "Other" && (
+            <FormField
+              control={form.control}
+              name="otherStandardOrganization"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Specify Other Standard Organization</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
+
+          <FormField
+            control={form.control}
+            name="complianceStandards"
+            render={() => (
+              <FormItem>
+                <div className="mb-4">
+                  <FormLabel className="text-base">Standards You Comply</FormLabel>
+                  <FormDescription>
+                    Select all the standards that your organization complies with.
+                  </FormDescription>
+                </div>
+                {complianceStandards.map((standard) => (
+                  <FormField
+                    key={standard}
+                    control={form.control}
+                    name="complianceStandards"
+                    render={({ field }) => {
+                      return (
+                        <FormItem
+                          key={standard}
+                          className="flex flex-row items-start space-x-3 space-y-0"
+                        >
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value?.includes(standard)}
+                              onCheckedChange={(checked) => {
+                                return checked
+                                  ? field.onChange([...field.value, standard])
+                                  : field.onChange(
+                                    field.value?.filter(
+                                      (value) => value !== standard
+                                    )
+                                  )
+                              }}
+                            />
+                          </FormControl>
+                          <FormLabel className="font-normal">
+                            {standard}
+                          </FormLabel>
+                        </FormItem>
+                      )
+                    }}
+                  />
+                ))}
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {form.watch("complianceStandards")?.includes("Other") && (
+            <FormField
+              control={form.control}
+              name="otherComplianceStandard"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Specify Other Compliance Standard</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
+
+          <div>
+            <h3 className="text-lg font-semibold mb-4">HSN Codes</h3>
+            {hsnFields.map((field, index) => (
+              <div key={field.id} className="flex items-end gap-4 mb-4">
+                <FormField
+                  control={form.control}
+                  name={`hsnCodes.${index}.code`}
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>HSN Code</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name={`hsnCodes.${index}.description`}
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Description</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  onClick={() => removeHsn(index)}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="mt-2"
+              onClick={() => appendHsn({ code: "", description: "" })}
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Add HSN Code
+            </Button>
+          </div>
+
+          <FormField
+            control={form.control}
+            name="hasDocumentedProcedures"
+            render={({ field }) => (
+              <FormItem className="space-y-3">
+                <FormLabel>
+                  Does your company have documented procedures and controls in place for selection, approval, and monitoring of: Suppliers, Service Providers, Contractors and Consultants?
+                </FormLabel>
+                <FormControl>
+                  <RadioGroup
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    className="flex flex-row space-x-4"
+                  >
+                    <FormItem className="flex items-center space-x-3 space-y-0">
+                      <FormControl>
+                        <RadioGroupItem value="yes" />
+                      </FormControl>
+                      <FormLabel className="font-normal">
+                        Yes
+                      </FormLabel>
+                    </FormItem>
+                    <FormItem className="flex items-center space-x-3 space-y-0">
+                      <FormControl>
+                        <RadioGroupItem value="no" />
+                      </FormControl>
+                      <FormLabel className="font-normal">
+                        No
+                      </FormLabel>
+                    </FormItem>
+                  </RadioGroup>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="experienceWithEPCs"
+            render={() => (
+              <FormItem>
+                <div className="mb-4">
+                  <FormLabel className="text-base">Select experience with reputed EPC's</FormLabel>
+                  <FormDescription>
+                    Select all the EPC's that your organization has experience with.
+                  </FormDescription>
+                </div>
+                {reputedEPCs.map((epc) => (
+                  <FormField
+                    key={epc}
+                    control={form.control}
+                    name="experienceWithEPCs"
+                    render={({ field }) => {
+                      return (
+                        <FormItem
+                          key={epc}
+                          className="flex flex-row items-start space-x-3 space-y-0"
+                        >
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value?.includes(epc)}
+                              onCheckedChange={(checked) => {
+                                return checked
+                                  ? field.onChange([...field.value, epc])
+                                  : field.onChange(
+                                    field.value?.filter(
+                                      (value) => value !== epc
+                                    )
+                                  )
+                              }}
+                            />
+                          </FormControl>
+                          <FormLabel className="font-normal">
+                            {epc}
+                          </FormLabel>
+                        </FormItem>
+                      )
+                    }}
+                  />
+                ))}
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Major Current/Potential Customers</h3>
+            {customerFields.map((field, index) => (
+              <div key={field.id} className="flex items-end gap-4 mb-4">
+                <FormField
+                  control={form.control}
+                  name={`majorCustomers.${index}.name`}
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Customer Name</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name={`majorCustomers.${index}.location`}
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Location</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name={`majorCustomers.${index}.businessPercentage`}
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>% of Business</FormLabel>
+                      <FormControl>
+                        <Input type="number" min="0" max="100" {...field} onChange={(e) => field.onChange(parseFloat(e.target.value))} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  onClick={() => removeCustomer(index)}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="mt-2"
+              onClick={() => appendCustomer({ name: "", location: "", businessPercentage: 0 })}
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Add Customer
+            </Button>
+          </div>
 
           <Button type="submit">Submit</Button>
         </form>
