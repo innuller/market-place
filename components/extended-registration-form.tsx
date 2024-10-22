@@ -212,6 +212,23 @@ const formSchema = z.object({
     location: z.string().min(1, { message: "Customer location is required" }),
     businessPercentage: z.number().min(0).max(100, { message: "Percentage must be between 0 and 100" }),
   })),
+  majorSubSuppliers: z.array(z.object({
+    name: z.string().min(1, { message: "Sub-supplier name is required" }),
+    location: z.string().min(1, { message: "Sub-supplier location is required" }),
+    sourcingPercentage: z.number().min(0).max(100, { message: "Percentage must be between 0 and 100" }),
+  })),
+  majorProjects: z.array(z.object({
+    name: z.string().min(1, { message: "Project name is required" }),
+    location: z.string().min(1, { message: "Project location is required" }),
+    endCustomer: z.string().min(1, { message: "End customer is required" }),
+  })),
+  hasBeenBlacklisted: z.enum(["yes", "no"]),
+  blacklistingDocument: z.any().optional(),
+  hasEngagedConsultant: z.enum(["yes", "no"]),
+  consultantName: z.string().optional(),
+  consultancyFirmName: z.string().optional(),
+  hasDocumentedQMS: z.enum(["yes", "no"]),
+  qmsCertificationStructure: z.enum(["single", "multi"]).optional(),
 })
 
 export default function ExtendedRegistrationForm() {
@@ -253,6 +270,12 @@ export default function ExtendedRegistrationForm() {
       hsnCodes: [{ code: "", description: "" }],
       hasDocumentedProcedures: "no",
       experienceWithEPCs: [],
+      majorCustomers: [{ name: "", location: "", businessPercentage: 0 }],
+      majorSubSuppliers: [{ name: "", location: "", sourcingPercentage: 0 }],
+      majorProjects: [{ name: "", location: "", endCustomer: "" }],
+      hasBeenBlacklisted: "no",
+      hasEngagedConsultant: "no",
+      hasDocumentedQMS: "no",
     },
   })
 
@@ -271,13 +294,23 @@ export default function ExtendedRegistrationForm() {
     name: "majorCustomers",
   })
 
+  const { fields: subSupplierFields, append: appendSubSupplier, remove: removeSubSupplier } = useFieldArray({
+    control: form.control,
+    name: "majorSubSuppliers",
+  })
+
+  const { fields: projectFields, append: appendProject, remove: removeProject } = useFieldArray({
+    control: form.control,
+    name: "majorProjects",
+  })
+
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values)
   }
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h2 className="text-2xl font-bold mb-6">Extended Registration Form</h2>
+      <h2 className="text-2xl font-bold mb-6">Company Registration Form</h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
@@ -1455,6 +1488,323 @@ export default function ExtendedRegistrationForm() {
               <Plus className="h-4 w-4 mr-2" />
               Add Customer
             </Button>
+          </div>
+
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Major Sub-Suppliers</h3>
+            {subSupplierFields.map((field, index) => (
+              <div key={field.id} className="flex items-end gap-4 mb-4">
+                <FormField
+                  control={form.control}
+                  name={`majorSubSuppliers.${index}.name`}
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Sub-Supplier Name</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name={`majorSubSuppliers.${index}.location`}
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Location</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name={`majorSubSuppliers.${index}.sourcingPercentage`}
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>% of Sourcing</FormLabel>
+                      <FormControl>
+                        <Input type="number" min="0" max="100" {...field} onChange={(e) => field.onChange(parseFloat(e.target.value))} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  onClick={() => removeSubSupplier(index)}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="mt-2"
+              onClick={() => appendSubSupplier({ name: "", location: "", sourcingPercentage: 0 })}
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Add Sub-Supplier
+            </Button>
+          </div>
+
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Major Projects</h3>
+            {projectFields.map((field, index) => (
+              <div key={field.id} className="flex items-end gap-4 mb-4">
+                <FormField
+                  control={form.control}
+                  name={`majorProjects.${index}.name`}
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Project Name</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name={`majorProjects.${index}.location`}
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Location</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name={`majorProjects.${index}.endCustomer`}
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>End Customer</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  onClick={() => removeProject(index)}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="mt-2"
+              onClick={() => appendProject({ name: "", location: "", endCustomer: "" })}
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Add Project
+            </Button>
+          </div>
+
+          <div>
+            <FormField
+              control={form.control}
+              name="hasBeenBlacklisted"
+              render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <FormLabel>
+                    Have you faced blacklisting/banning/Tender Holiday by any PSU in the last 5 years?
+                  </FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex flex-row space-x-4"
+                    >
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="yes" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          Yes
+                        </FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="no" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          No
+                        </FormLabel>
+                      </FormItem>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {form.watch("hasBeenBlacklisted") === "yes" && (
+              <FormField
+                control={form.control}
+                name="blacklistingDocument"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Upload Blacklisting Document</FormLabel>
+                    <FormControl>
+                      <Input type="file" {...field} value={field.value?.filename} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+
+            <FormField
+              control={form.control}
+              name="hasEngagedConsultant"
+              render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <FormLabel>
+                    Have you engaged a consultant to assist you?
+                  </FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex flex-row space-x-4"
+                    >
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="yes" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          Yes
+                        </FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="no" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          No
+                        </FormLabel>
+                      </FormItem>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {form.watch("hasEngagedConsultant") === "yes" && (
+              <>
+                <FormField
+                  control={form.control}
+                  name="consultantName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Name of the Consultant</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="consultancyFirmName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Name of the Consultancy Firm</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </>
+            )}
+          </div>
+
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Quality</h3>
+            <FormField
+              control={form.control}
+              name="hasDocumentedQMS"
+              render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <FormLabel>
+                    Do you have documented QMS?
+                  </FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex flex-row space-x-4"
+                    >
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="yes" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          Yes
+                        </FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="no" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          No
+                        </FormLabel>
+                      </FormItem>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {form.watch("hasDocumentedQMS") === "yes" && (
+              <FormField
+                control={form.control}
+                name="qmsCertificationStructure"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="py-1">Certification structure for QMS</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select certification structure" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="single">Single Site</SelectItem>
+                        <SelectItem value="multi">Multi Site</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
           </div>
 
           <Button type="submit">Submit</Button>
