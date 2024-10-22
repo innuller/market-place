@@ -120,6 +120,24 @@ const reputedEPCs = [
   "Aramco",
 ]
 
+const currencyOptions = [
+  { value: "INR", label: "INR" },
+  { value: "EURO", label: "EURO" },
+  { value: "USD", label: "USD" },
+  { value: "YEN", label: "YEN" },
+  { value: "RMB", label: "RMB" },
+  { value: "OTHER", label: "Other" },
+]
+
+const logisticOptions = [
+  { value: "LAND_ROAD", label: "Land Road" },
+  { value: "MOTORWAY", label: "Motorway" },
+  { value: "RAILWAY", label: "Railway" },
+  { value: "RIVERPORT", label: "Riverport" },
+  { value: "AIRPORT", label: "Airport" },
+  { value: "SEAPORT", label: "Seaport" },
+]
+
 
 
 const formSchema = z.object({
@@ -229,9 +247,44 @@ const formSchema = z.object({
   consultancyFirmName: z.string().optional(),
   hasDocumentedQMS: z.enum(["yes", "no"]),
   qmsCertificationStructure: z.enum(["single", "multi"]).optional(),
+  isQualitySystemDocumentationAvailable: z.enum(["yes", "no"]),
+  hasCompletedManagementReview: z.enum(["yes", "no"]),
+  surveillanceAuditFrequency: z.enum(["annual", "sixMonth"]).optional(),
+  hasDocumentedHSSESystem: z.enum(["yes", "no"]),
+  isHSEManagementSystemCertified: z.enum(["yes", "no"]).optional(),
+  hseOverseerInfo: z.string().min(1, { message: "HSE overseer information is required" }),
+  hasDrugsAlcoholPolicy: z.enum(["yes", "no"]),
+  identifiesHazardsAndControls: z.enum(["yes", "no"]),
+  workersInductedAndTrained: z.enum(["yes", "no"]),
+  maintainsHSEIncidentReports: z.enum(["yes", "no"]),
+  receivedLegalNotices: z.enum(["yes", "no"]),
+  hasEmergencyProcedures: z.enum(["yes", "no"]),
+  hasEmergencyResponseTeam: z.enum(["yes", "no"]),
+  currencyTransactions: z.array(z.string()).min(1, "Select at least one currency"),
+  annualTurnover: z.string().min(1, "Annual turnover is required"),
+  forecastEBITA: z.string().min(1, "Forecast EBITA is required"),
+  currentRatio: z.string().min(1, "Current ratio is required"),
+  inventoryTurnover: z.string().min(1, "Inventory turnover is required"),
+  bankName: z.string().min(1, "Bank name is required"),
+  bankBranchAddress: z.string().min(1, "Bank branch address is required"),
+  turnoverLastThreeYears: z.array(z.object({
+    year: z.string(),
+    turnover: z.string().min(1, "Turnover is required"),
+  })).length(3),
+  childLabor: z.enum(["yes", "no"]),
+  forcedLabor: z.enum(["yes", "no"]),
+  nonDiscrimination: z.enum(["yes", "no"]),
+  wagesAndBenefits: z.enum(["yes", "no"]),
+  logisticAccess: z.array(z.string()).min(1, "Select at least one logistic access option"),
+  distanceFromSeaport: z.string().min(1, "Distance from seaport is required"),
+  exportExperience: z.enum(["yes", "no"]),
+  importExportRestrictions: z.enum(["yes", "no"]),
+  dataSecurityPractices: z.enum(["yes", "no"]),
+  otherDocumentation: z.any().optional(),
 })
 
 export default function ExtendedRegistrationForm() {
+  const currentYear = new Date().getFullYear()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -276,6 +329,37 @@ export default function ExtendedRegistrationForm() {
       hasBeenBlacklisted: "no",
       hasEngagedConsultant: "no",
       hasDocumentedQMS: "no",
+      isQualitySystemDocumentationAvailable: "no",
+      hasCompletedManagementReview: "no",
+      hasDocumentedHSSESystem: "no",
+      hasDrugsAlcoholPolicy: "no",
+      identifiesHazardsAndControls: "no",
+      workersInductedAndTrained: "no",
+      maintainsHSEIncidentReports: "no",
+      receivedLegalNotices: "no",
+      hasEmergencyProcedures: "no",
+      hasEmergencyResponseTeam: "no",
+      currencyTransactions: [],
+      annualTurnover: "",
+      forecastEBITA: "",
+      currentRatio: "",
+      inventoryTurnover: "",
+      bankName: "",
+      bankBranchAddress: "",
+      turnoverLastThreeYears: [
+        { year: `${currentYear - 2}-${currentYear - 1}`, turnover: "" },
+        { year: `${currentYear - 1}-${currentYear}`, turnover: "" },
+        { year: `${currentYear}-${currentYear + 1}`, turnover: "" },
+      ],
+      childLabor: "no",
+      forcedLabor: "no",
+      nonDiscrimination: "no",
+      wagesAndBenefits: "no",
+      logisticAccess: [],
+      distanceFromSeaport: "",
+      exportExperience: "no",
+      importExportRestrictions: "no",
+      dataSecurityPractices: "no",
     },
   })
 
@@ -1805,6 +1889,456 @@ export default function ExtendedRegistrationForm() {
                 )}
               />
             )}
+
+            <FormField
+              control={form.control}
+              name="isQualitySystemDocumentationAvailable"
+              render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <FormLabel>
+                    Is your quality system documentation available for review?
+                  </FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex flex-row space-x-4"
+                    >
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="yes" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          Yes
+                        </FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="no" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          No
+                        </FormLabel>
+                      </FormItem>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="hasCompletedManagementReview"
+              render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <FormLabel>
+                    Have you completed one Management review after internal audit?
+                  </FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex flex-row space-x-4"
+                    >
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="yes" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          Yes
+                        </FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="no" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          No
+                        </FormLabel>
+                      </FormItem>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {form.watch("hasCompletedManagementReview") === "yes" && (
+              <FormField
+                control={form.control}
+                name="surveillanceAuditFrequency"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Please indicate the desired frequency of surveillance audits in three-year cycle</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select surveillance audit frequency" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="annual">Annual</SelectItem>
+                        <SelectItem value="sixMonth">Six Month</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+          </div>
+
+          <div>
+            <h3 className="text-lg font-semibold mb-4">HSE (Health, Safety, and Environment)</h3>
+            <FormField
+              control={form.control}
+              name="hasDocumentedHSSESystem"
+              render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <FormLabel>
+                    Do you have a documented HSSE (Health, Safety, Security, Environment) Management System?
+                  </FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex flex-row space-x-4"
+                    >
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="yes" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          Yes
+                        </FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="no" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          No
+                        </FormLabel>
+                      </FormItem>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {form.watch("hasDocumentedHSSESystem") === "yes" && (
+              <FormField
+                control={form.control}
+                name="isHSEManagementSystemCertified"
+                render={({ field }) => (
+                  <FormItem className="space-y-3">
+                    <FormLabel>
+                      Is your HSE Management System Certified?
+                    </FormLabel>
+                    <FormControl>
+                      <RadioGroup
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        className="flex flex-row space-x-4"
+                      >
+                        <FormItem className="flex items-center space-x-3 space-y-0">
+                          <FormControl>
+                            <RadioGroupItem value="yes" />
+                          </FormControl>
+                          <FormLabel className="font-normal">
+                            Yes
+                          </FormLabel>
+                        </FormItem>
+                        <FormItem className="flex items-center space-x-3 space-y-0">
+                          <FormControl>
+                            <RadioGroupItem value="no" />
+                          </FormControl>
+                          <FormLabel className="font-normal">
+                            No
+                          </FormLabel>
+                        </FormItem>
+                      </RadioGroup>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+
+            <FormField
+              control={form.control}
+              name="hseOverseerInfo"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name and title of the person responsible for overseeing HSE matters at your worksite, and the reporting lines to top management</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="hasDrugsAlcoholPolicy"
+              render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <FormLabel>
+                    Do you have a written Drugs/Alcohol abuse policy?
+                  </FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex flex-row space-x-4"
+                    >
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="yes" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          Yes
+                        </FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="no" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          No
+                        </FormLabel>
+                      </FormItem>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="identifiesHazardsAndControls"
+              render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <FormLabel>
+                    Do you identify the hazards and controls related to the work being carried out?
+                  </FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex flex-row space-x-4"
+                    >
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="yes" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          Yes
+                        </FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="no" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          No
+                        </FormLabel>
+                      </FormItem>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="workersInductedAndTrained"
+              render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <FormLabel>
+                    Are all workers in your organization inducted and trained for the work they perform?
+                  </FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex flex-row space-x-4"
+                    >
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="yes" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          Yes
+                        </FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="no" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          No
+                        </FormLabel>
+                      </FormItem>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="maintainsHSEIncidentReports"
+              render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <FormLabel>
+                    Do you maintain HSE incident statistics reports (e.g., LTI - Lost Time Injuries, NM - Near Misses, Incidents)?
+                  </FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex flex-row space-x-4"
+                    >
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="yes" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          Yes
+                        </FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="no" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          No
+                        </FormLabel>
+                      </FormItem>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="receivedLegalNotices"
+              render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <FormLabel>
+                    Has your organization received any legal notices or fines in the past 3 years?
+                  </FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex flex-row space-x-4"
+                    >
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="yes" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          Yes
+                        </FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="no" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          No
+                        </FormLabel>
+                      </FormItem>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="hasEmergencyProcedures"
+              render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <FormLabel>
+                    Do you have documented procedures for emergency situations?
+                  </FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex flex-row space-x-4"
+                    >
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="yes" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          Yes
+                        </FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="no" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          No
+                        </FormLabel>
+                      </FormItem>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="hasEmergencyResponseTeam"
+              render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <FormLabel>
+                    Do you have a designated emergency response team?
+                  </FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex flex-row space-x-4"
+                    >
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="yes" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          Yes
+                        </FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="no" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          No
+                        </FormLabel>
+                      </FormItem>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
 
           <Button type="submit">Submit</Button>
