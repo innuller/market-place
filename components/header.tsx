@@ -11,6 +11,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { hasEnvVars } from "@/utils/supabase/check-env-vars"
+import { EnvVarWarning } from "./env-var-warning"
+// import HeaderAuth from "@/components/header-auth";
 
 export function HeaderComponent() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false)
@@ -63,6 +66,7 @@ export function HeaderComponent() {
             </Link>
             <Button variant="ghost">Login</Button>
             <Button>Register</Button>
+            {/* {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />} */}
           </nav>
           <div className="flex md:hidden">
             <button
@@ -118,6 +122,7 @@ export function HeaderComponent() {
             </Link>
             <Button variant="ghost" className="w-full justify-start">Login</Button>
             <Button className="w-full">Register</Button>
+            {/* {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />} */}
           </div>
         </div>
       )}

@@ -1,3 +1,4 @@
+import { HeaderComponent } from "@/components/header";
 import Hero from "@/components/hero";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import ConnectSupabaseSteps from "@/components/tutorial/connect-supabase-steps";
@@ -9,11 +10,15 @@ export default async function Index() {
   return (
     <>
       {/* <Hero /> */}
+      <HeaderComponent/>
       <main className="flex-1 flex flex-col gap-6 px-4 justify-center items-center h-screen">
         {/* <h2 className="font-medium text-xl mb-4">Next steps</h2>
         {hasEnvVars ? <SignUpUserSteps /> : <ConnectSupabaseSteps />} */}
         <Link href={"/NewHome"} className="bg-gradient-to-br from-green-400 to-secondary text-black font-bold py-2 px-4 rounded">
         Click to Go to New Redesigned Home Page
+        </Link>
+        <Link href={"/registration-form"} className="bg-gradient-to-br from-green-400 to-secondary text-black font-bold py-2 px-4 rounded">
+        Click to Go to Registration Page
         </Link>
         <ThemeSwitcher/>
       </main>

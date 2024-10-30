@@ -27,6 +27,7 @@ import { useForm, useFieldArray } from "react-hook-form"
 import * as z from "zod"
 import { Badge } from "@/components/ui/badge"
 import { X, Plus } from "lucide-react"
+import {createClient} from "@/utils/supabase/client";
 
 const categories = [
   "Manufacturing",
@@ -176,7 +177,7 @@ const formSchema = z.object({
   }),
   isPartOfLargerOrg: z.enum(["yes", "no"]),
   largerOrgName: z.string().optional(),
-  yearOfIncorporation: z.string().optional(),
+  yearOfIncorporation: z.string(),
   gstNumber: z.string().optional(),
   gstRegistrationState: z.string().optional(),
   esiRegistrationNumber: z.string().optional(),
@@ -388,9 +389,96 @@ export default function ExtendedRegistrationForm() {
     name: "majorProjects",
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
+  // function onSubmit(values: z.infer<typeof formSchema>) {
+  //   console.log(values)
+  // }
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    // Convert form values to match schema requirements
+    const { data, error } = await createClient()
+      .from("organizations")
+      .insert([
+        {
+          organization_name: values.organizationName,
+          email: values.email,
+          office_address: values.officeAddress,
+          office_pincode: values.officePincode,
+          plant_address: values.plantAddress,
+          plant_pincode: values.plantPincode,
+          office_start_time: values.officeStartTime,
+          office_end_time: values.officeEndTime,
+          max_floor_space: parseInt(values.maxFloorSpace, 10),
+          legal_status: values.legalStatus,
+          is_part_of_larger_org: values.isPartOfLargerOrg === "yes",
+          larger_org_name: values.largerOrgName,
+          year_of_incorporation: parseInt(values.yearOfIncorporation, 10),
+          gst_number: values.gstNumber,
+          gst_registration_state: values.gstRegistrationState,
+          esi_registration_number: values.esiRegistrationNumber,
+          pf_registration_number: values.pfRegistrationNumber,
+          duns_number: values.dunsNumber,
+          is_msme: values.isMSME === "yes",
+          pan_number: values.panNumber,
+          cin_number: values.cinNumber,
+          website: values.website,
+          contact_number: values.contactNumber,
+          fax: values.fax,
+          director_name: values.directorName,
+          director_email: values.directorEmail,
+          director_contact_number: values.directorContactNumber,
+          management_name: values.managementName,
+          management_email: values.managementEmail,
+          management_contact_number: values.managementContactNumber,
+          emergency_person_name: values.emergencyPersonName,
+          emergency_person_email: values.emergencyPersonEmail,
+          emergency_person_contact_number: values.emergencyPersonContactNumber,
+          total_employees: values.totalEmployees,
+          standard_organization: values.standardOrganization,
+          other_standard_organization: values.otherStandardOrganization,
+          has_documented_procedures: values.hasDocumentedProcedures === "yes",
+          has_been_blacklisted: values.hasBeenBlacklisted === "yes",
+          has_engaged_consultant: values.hasEngagedConsultant === "yes",
+          consultant_name: values.consultantName,
+          consultancy_firm_name: values.consultancyFirmName,
+          has_documented_qms: values.hasDocumentedQMS === "yes",
+          qms_certification_structure: values.qmsCertificationStructure,
+          is_quality_system_documentation_available: values.isQualitySystemDocumentationAvailable === "yes",
+          has_completed_management_review: values.hasCompletedManagementReview === "yes",
+          surveillance_audit_frequency: values.surveillanceAuditFrequency,
+          has_documented_hsse_system: values.hasDocumentedHSSESystem === "yes",
+          is_hse_management_system_certified: values.isHSEManagementSystemCertified === "yes",
+          hse_overseer_info: values.hseOverseerInfo,
+          has_drugs_alcohol_policy: values.hasDrugsAlcoholPolicy === "yes",
+          identifies_hazards_and_controls: values.identifiesHazardsAndControls === "yes",
+          workers_inducted_and_trained: values.workersInductedAndTrained === "yes",
+          maintains_hse_incident_reports: values.maintainsHSEIncidentReports === "yes",
+          received_legal_notices: values.receivedLegalNotices === "yes",
+          has_emergency_procedures: values.hasEmergencyProcedures === "yes",
+          has_emergency_response_team: values.hasEmergencyResponseTeam === "yes",
+          annual_turnover: values.annualTurnover,
+          forecast_ebita: values.forecastEBITA,
+          current_ratio: values.currentRatio,
+          inventory_turnover: values.inventoryTurnover,
+          bank_name: values.bankName,
+          bank_branch_address: values.bankBranchAddress,
+          child_labor: values.childLabor === "yes",
+          forced_labor: values.forcedLabor === "yes",
+          non_discrimination: values.nonDiscrimination === "yes",
+          wages_and_benefits: values.wagesAndBenefits === "yes",
+          distance_from_seaport: parseInt(values.distanceFromSeaport, 10),
+          export_experience: values.exportExperience === "yes",
+          import_export_restrictions: values.importExportRestrictions === "yes",
+          data_security_practices: values.dataSecurityPractices === "yes"
+        }
+      ]);
+  
+    if (error) {
+      console.error("Error inserting data:", error.message);
+    } else {
+      console.log("Data inserted successfully:", data);
+    }
   }
+  
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -786,8 +874,10 @@ export default function ExtendedRegistrationForm() {
                   </FormItem>
                 )}
               />
+            </>
+          )}
 
-              <FormField
+<FormField
                 control={form.control}
                 name="yearOfIncorporation"
                 render={({ field }) => (
@@ -870,8 +960,6 @@ export default function ExtendedRegistrationForm() {
                   </FormItem>
                 )}
               />
-            </>
-          )}
 
           <FormField
             control={form.control}
