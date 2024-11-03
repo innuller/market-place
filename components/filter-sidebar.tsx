@@ -23,7 +23,7 @@ export default function FilterSidebar() {
   const clearAll = () => setActiveFilters([])
 
   const FilterContent = () => (
-    <div className="p-4 border border-orange-400 rounded-lg">
+    <div className="p-4 border border-[#003853] rounded-lg">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold">Refine</h2>
         <Button variant="ghost" size="sm" onClick={clearAll}>

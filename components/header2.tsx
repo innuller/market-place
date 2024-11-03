@@ -15,8 +15,6 @@ export async function Header() {
     data: { user },
   } = await createClient().auth.getUser();
 
-  console.log(user);
-
   return (
     <header className="bg-[#003853] border-b border-white/10">
       <div className="container mx-auto px-4 h-20 flex items-center justify-between">
@@ -47,7 +45,7 @@ export async function Header() {
                   <DropdownMenuTrigger className="text-lg">For Suppliers</DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropdownMenuItem>
-                      <Link href="#" className="w-full">Register Your Business</Link>
+                      <Link href="registration-form" className="w-full">Register Your Business</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
                       <Link href="#" className="w-full">Contact Us</Link>
@@ -55,7 +53,7 @@ export async function Header() {
                   </DropdownMenuContent>
                 </DropdownMenu>
                 <Link href="#" className="text-lg">About Us</Link>
-                <Link href="#" className="text-lg">Register your business</Link>
+                <Link href="registration-form" className="text-lg">Register your business</Link>
               </div>
             </SheetContent>
           </Sheet>
@@ -81,7 +79,7 @@ export async function Header() {
               <DropdownMenuTrigger className="hover:text-white">For Suppliers</DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem>
-                  <Link href="#" className="w-full">Register Your Business</Link>
+                  <Link href="registration-form" className="w-full">Register Your Business</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Link href="#" className="w-full">Contact Us</Link>
@@ -96,7 +94,7 @@ export async function Header() {
           <Link href="#" className="hidden lg:inline-block text-white/90 hover:text-white">
             About Us
           </Link>
-          <Link href="#" className="hidden lg:inline-block text-white/90 hover:text-white">
+          <Link href="registration-form" className="hidden lg:inline-block text-white/90 hover:text-white">
             Register Your Business
           </Link>
           {!user ? (

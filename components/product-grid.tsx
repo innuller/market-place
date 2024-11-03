@@ -72,7 +72,7 @@ export default function ProductGrid({ onProductSelect }: ProductGridProps) {
       <h2 className="text-2xl font-bold mb-6">Featured Products</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {products.map((product) => (
-          <div key={product.id} className="rounded-lg shadow-md overflow-hidden border border-orange-400">
+          <div key={product.id} className="rounded-lg shadow-md overflow-hidden border border-[#003853]">
             <Link href={product.product_url} key={product.id}>
               <img
                 src={product.image}

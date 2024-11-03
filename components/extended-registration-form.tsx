@@ -5,22 +5,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
+import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue} from "@/components/ui/select"
+import {Form,FormControl,FormDescription,FormField,FormItem,FormLabel,FormMessage} from "@/components/ui/form"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, useFieldArray } from "react-hook-form"
@@ -28,6 +14,7 @@ import * as z from "zod"
 import { Badge } from "@/components/ui/badge"
 import { X, Plus } from "lucide-react"
 import { createClient } from "@/utils/supabase/client";
+import { redirect } from "next/navigation"
 
 const categories = [
   "Manufacturing",
@@ -284,7 +271,18 @@ const formSchema = z.object({
   otherDocumentation: z.any().optional(),
 })
 
-export default function ExtendedRegistrationForm() {
+export default async function ExtendedRegistrationForm() {
+
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return redirect("/sign-in");
+  }
+
   const currentYear = new Date().getFullYear()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

@@ -38,7 +38,6 @@ export default function RootLayout({
             {/* <div className="flex flex-col gap-20 max-w-5xl p-5"> */}
             <Header />
             {children}
-            <ThemeSwitcher />
             {/* </div> */}
           </>
           {/* </main> */}

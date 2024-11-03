@@ -25,8 +25,8 @@ export default function ProductCatalog() {
         <div className="flex-1">
           <ProductGrid onProductSelect={handleProductSelect} />
           {selectedProducts.length > 0 && (
-            <div className="fixed bottom-4 right-4 z-10 border border-orange-400 rounded-lg">
-              <Button onClick={() => setIsMessageDialogOpen(true)}>
+            <div className="fixed bottom-4 right-4 z-10 rounded-lg">
+              <Button onClick={() => setIsMessageDialogOpen(true)} className='bg-[#7AB80E] hover:bg-[#8BC727] text-white text-sm md:text-base'>
                 Send Message ({selectedProducts.length})
               </Button>
             </div>
