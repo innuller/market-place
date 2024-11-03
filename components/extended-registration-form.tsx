@@ -27,7 +27,7 @@ import { useForm, useFieldArray } from "react-hook-form"
 import * as z from "zod"
 import { Badge } from "@/components/ui/badge"
 import { X, Plus } from "lucide-react"
-import {createClient} from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 
 const categories = [
   "Manufacturing",
@@ -389,96 +389,128 @@ export default function ExtendedRegistrationForm() {
     name: "majorProjects",
   })
 
-  // function onSubmit(values: z.infer<typeof formSchema>) {
-  //   console.log(values)
-  // }
-
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Convert form values to match schema requirements
-    const { data, error } = await createClient()
-      .from("organizations")
-      .insert([
-        {
-          organization_name: values.organizationName,
-          email: values.email,
-          office_address: values.officeAddress,
-          office_pincode: values.officePincode,
-          plant_address: values.plantAddress,
-          plant_pincode: values.plantPincode,
-          office_start_time: values.officeStartTime,
-          office_end_time: values.officeEndTime,
-          max_floor_space: parseInt(values.maxFloorSpace, 10),
-          legal_status: values.legalStatus,
-          is_part_of_larger_org: values.isPartOfLargerOrg === "yes",
-          larger_org_name: values.largerOrgName,
-          year_of_incorporation: parseInt(values.yearOfIncorporation, 10),
-          gst_number: values.gstNumber,
-          gst_registration_state: values.gstRegistrationState,
-          esi_registration_number: values.esiRegistrationNumber,
-          pf_registration_number: values.pfRegistrationNumber,
-          duns_number: values.dunsNumber,
-          is_msme: values.isMSME === "yes",
-          pan_number: values.panNumber,
-          cin_number: values.cinNumber,
-          website: values.website,
-          contact_number: values.contactNumber,
-          fax: values.fax,
-          director_name: values.directorName,
-          director_email: values.directorEmail,
-          director_contact_number: values.directorContactNumber,
-          management_name: values.managementName,
-          management_email: values.managementEmail,
-          management_contact_number: values.managementContactNumber,
-          emergency_person_name: values.emergencyPersonName,
-          emergency_person_email: values.emergencyPersonEmail,
-          emergency_person_contact_number: values.emergencyPersonContactNumber,
-          total_employees: values.totalEmployees,
-          standard_organization: values.standardOrganization,
-          other_standard_organization: values.otherStandardOrganization,
-          has_documented_procedures: values.hasDocumentedProcedures === "yes",
-          has_been_blacklisted: values.hasBeenBlacklisted === "yes",
-          has_engaged_consultant: values.hasEngagedConsultant === "yes",
-          consultant_name: values.consultantName,
-          consultancy_firm_name: values.consultancyFirmName,
-          has_documented_qms: values.hasDocumentedQMS === "yes",
-          qms_certification_structure: values.qmsCertificationStructure,
-          is_quality_system_documentation_available: values.isQualitySystemDocumentationAvailable === "yes",
-          has_completed_management_review: values.hasCompletedManagementReview === "yes",
-          surveillance_audit_frequency: values.surveillanceAuditFrequency,
-          has_documented_hsse_system: values.hasDocumentedHSSESystem === "yes",
-          is_hse_management_system_certified: values.isHSEManagementSystemCertified === "yes",
-          hse_overseer_info: values.hseOverseerInfo,
-          has_drugs_alcohol_policy: values.hasDrugsAlcoholPolicy === "yes",
-          identifies_hazards_and_controls: values.identifiesHazardsAndControls === "yes",
-          workers_inducted_and_trained: values.workersInductedAndTrained === "yes",
-          maintains_hse_incident_reports: values.maintainsHSEIncidentReports === "yes",
-          received_legal_notices: values.receivedLegalNotices === "yes",
-          has_emergency_procedures: values.hasEmergencyProcedures === "yes",
-          has_emergency_response_team: values.hasEmergencyResponseTeam === "yes",
-          annual_turnover: values.annualTurnover,
-          forecast_ebita: values.forecastEBITA,
-          current_ratio: values.currentRatio,
-          inventory_turnover: values.inventoryTurnover,
-          bank_name: values.bankName,
-          bank_branch_address: values.bankBranchAddress,
-          child_labor: values.childLabor === "yes",
-          forced_labor: values.forcedLabor === "yes",
-          non_discrimination: values.nonDiscrimination === "yes",
-          wages_and_benefits: values.wagesAndBenefits === "yes",
-          distance_from_seaport: parseInt(values.distanceFromSeaport, 10),
-          export_experience: values.exportExperience === "yes",
-          import_export_restrictions: values.importExportRestrictions === "yes",
-          data_security_practices: values.dataSecurityPractices === "yes"
-        }
-      ]);
-  
+    // Extract top-level fields
+    const { organizationName, email, ...restValues } = values;
+
+    // Prepare metadata by mapping form values to schema-compliant types and structures
+    const metadata = {
+      categories: restValues.categories,
+      sub_categories: restValues.subCategories,
+      office_address: restValues.officeAddress,
+      office_pincode: restValues.officePincode,
+      plant_address: restValues.plantAddress,
+      plant_pincode: restValues.plantPincode,
+      office_start_time: restValues.officeStartTime,
+      office_end_time: restValues.officeEndTime,
+      max_floor_space: parseInt(restValues.maxFloorSpace, 10) || null,
+      legal_status: restValues.legalStatus || [],
+      is_part_of_larger_org: restValues.isPartOfLargerOrg === "yes",
+      year_of_incorporation: parseInt(restValues.yearOfIncorporation, 10) || null,
+      gst_number: restValues.gstNumber || null,
+      gst_registration_state: restValues.gstRegistrationState || null,
+      is_msme: restValues.isMSME === "yes",
+      pan_number: restValues.panNumber || null,
+      cin_number: restValues.cinNumber || null,
+      website: restValues.website || null,
+      contact_number: restValues.contactNumber || null,
+      director_name: restValues.directorName || null,
+      director_email: restValues.directorEmail || null,
+      director_contact_number: restValues.directorContactNumber || null,
+      management_name: restValues.managementName || null,
+      management_email: restValues.managementEmail || null,
+      management_contact_number: restValues.managementContactNumber || null,
+      emergency_person_name: restValues.emergencyPersonName || null,
+      emergency_person_email: restValues.emergencyPersonEmail || null,
+      emergency_person_contact_number: restValues.emergencyPersonContactNumber || null,
+      total_employees: restValues.totalEmployees || null,
+      departments: restValues.departments || [],
+      manpower_details: restValues.manpowerDetails,
+      products_services: restValues.productsServices.map(ps => ({
+        name: ps.name,
+        catalog: ps.catalog || null
+      })),
+      standard_organization: restValues.standardOrganization || null,
+      other_standard_organization: restValues.otherStandardOrganization || null,
+      compliance_standards: restValues.complianceStandards || [],
+      hsn_codes: restValues.hsnCodes.map(code => ({
+        code: code.code,
+        description: code.description
+      })),
+      has_documented_procedures: restValues.hasDocumentedProcedures === "yes",
+      experience_with_epcs: restValues.experienceWithEPCs || [],
+      major_customers: restValues.majorCustomers.map(cust => ({
+        name: cust.name,
+        location: cust.location,
+        business_percentage: parseFloat(String(cust.businessPercentage)) || 0
+      })),
+      major_sub_suppliers: restValues.majorSubSuppliers.map(sub => ({
+        name: sub.name,
+        location: sub.location,
+        sourcing_percentage: parseFloat(String(sub.sourcingPercentage)) || 0
+      })),
+      major_projects: restValues.majorProjects.map(proj => ({
+        name: proj.name,
+        location: proj.location,
+        end_customer: proj.endCustomer
+      })),
+      has_been_blacklisted: restValues.hasBeenBlacklisted === "yes",
+      has_engaged_consultant: restValues.hasEngagedConsultant === "yes",
+      has_documented_qms: restValues.hasDocumentedQMS === "yes",
+      is_quality_system_documentation_available: restValues.isQualitySystemDocumentationAvailable === "yes",
+      has_completed_management_review: restValues.hasCompletedManagementReview === "yes",
+      has_documented_hsse_system: restValues.hasDocumentedHSSESystem === "yes",
+      is_hse_management_system_certified: restValues.isHSEManagementSystemCertified === "yes",
+      hse_overseer_info: restValues.hseOverseerInfo || null,
+      has_drugs_alcohol_policy: restValues.hasDrugsAlcoholPolicy === "yes",
+      identifies_hazards_and_controls: restValues.identifiesHazardsAndControls === "yes",
+      workers_inducted_and_trained: restValues.workersInductedAndTrained === "yes",
+      maintains_hse_incident_reports: restValues.maintainsHSEIncidentReports === "yes",
+      received_legal_notices: restValues.receivedLegalNotices === "yes",
+      has_emergency_procedures: restValues.hasEmergencyProcedures === "yes",
+      has_emergency_response_team: restValues.hasEmergencyResponseTeam === "yes",
+      currency_transactions: restValues.currencyTransactions || [],
+      annual_turnover: restValues.annualTurnover || null,
+      forecast_ebita: restValues.forecastEBITA || null,
+      current_ratio: restValues.currentRatio || null,
+      inventory_turnover: restValues.inventoryTurnover || null,
+      bank_name: restValues.bankName || null,
+      bank_branch_address: restValues.bankBranchAddress || null,
+      turnover_last_three_years: restValues.turnoverLastThreeYears.map(turnover => ({
+        year: turnover.year,
+        turnover: turnover.turnover
+      })),
+      child_labor: restValues.childLabor === "yes",
+      forced_labor: restValues.forcedLabor === "yes",
+      non_discrimination: restValues.nonDiscrimination === "yes",
+      wages_and_benefits: restValues.wagesAndBenefits === "yes",
+      logistic_access: restValues.logisticAccess || [],
+      distance_from_seaport: parseInt(restValues.distanceFromSeaport, 10) || null,
+      export_experience: restValues.exportExperience === "yes",
+      import_export_restrictions: restValues.importExportRestrictions === "yes",
+      data_security_practices: restValues.dataSecurityPractices === "yes"
+    };
+
+    // Insert organization data into Supabase
+    const { data, error } = await createClient().from('organizations_main').insert([
+      {
+        organization_name: organizationName,
+        email: email,
+        metadata: metadata  // Store all validated metadata
+      }
+    ]);
+
     if (error) {
-      console.error("Error inserting data:", error.message);
+      console.log(values);
+      console.error('Error inserting data:', error.message);
     } else {
-      console.log("Data inserted successfully:", data);
+      console.log(values);
+      console.log('Successfully inserted data:', data);
     }
   }
-  
+
+
+
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -518,7 +550,7 @@ export default function ExtendedRegistrationForm() {
             name="categories"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Categories</FormLabel>
+                <FormLabel>Main-Categories</FormLabel>
                 <FormControl>
                   <Select
                     onValueChange={(value) => {
@@ -877,89 +909,89 @@ export default function ExtendedRegistrationForm() {
             </>
           )}
 
-<FormField
-                control={form.control}
-                name="yearOfIncorporation"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Year of company incorporation</FormLabel>
-                    <FormControl>
-                      <Input type="number" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+          <FormField
+            control={form.control}
+            name="yearOfIncorporation"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Year of company incorporation</FormLabel>
+                <FormControl>
+                  <Input type="number" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-              <FormField
-                control={form.control}
-                name="gstNumber"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>GST Number</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+          <FormField
+            control={form.control}
+            name="gstNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>GST Number</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-              <FormField
-                control={form.control}
-                name="gstRegistrationState"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>GST Registration State</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+          <FormField
+            control={form.control}
+            name="gstRegistrationState"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>GST Registration State</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-              <FormField
-                control={form.control}
-                name="esiRegistrationNumber"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>ESI Registration Number (optional)</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+          <FormField
+            control={form.control}
+            name="esiRegistrationNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>ESI Registration Number (optional)</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-              <FormField
-                control={form.control}
-                name="pfRegistrationNumber"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>PF Registration Number (optional)</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+          <FormField
+            control={form.control}
+            name="pfRegistrationNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>PF Registration Number (optional)</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-              <FormField
-                control={form.control}
-                name="dunsNumber"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>DUNS/D&B Number (optional)</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+          <FormField
+            control={form.control}
+            name="dunsNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>DUNS/D&B Number (optional)</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           <FormField
             control={form.control}
@@ -2456,10 +2488,10 @@ export default function ExtendedRegistrationForm() {
                                     return checked
                                       ? field.onChange([...field.value, option.value])
                                       : field.onChange(
-                                          field.value?.filter(
-                                            (value) => value !== option.value
-                                          )
+                                        field.value?.filter(
+                                          (value) => value !== option.value
                                         )
+                                      )
                                   }}
                                 />
                               </FormControl>
@@ -2720,7 +2752,7 @@ export default function ExtendedRegistrationForm() {
                   <div className="space-y-2">
                     {logisticOptions.map((option) => (
                       <FormField
-                        
+
                         key={option.value}
                         control={form.control}
                         name="logisticAccess"
@@ -2737,10 +2769,10 @@ export default function ExtendedRegistrationForm() {
                                     return checked
                                       ? field.onChange([...field.value, option.value])
                                       : field.onChange(
-                                          field.value?.filter(
-                                            (value) => value !== option.value
-                                          )
+                                        field.value?.filter(
+                                          (value) => value !== option.value
                                         )
+                                      )
                                   }}
                                 />
                               </FormControl>

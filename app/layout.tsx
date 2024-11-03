@@ -1,15 +1,13 @@
-// import DeployButton from "@/components/deploy-button";
-// import { EnvVarWarning } from "@/components/env-var-warning";
-// import HeaderAuth from "@/components/header-auth";
-// import { ThemeSwitcher } from "@/components/theme-switcher";
-// import { hasEnvVars } from "@/utils/supabase/check-env-vars";
+import DeployButton from "@/components/deploy-button";
+import { EnvVarWarning } from "@/components/env-var-warning";
+import HeaderAuth from "@/components/header-auth";
+import { ThemeSwitcher } from "@/components/theme-switcher";
+import { hasEnvVars } from "@/utils/supabase/check-env-vars";
 import { GeistSans } from "geist/font/sans";
 import { ThemeProvider } from "next-themes";
-// import Link from "next/link";
+import Link from "next/link";
 import "./globals.css";
-import '@/public/css/E7526FBA320375AFB.css'
-import Script from "next/script";
-import { HeaderComponent } from "@/components/header";
+import { Header } from "@/components/header2";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -35,58 +33,15 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js" />
-          <Script src="http://localhost:3000/js/cmg.v1726519039.js" />
-          <Script src="http://localhost:3000/js/conversion.js" />
-          <Script src="http://localhost:3000/js/gpt.js" />
-          <Script src="https://code.jquery.com/color/jquery.color-3.0.0.min.js" />
-          <Script src="https://code.jquery.com/jquery-3.7.1.min.js" />
-          <Script src="https://code.jquery.com/ui/1.14.0-beta.2/jquery-ui.min.js" />
-          <Script src="http://localhost:3000/js/modernizr.dev.js" />
-          <Script src="http://localhost:3000/js/popper.min.js" />
-          <Script src="http://localhost:3000/js/production.min.v1726519031.js" />
-          <Script src="http://localhost:3000/js/rocket-loader.min.js" />
-          <Script src="http://localhost:3000/js/smart.js" />
-          {/* <main className="min-h-screen flex flex-col items-center">
-            <div className="flex-1 w-full flex flex-col gap-20 items-center"> */}
-          <main>
-            <div>
-              {/* <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
-                <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
-                  <div className="flex gap-5 items-center font-semibold">
-                    <Link href={"/"}>Next.js Supabase Starter</Link>
-                    <div className="flex items-center gap-2">
-                      <DeployButton />
-                    </div>
-                  </div>
-                  {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}
-                </div>
-              </nav> */}
-              {/* <HeaderComponent/> */}
-
-              {/* <div className="flex flex-col gap-20 max-w-5xl p-5"> */}
-              <div>
-                {children}
-                {/* <ThemeSwitcher /> */}
-              </div>
-
-              {/* <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-16">
-                <p>
-                  Powered by{" "}
-                  <a
-                    href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
-                    target="_blank"
-                    className="font-bold hover:underline"
-                    rel="noreferrer"
-                  >
-                    Supabase
-                  </a>
-                </p>
-                <ThemeSwitcher />
-              </footer>*/}
-            </div>
-
-          </main>
+          {/* <main className="min-h-screen flex flex-col items-center"> */}
+          <>
+            {/* <div className="flex flex-col gap-20 max-w-5xl p-5"> */}
+            <Header />
+            {children}
+            <ThemeSwitcher />
+            {/* </div> */}
+          </>
+          {/* </main> */}
         </ThemeProvider>
       </body>
     </html>

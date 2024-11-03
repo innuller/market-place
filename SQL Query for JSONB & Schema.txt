@@ -1,0 +1,167 @@
+-- Supabase AI is experimental and may produce incorrect answers
+-- Always verify the output before executing
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+CREATE EXTENSION IF NOT EXISTS "pg_jsonschema";
+
+create table
+  organizations_main (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid (),
+    organization_name varchar(255) not null,
+    email varchar(255) unique not null,
+    metadata JSONB default '{}',
+    created_at timestamp default current_timestamp,
+    updated_at timestamp default current_timestamp,
+    check (
+      jsonb_matches_schema (
+        '{
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+            "categories": { "type": "array", "items": { "type": "string" } },
+            "subCategories": { "type": "array", "items": { "type": "string" } },
+            "officeAddress": { "type": "string" },
+            "officePincode": { "type": "string", "pattern": "^\\d{6}$" },
+            "plantAddress": { "type": "string" },
+            "plantPincode": { "type": "string", "pattern": "^\\d{6}$" },
+            "officeStartTime": { "type": "string" },
+            "officeEndTime": { "type": "string" },
+            "offDays": { "type": "array", "items": { "type": "string" } },
+            "maxFloorSpace": { "type": "string" },
+            "legalStatus": { "type": "array", "items": { "type": "string" } },
+            "isPartOfLargerOrg": { "type": "string" },
+            "yearOfIncorporation": { "type": "string", "pattern": "^\\d{4}$" },
+            "gstNumber": { "type": "string" },
+            "gstRegistrationState": { "type": "string" },
+            "isMSME": { "type": "string" },
+            "panNumber": { "type": "string" },
+            "cinNumber": { "type": "string" },
+            "website": { "type": "string", "format": "uri" },
+            "contactNumber": { "type": "string", "pattern": "^\\d{10,15}$" },
+            "directorName": { "type": "string" },
+            "directorEmail": { "type": "string", "format": "email" },
+            "directorContactNumber": { "type": "string", "pattern": "^\\d{10,15}$" },
+            "managementName": { "type": "string" },
+            "managementEmail": { "type": "string", "format": "email" },
+            "managementContactNumber": { "type": "string", "pattern": "^\\d{10,15}$" },
+            "emergencyPersonName": { "type": "string" },
+            "emergencyPersonEmail": { "type": "string", "format": "email" },
+            "emergencyPersonContactNumber": { "type": "string", "pattern": "^\\d{10,15}$" },
+            "totalEmployees": { "type": "string" },
+            "departments": { "type": "array", "items": { "type": "string" } },
+            "manpowerDetails": {
+                "type": "object",
+                "properties": {
+                    "Engineers": { "type": "string" },
+                    "Skilled Operators": { "type": "string" },
+                    "Welders/Fitters": { "type": "string" },
+                    "Unskilled Labour": { "type": "string" },
+                    "Separate Quality Inspectors": { "type": "string" }
+                },
+                "additionalProperties": false
+            },
+            "productsServices": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "name": { "type": "string" },
+                        "catalog": { "type": ["string", "null"] }
+                    }
+                }
+            },
+            "standardOrganization": { "type": "string" },
+            "otherStandardOrganization": { "type": "string" },
+            "complianceStandards": { "type": "array", "items": { "type": "string" } },
+            "otherComplianceStandard": { "type": "string" },
+            "hsnCodes": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "code": { "type": "string" },
+                        "description": { "type": "string" }
+                    }
+                }
+            },
+            "hasDocumentedProcedures": { "type": "string" },
+            "experienceWithEPCs": { "type": "array", "items": { "type": "string" } },
+            "majorCustomers": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "name": { "type": "string" },
+                        "location": { "type": "string" },
+                        "businessPercentage": { "type": "number" }
+                    },
+                    "required": ["name", "location", "businessPercentage"]
+                }
+            },
+            "majorSubSuppliers": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "name": { "type": "string" },
+                        "location": { "type": "string" },
+                        "sourcingPercentage": { "type": "number" }
+                    }
+                }
+            },
+            "majorProjects": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "name": { "type": "string" },
+                        "location": { "type": "string" },
+                        "endCustomer": { "type": "string" }
+                    }
+                }
+            },
+            "hasBeenBlacklisted": { "type": "string" },
+            "hasEngagedConsultant": { "type": "string" },
+            "hasDocumentedQMS": { "type": "string" },
+            "isQualitySystemDocumentationAvailable": { "type": "string" },
+            "hasCompletedManagementReview": { "type": "string" },
+            "hasDocumentedHSSESystem": { "type": "string" },
+            "hseOverseerInfo": { "type": "string" },
+            "hasDrugsAlcoholPolicy": { "type": "string" },
+            "identifiesHazardsAndControls": { "type": "string" },
+            "workersInductedAndTrained": { "type": "string" },
+            "maintainsHSEIncidentReports": { "type": "string" },
+            "receivedLegalNotices": { "type": "string" },
+            "hasEmergencyProcedures": { "type": "string" },
+            "hasEmergencyResponseTeam": { "type": "string" },
+            "currencyTransactions": { "type": "array", "items": { "type": "string" } },
+            "annualTurnover": { "type": "string" },
+            "forecastEBITA": { "type": "string" },
+            "currentRatio": { "type": "string" },
+            "inventoryTurnover": { "type": "string" },
+            "bankName": { "type": "string" },
+            "bankBranchAddress": { "type": "string" },
+            "turnoverLastThreeYears": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "year": { "type": "string" },
+                        "turnover": { "type": "string" }
+                    }
+                }
+            },
+            "childLabor": { "type": "string" },
+            "forcedLabor": { "type": "string" },
+            "nonDiscrimination": { "type": "string" },
+            "wagesAndBenefits": { "type": "string" },
+            "logisticAccess": { "type": "array", "items": { "type": "string" } },
+            "distanceFromSeaport": { "type": "string" },
+            "exportExperience": { "type": "string" },
+            "importExportRestrictions": { "type": "string" },
+            "dataSecurityPractices": { "type": "string" }
+        }
+    }',
+        metadata
+      )
+    )
+  );

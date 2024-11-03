@@ -1,38 +1,82 @@
-import FetchDataSteps from "@/components/tutorial/fetch-data-steps";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { createClient } from "@/utils/supabase/server";
-import { InfoIcon } from "lucide-react";
 import { redirect } from "next/navigation";
+import { InfoIcon } from "lucide-react";
 
-export default async function ProtectedPage() {
-  const supabase = createClient();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+interface UserMetadata {
+    name?: string;
+    phone_number?: string;
+}
 
-  if (!user) {
-    return redirect("/sign-in");
-  }
+interface UserData {
+    email?: string;
+    last_sign_in_at?: string;
+    created_at?: string;
+    user_metadata?: UserMetadata;
+}
 
-  return (
-    <div className="flex-1 w-full flex flex-col gap-12">
-      <div className="w-full">
-        <div className="bg-accent text-sm p-3 px-5 rounded-md text-foreground flex gap-3 items-center">
-          <InfoIcon size="16" strokeWidth={2} />
-          This is a protected page that you can only see as an authenticated
-          user
+export default async function Component() {
+
+    const supabase = await createClient();
+
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+        return redirect("/signin");
+    }
+
+    const formatDate = (dateString?: string) => {
+        if (!dateString) return 'Not available';
+        return new Date(dateString).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    };
+
+    const name = user?.user_metadata?.name || 'User';
+    const email = user?.email || 'Not provided';
+    const phone = user?.user_metadata?.phone_number || 'Not provided';
+    const lastSignIn = formatDate(user?.last_sign_in_at);
+    const accountCreated = formatDate(user?.created_at);
+
+    return (
+        <div className="flex justify-center items-center min-h-screen bg-gray-100">
+            <Card className="w-full max-w-md">
+                <CardHeader className="flex flex-col items-center">
+                    <Avatar className="w-24 h-24">
+                        <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${name}`} alt={name} />
+                        <AvatarFallback>{name.split(' ').map((n: any[]) => n[0]).join('')}</AvatarFallback>
+                    </Avatar>
+                    <CardTitle className="mt-4 text-2xl font-bold">{name}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <dl className="space-y-4">
+                        <div>
+                            <dt className="text-sm font-medium text-gray-500">Email</dt>
+                            <dd className="mt-1 text-sm text-gray-900">{email}</dd>
+                        </div>
+                        <div>
+                            <dt className="text-sm font-medium text-gray-500">Phone</dt>
+                            <dd className="mt-1 text-sm text-gray-900">{phone}</dd>
+                        </div>
+                        <div>
+                            <dt className="text-sm font-medium text-gray-500">Last Sign In</dt>
+                            <dd className="mt-1 text-sm text-gray-900">{lastSignIn}</dd>
+                        </div>
+                        <div>
+                            <dt className="text-sm font-medium text-gray-500">Account Created</dt>
+                            <dd className="mt-1 text-sm text-gray-900">{accountCreated}</dd>
+                        </div>
+                    </dl>
+                </CardContent>
+            </Card>
         </div>
-      </div>
-      <div className="flex flex-col gap-2 items-start">
-        <h2 className="font-bold text-2xl mb-4">Your user details</h2>
-        <pre className="text-xs font-mono p-3 rounded border max-h-32 overflow-auto">
-          {JSON.stringify(user, null, 2)}
-        </pre>
-      </div>
-      <div>
-        <h2 className="font-bold text-2xl mb-4">Next steps</h2>
-        <FetchDataSteps />
-      </div>
-    </div>
-  );
+    )
 }
