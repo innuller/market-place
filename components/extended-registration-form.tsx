@@ -14,7 +14,7 @@ import * as z from "zod"
 import { Badge } from "@/components/ui/badge"
 import { X, Plus } from "lucide-react"
 import { createClient } from "@/utils/supabase/client";
-import { redirect } from "next/navigation"
+// import { redirect } from "next/navigation"
 
 const categories = [
   "Manufacturing",
@@ -273,15 +273,15 @@ const formSchema = z.object({
 
 export default async function ExtendedRegistrationForm() {
 
-  const supabase = await createClient();
+  // const supabase = await createClient();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // const {
+  //   data: { user },
+  // } = await supabase.auth.getUser();
 
-  if (!user) {
-    return redirect("/sign-in");
-  }
+  // if (!user) {
+  //   return redirect("/signin");
+  // }
 
   const currentYear = new Date().getFullYear()
   const form = useForm<z.infer<typeof formSchema>>({
