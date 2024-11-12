@@ -1,12 +1,13 @@
 'use client'
 
 import * as React from "react"
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
-import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue} from "@/components/ui/select"
-import {Form,FormControl,FormDescription,FormField,FormItem,FormLabel,FormMessage} from "@/components/ui/form"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, useFieldArray } from "react-hook-form"
@@ -15,6 +16,7 @@ import { Badge } from "@/components/ui/badge"
 import { X, Plus } from "lucide-react"
 import { createClient } from "@/utils/supabase/client";
 // import { redirect } from "next/navigation"
+
 
 const categories = [
   "Manufacturing",
@@ -271,9 +273,12 @@ const formSchema = z.object({
   otherDocumentation: z.any().optional(),
 })
 
-export default async function ExtendedRegistrationForm() {
+export default function ExtendedRegistrationForm() {
 
-  // const supabase = await createClient();
+  // const [categories, setCategories] = useState<any[]>([]);
+  // const [loading, setLoading] = useState(true);
+
+  // const supabase = createClient();
 
   // const {
   //   data: { user },
@@ -282,6 +287,30 @@ export default async function ExtendedRegistrationForm() {
   // if (!user) {
   //   return redirect("/signin");
   // }
+
+  // Fetch categories from Supabase
+  // useEffect(() => {
+  //   const fetchCategories = async () => {
+  //     try {
+  //       const { data, error } = await supabase
+  //         .from('categories')
+  //         .select('id, category');
+
+  //       if (error) {
+  //         console.error("Error fetching categories:", error);
+  //       } else {
+  //         console.log("Check this out --> ", data)
+  //         setCategories(data);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error in fetching categories:", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchCategories();
+  // }, []);
 
   const currentYear = new Date().getFullYear()
   const form = useForm<z.infer<typeof formSchema>>({
@@ -593,6 +622,8 @@ export default async function ExtendedRegistrationForm() {
               </FormItem>
             )}
           />
+
+          
 
           <FormField
             control={form.control}
