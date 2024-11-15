@@ -42,7 +42,7 @@ export function DataTable<T extends { id: number }>({
               {columns.map((column) => (
                 <TableHead key={column.key as string}>{column.label}</TableHead>
               ))}
-              <TableHead>Actions</TableHead>
+              <TableHead>Actionss</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
