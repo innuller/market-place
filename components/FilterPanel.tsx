@@ -111,12 +111,16 @@ export default function FilterPanel({ filters, setFilters }: FilterPanelProps) {
 
   // Handle filter changes
   const handleFilterChange = (key: string, value: string) => {
-    setFilters((prev) => ({
-      ...prev,
-      [key]: prev[key]?.includes(value)
-        ? prev[key].filter((v) => v !== value)
-        : [...(prev[key] || []), value]
-    }));
+    setFilters((prev) => {
+      const updatedFilters = {
+        ...prev,
+        [key]: prev[key]?.includes(value)
+          ? prev[key].filter((v) => v !== value)
+          : [...(prev[key] || []), value]
+      };
+      console.log("Filters updated:", updatedFilters); // Debugging
+      return updatedFilters;
+    });
   };
 
   const FilterContent = () => (
@@ -157,6 +161,9 @@ export default function FilterPanel({ filters, setFilters }: FilterPanelProps) {
     </div>
   );
 
+  // Updated FilterContent with additional logs
+
+
   return (
     <>
       {/* Mobile Sheet Dialog */}
@@ -166,7 +173,7 @@ export default function FilterPanel({ filters, setFilters }: FilterPanelProps) {
             <Button size="icon" className="fixed bottom-4 right-4 h-12 w-12 rounded-full shadow-lg">
               <Filter className="h-6 w-6" />
               {totalActiveFilters > 0 && (
-                <Badge 
+                <Badge
                   className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0 flex items-center justify-center"
                   variant="destructive"
                 >

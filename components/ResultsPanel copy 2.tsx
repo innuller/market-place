@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { Eye } from 'lucide-react';
 
+
 // Define interfaces for type safety
 interface Organization {
   id: number;
