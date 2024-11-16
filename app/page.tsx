@@ -58,9 +58,11 @@ export default function Index() {
                 className="w-full h-full px-4 rounded-md"
               />
             </div>
-            <Button className="bg-[#7AB80E] hover:bg-[#8BC727] text-white px-8 w-full sm:w-auto">
-              Search
-            </Button>
+            <Link href={"/search"}>
+              <Button className="bg-[#7AB80E] hover:bg-[#8BC727] text-white px-8 w-full sm:w-auto">
+                Search
+              </Button>
+            </Link>
           </div>
           <div className="mt-4 text-white">
             New to Thomas?

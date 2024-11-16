@@ -3,14 +3,14 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Organization } from "@/types/types";
-import {Button} from "@/components/ui/button"
-import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card"
-import {Badge,badgeVariants,BadgeProps} from "@/components/ui/badge"
-import {Dialog,DialogClose,DialogContent,DialogDescription,DialogFooter,DialogHeader,DialogOverlay,DialogPortal,DialogTitle,DialogTrigger } from "@/components/ui/dialog"
-import {Table,TableBody,TableCaption,TableCell,TableFooter,TableHead,TableHeader,TableRow} from "@/components/ui/table"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Loader2 } from "lucide-react";
+import { redirect } from "next/navigation";
 
 const AdminDashboard: React.FC = () => {
-    
     const supabase = createClient();
 
     const [organizations, setOrganizations] = useState<Organization[]>([]);
@@ -19,9 +19,19 @@ const AdminDashboard: React.FC = () => {
     const [selectedOrg, setSelectedOrg] = useState<Organization | null>(null);
     const [isConfirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false);
     const [actionType, setActionType] = useState<"approve" | "reject" | null>(null);
+    const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
     useEffect(() => {
         const fetchPendingOrganizations = async () => {
+
+            const {
+                data: { user },
+            } = await supabase.auth.getUser();
+
+            if (!user) {
+                return redirect("/signin");
+            }
+
             setLoading(true);
             const { data, error } = await supabase
                 .from("organizations_main")
@@ -43,6 +53,7 @@ const AdminDashboard: React.FC = () => {
     const updateOrganizationStatus = async (status: "approved" | "rejected") => {
         if (!selectedOrg) return;
 
+        setIsProcessing(true);
         const { error } = await supabase
             .from("organizations_main")
             .update({ status })
@@ -50,9 +61,12 @@ const AdminDashboard: React.FC = () => {
 
         if (error) {
             console.error(`Error updating organization status: ${error.message}`);
+            // TODO: Add error toast notification here
         } else {
             setOrganizations(organizations.filter((org) => org.id !== selectedOrg.id));
+            // TODO: Add success toast notification here
         }
+        setIsProcessing(false);
         setConfirmDialogOpen(false);
         setSelectedOrg(null);
     };
@@ -64,75 +78,95 @@ const AdminDashboard: React.FC = () => {
     };
 
     if (loading) {
-        return <div>Loading...</div>;
+        return (
+            <div className="flex items-center justify-center min-h-[400px]">
+                <Loader2 className="h-8 w-8 animate-spin" />
+            </div>
+        );
     }
 
     if (error) {
-        return <div>{error}</div>;
+        return (
+            <div className="p-4 text-red-500 bg-red-50 rounded-lg">
+                {error}
+            </div>
+        );
     }
 
     return (
-        <div className="p-4">
-            <h1 className="text-xl font-bold mb-4">Pending Organization Approvals</h1>
+        <div className="p-4 space-y-4">
+            <h1 className="text-2xl font-bold">Pending Organization Approvals</h1>
 
             {organizations.length === 0 ? (
-                <p>No pending approvals</p>
+                <Card>
+                    <CardContent className="py-8">
+                        <p className="text-center text-muted-foreground">No pending approvals</p>
+                    </CardContent>
+                </Card>
             ) : (
                 <div className="overflow-x-auto">
-                    {/* Responsive Table for Desktop */}
-                    <Table className="hidden md:block">
+                    {/* Desktop Table View */}
+                    <Table className="hidden md:table">
                         <TableHeader>
                             <TableRow>
                                 <TableHead>Organization Name</TableHead>
                                 <TableHead>Email</TableHead>
-                                <TableHead>Actions</TableHead>
+                                <TableHead className="w-[200px]">Actions</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {organizations.map((org) => (
                                 <TableRow key={org.id}>
-                                    <TableCell>{org.organization_name}</TableCell>
+                                    <TableCell className="font-medium">{org.organization_name}</TableCell>
                                     <TableCell>{org.email}</TableCell>
                                     <TableCell>
-                                        <Button
-                                            variant="default"
-                                            onClick={() => openConfirmDialog(org, "approve")}
-                                            className="mr-2"
-                                        >
-                                            Approve
-                                        </Button>
-                                        <Button
-                                            variant="secondary"
-                                            onClick={() => openConfirmDialog(org, "reject")}
-                                        >
-                                            Reject
-                                        </Button>
+                                        <div className="flex gap-2">
+                                            <Button
+                                                // variant="default"
+                                                className="bg-green-600 hover:bg-green-500"
+                                                size="sm"
+                                                onClick={() => openConfirmDialog(org, "approve")}
+                                                aria-label={`Approve ${org.organization_name}`}
+                                            >
+                                                Approve
+                                            </Button>
+                                            <Button
+                                                variant="destructive"
+                                                size="sm"
+                                                onClick={() => openConfirmDialog(org, "reject")}
+                                                aria-label={`Reject ${org.organization_name}`}
+                                            >
+                                                Reject
+                                            </Button>
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
                     </Table>
 
-                    {/* Cards for Mobile */}
-                    <div className="md:hidden">
+                    {/* Mobile Card View */}
+                    <div className="grid gap-4 md:hidden">
                         {organizations.map((org) => (
-                            <Card key={org.id} className="mb-4">
+                            <Card key={org.id}>
                                 <CardHeader>
                                     <CardTitle>{org.organization_name}</CardTitle>
+                                    <CardDescription>{org.email}</CardDescription>
                                 </CardHeader>
-                                <CardContent>
-                                    <p>{org.email}</p>
-                                </CardContent>
-                                <CardFooter className="flex justify-between">
+                                <CardFooter className="flex gap-2">
                                     <Button
+                                        className="flex-1"
                                         variant="default"
                                         onClick={() => openConfirmDialog(org, "approve")}
+                                        aria-label={`Approve ${org.organization_name}`}
                                     >
                                         Approve
                                     </Button>
                                     <Button
-                                        variant="secondary"
+                                        className="flex-1"
+                                        variant="destructive"
                                         onClick={() => openConfirmDialog(org, "reject")}
+                                        aria-label={`Reject ${org.organization_name}`}
                                     >
                                         Reject
                                     </Button>
@@ -146,35 +180,35 @@ const AdminDashboard: React.FC = () => {
             {/* Confirmation Dialog */}
             <Dialog open={isConfirmDialogOpen} onOpenChange={setConfirmDialogOpen}>
                 <DialogContent>
-                    <h3 className="font-bold text-lg">
-                        {actionType === "approve"
-                            ? `Approve ${selectedOrg?.organization_name}?`
-                            : `Reject ${selectedOrg?.organization_name}?`}
-                    </h3>
-                    <p>
-                        Are you sure you want to{" "}
-                        {actionType === "approve" ? "approve" : "reject"} this organization?
-                    </p>
+                    <DialogHeader>
+                        <DialogTitle>
+                            {actionType === "approve"
+                                ? `Approve ${selectedOrg?.organization_name}`
+                                : `Reject ${selectedOrg?.organization_name}`}
+                        </DialogTitle>
+                        <DialogDescription>
+                            Are you sure you want to {actionType === "approve" ? "approve" : "reject"} this organization?
+                            This action cannot be undone.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                        <Button
+                            variant="outline"
+                            onClick={() => setConfirmDialogOpen(false)}
+                            disabled={isProcessing}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            variant={actionType === "approve" ? "default" : "destructive"}
+                            onClick={() => updateOrganizationStatus(actionType === "approve" ? "approved" : "rejected")}
+                            disabled={isProcessing}
+                        >
+                            {isProcessing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                            {actionType === "approve" ? "Approve" : "Reject"}
+                        </Button>
+                    </DialogFooter>
                 </DialogContent>
-                <DialogFooter>
-                    <Button
-                        variant="outline"
-                        onClick={() => setConfirmDialogOpen(false)}
-                        className="mr-2"
-                    >
-                        Cancel
-                    </Button>
-                    <Button
-                        variant={actionType === "approve" ? "default" : "destructive"}
-                        onClick={() =>
-                            actionType === "approve"
-                                ? updateOrganizationStatus("approved")
-                                : updateOrganizationStatus("rejected")
-                        }
-                    >
-                        {actionType === "approve" ? "Approve" : "Reject"}
-                    </Button>
-                </DialogFooter>
             </Dialog>
         </div>
     );
