@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from "react"
-import { useEffect, useState, ChangeEvent } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -278,7 +278,7 @@ export default function ExtendedRegistrationForm() {
   // const [categories, setCategories] = useState<any[]>([]);
   // const [loading, setLoading] = useState(true);
 
-  const supabase = createClient();
+  // const supabase = createClient();
 
   // const {
   //   data: { user },
@@ -311,55 +311,6 @@ export default function ExtendedRegistrationForm() {
 
   //   fetchCategories();
   // }, []);
-
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [uploading, setUploading] = useState<boolean>(false);
-  const [uploadError, setUploadError] = useState<string | null>(null);
-  const [fileUrl, setFileUrl] = useState<string>('');
-
-  // Handle file selection
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    const file = event.target.files?.[0] || null;
-    setSelectedFile(file);
-  };
-
-  // Handle file upload
-  const handleFileUpload = async (): Promise<void> => {
-    if (!selectedFile) {
-      alert('Please select a file to upload.');
-      return;
-    }
-
-    try {
-      setUploading(true);
-      setUploadError(null);
-
-      const fileName = `${Date.now()}_${selectedFile.name}`; // Unique file name
-      const { data, error } = await supabase.storage
-        .from('your_bucket_name') // Replace with your bucket name
-        .upload(fileName, selectedFile);
-
-      if (error) {
-        throw error;
-      }
-
-      const { data: publicData } = supabase.storage
-        .from('your_bucket_name')
-        .getPublicUrl(fileName);
-
-      if (publicData) {
-        setFileUrl(publicData.publicUrl);
-        alert('File uploaded successfully!');
-      } else {
-        throw new Error('Failed to retrieve the public URL.');
-      }
-    } catch (error: any) {
-      console.error('Error uploading file:', error.message);
-      setUploadError(error.message || 'An unknown error occurred.');
-    } finally {
-      setUploading(false);
-    }
-  };
 
   const currentYear = new Date().getFullYear()
   const form = useForm<z.infer<typeof formSchema>>({
@@ -672,7 +623,7 @@ export default function ExtendedRegistrationForm() {
             )}
           />
 
-
+          
 
           <FormField
             control={form.control}
@@ -1435,25 +1386,7 @@ export default function ExtendedRegistrationForm() {
                     <FormItem className="flex-1">
                       <FormLabel>Catalog</FormLabel>
                       <FormControl>
-                        <Input
-                          type="file"
-                          onChange={async (e) => {
-                            const file = e.target.files?.[0];
-                            if (file) {
-                              const filePath = `catalogs/${file.name}`;
-                              const { data, error } = await supabase.storage.from("catalogs").upload(filePath, file);
-                              if (error) {
-                                console.error("File upload failed:", error.message);
-                                return;
-                              }
-                              const publicUrl = supabase.storage.from("catalogs").getPublicUrl(filePath).data?.publicUrl;
-                              if (publicUrl) {
-                                // Update the field value with the uploaded URL
-                                field.onChange(publicUrl);
-                              }
-                            }
-                          }}
-                        />
+                        <Input type="file" {...field} value={field.value?.filename} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -1480,7 +1413,6 @@ export default function ExtendedRegistrationForm() {
               Add Product/Service
             </Button>
           </div>
-
 
           <FormField
             control={form.control}
