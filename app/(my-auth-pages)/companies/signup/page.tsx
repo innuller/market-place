@@ -2,14 +2,14 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from '@/utils/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Eye, EyeOff } from 'lucide-react'
 
-const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
+const supabase = createClient()
 
 export default function CompanySignUp() {
   const [email, setEmail] = useState('')
@@ -22,7 +22,7 @@ export default function CompanySignUp() {
   const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
 
-  const handleSignUp = async (e) => {
+  const handleSignUp = async (e:any) => {
     e.preventDefault()
     try {
       // Sign up the user
@@ -63,7 +63,7 @@ export default function CompanySignUp() {
       if (updateError) throw updateError
 
       router.push('/dashboard')
-    } catch (error) {
+    } catch (error:any) {
       setError(error.message)
     }
   }
