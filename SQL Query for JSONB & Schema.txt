@@ -1,3 +1,5 @@
+SQL Query Version 1
+
 -- Supabase AI is experimental and may produce incorrect answers
 -- Always verify the output before executing
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
@@ -165,3 +167,223 @@ create table
       )
     )
   );
+
+
+SQL Query Version 2
+
+-- Step 1: Drop the existing constraint
+ALTER TABLE public.organizations_main
+DROP CONSTRAINT organizations_main_metadata_check;
+
+-- Step 2: Add the new constraint with categories as a single item
+ALTER TABLE public.organizations_main
+ADD CONSTRAINT organizations_main_metadata_check CHECK (
+  extensions.jsonb_matches_schema (
+    '{
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "type": "object",
+      "properties": {
+          "categories": { "type": "string" },  -- Changed from array to string
+          "subCategories": { "type": "array", "items": { "type": "string" } },
+          "officeAddress": { "type": "string" },
+          "officePincode": { "type": "string", "pattern": "^\\d{6}$" },
+          "plantAddress": { "type": "string" },
+          "plantPincode": { "type": "string", "pattern": "^\\d{6}$" },
+          "officeStartTime": { "type": "string" },
+          "officeEndTime": { "type": "string" },
+          "offDays": { "type": "array", "items": { "type": "string" } },
+          "maxFloorSpace": { "type": "string" },
+          "legalStatus": { "type": "array", "items": { "type": "string" } },
+          "isPartOfLargerOrg": { "type": "string" },
+          "yearOfIncorporation": { "type": "string", "pattern": "^\\d{4}$" },
+          "gstNumber": { "type": "string" },
+          "gstRegistrationState": { "type": "string" },
+          "isMSME": { "type": "string" },
+          "panNumber": { "type": "string" },
+          "cinNumber": { "type": "string" },
+          "website": { "type": "string", "format": "uri" },
+          "contactNumber": { "type": "string", "pattern": "^\\d{10,15}$" },
+          "directorName": { "type": "string" },
+          "directorEmail": { "type": "string", "format": "email" },
+          "directorContactNumber": { "type": "string", "pattern": "^\\d{10,15}$" },
+          "managementName": { "type": "string" },
+          "managementEmail": { "type": "string", "format": "email" },
+          "managementContactNumber": { "type": "string", "pattern": "^\\d{10,15}$" },
+          "emergencyPersonName": { "type": "string" },
+          "emergencyPersonEmail": { "type": "string", "format": "email" },
+          "emergencyPersonContactNumber": { "type": "string", "pattern": "^\\d{10,15}$" },
+          "totalEmployees": { "type": "string" },
+          "departments": { "type": "array", "items": { "type": "string" } },
+          "manpowerDetails": {
+              "type": "object",
+              "properties": {
+                  "Engineers": { "type": "string" },
+                  "Skilled Operators": { "type": "string" },
+                  "Welders/Fitters": { "type": "string" },
+                  "Unskilled Labour": { "type": "string" },
+                  "Separate Quality Inspectors": { "type": "string" }
+              },
+              "additionalProperties": false
+          },
+          "productsServices": {
+              "type": "array",
+              "items": {
+                  "type": "object",
+                  "properties": {
+                      "name": { "type": "string" },
+                      "catalog": { "type": ["string", "null"] }
+                  }
+              }
+          },
+          "standardOrganization": { "type": "string" },
+          "otherStandardOrganization": { "type": "string" },
+          "complianceStandards": { "type": "array", "items": { "type": "string" } },
+          "otherComplianceStandard": { "type": "string" },
+          "hsnCodes": {
+              "type": "array",
+              "items": {
+                  "type": "object",
+                  "properties": {
+                      "code": { "type": "string" },
+                      "description": { "type": "string" }
+                  }
+              }
+          },
+          "hasDocumentedProcedures": { "type": "string" },
+          "experienceWithEPCs": { "type": "array", "items": { "type": "string" } },
+          "majorCustomers": {
+              "type": "array",
+              "items": {
+                  "type": "object",
+                  "properties": {
+                      "name": { "type": "string" },
+                      "location": { "type": "string" },
+                      "businessPercentage": { "type": "number" }
+                  },
+                  "required": ["name", "location", "businessPercentage"]
+              }
+          },
+          "majorSubSuppliers": {
+              "type": "array",
+              "items": {
+                  "type": "object",
+                  "properties": {
+                      "name": { "type": "string" },
+                      "location": { "type": "string" },
+                      "sourcingPercentage": { "type": "number" }
+                  }
+              }
+          },
+          "majorProjects": {
+              "type": "array",
+              "items": {
+                  "type": "object",
+                  "properties": {
+                      "name": { "type": "string" },
+                      "location": { "type": "string" },
+                      "endCustomer": { "type": "string" }
+                  }
+              }
+          },
+          "hasBeenBlacklisted": { "type": "string" },
+          "hasEngagedConsultant": { "type": "string" },
+          "hasDocumentedQMS": { "type": "string" },
+          "isQualitySystemDocumentationAvailable": { "type": "string" },
+          "hasCompletedManagementReview": { "type": "string" },
+          "hasDocumentedHSSESystem": { "type": "string" },
+          "hseOverseerInfo": { "type": "string" },
+          "hasDrugsAlcoholPolicy": { "type": "string" },
+          "identifiesHazardsAndControls": { "type": "string" },
+          "workersInductedAndTrained": { "type": "string" },
+          "maintainsHSEIncidentReports": { "type": "string" },
+          "receivedLegalNotices": { "type": "string" },
+          "hasEmergencyProcedures": { "type": "string" },
+          "hasEmergencyResponseTeam": { "type": "string" },
+          "currencyTransactions": { "type": "array", "items": { "type": "string" } },
+          "annualTurnover": { "type": "string" },
+          "forecastEBITA": { "type": "string" },
+          "currentRatio": { "type": "string" },
+          "inventoryTurnover": { "type": "string" },
+          "bankName": { "type": "string" },
+          "bankBranchAddress": { "type": "string" },
+          "turnoverLastThreeYears": {
+              "type": "array",
+              "items": {
+                  "type": "object",
+                  "properties": {
+                      "year": { "type": "string" },
+                      "turnover": { "type": "string" }
+                  }
+              }
+          },
+          "childLabor": { "type": "string" },
+          "forcedLabor": { "type": "string" },
+          "nonDiscrimination": { "type": "string" },
+          "wagesAndBenefits": { "type": "string" },
+          "logisticAccess": { "type": "array", "items": { "type": "string" } },
+          "distanceFromSeaport": { "type": "string" },
+          "exportExperience": { "type": "string" },
+          "importExportRestrictions": { "type": "string" },
+          "dataSecurityPractices": { "type": "string" }
+      }
+  }'::json,
+      metadata
+    )
+  )
+);
+
+
+
+
+
+// Request Quote, Message Table and Functions & Triggers
+
+-- Create the quotes table
+CREATE TABLE quotes (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id),
+  company_id UUID,
+  project_title TEXT NOT NULL,
+  project_description TEXT,
+  date_needed DATE,
+  project_file_url TEXT,
+  phone_number TEXT,
+  zip_code TEXT,
+  shipping_instructions TEXT,
+  first_name TEXT NOT NULL,
+  last_name TEXT NOT NULL,
+  company_name TEXT,
+  email TEXT NOT NULL,
+  status TEXT DEFAULT 'pending',
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create the messages table
+CREATE TABLE messages (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  quote_id UUID REFERENCES quotes(id),
+  sender_id UUID REFERENCES auth.users(id),
+  content TEXT NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create a function to update the updated_at column
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create a trigger to automatically update the updated_at column
+CREATE TRIGGER update_quotes_updated_at
+BEFORE UPDATE ON quotes
+FOR EACH ROW
+EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_messages_updated_at
+BEFORE UPDATE ON messages
+FOR EACH ROW
+EXECUTE FUNCTION update_updated_at_column();

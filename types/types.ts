@@ -3,9 +3,20 @@ export interface OrganizationCategory {
   category: string;
 }
 
+export interface Category {
+  id: string;
+  category: string;
+}
+
 export interface OrganizationSubCategory {
-  id: number;
+  id: string;
   sub_category: string;
+  main_category_id: string;  // Changed from main_category to main_category_id to match DB
+  created_at: string;
+  categories: {  // This represents the joined categories table data
+    id: string;
+    category: string;
+  };
 }
 
 export interface ComplianceStandard {
@@ -22,3 +33,4 @@ export interface Organization {
   updated_at: string;
   status: 'pending' | 'approved' | 'rejected';
 }
+

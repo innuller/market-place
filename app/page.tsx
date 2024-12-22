@@ -1,7 +1,7 @@
 'use client'
 
 import Link from "next/link"
-import { Menu, Search, DollarSign, Users, Book, ShoppingCart } from "lucide-react"
+import { Menu, Search, ShoppingBag, IndianRupee, Users, Book, ShoppingCart } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   Select,
@@ -38,7 +38,7 @@ export default function Index() {
         {/* Hero Section */}
         <div className="container mx-auto px-4 py-12 md:py-24 text-center">
           <h1 className="text-white text-2xl sm:text-3xl md:text-4xl font-bold mb-8">
-            Search and Buy with The Industrial Buying Engine™
+            Search and Buy with The Leading Industries Exploration Platform.
           </h1>
           <div className="max-w-3xl mx-auto flex flex-col sm:flex-row gap-2">
             <Select>
@@ -65,8 +65,8 @@ export default function Index() {
             </Link>
           </div>
           <div className="mt-4 text-white">
-            New to Thomas?
-            <Link href="#" className="text-[#7AB80E] ml-2">
+            {/* New to Thomas? */}
+            <Link href="#" className="text-[#7AB80E] ml-2 underline">
               Join Free for Full Access
             </Link>
           </div>
@@ -88,10 +88,9 @@ export default function Index() {
               <div className="bg-white/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Search className="w-10 h-10 text-white" />
               </div>
-              <h3 className="text-white text-lg md:text-xl font-bold mb-4">Discover Suppliers</h3>
+              <h3 className="text-white text-lg md:text-xl font-bold mb-4">Explore Suppliers</h3>
               <p className="text-white/80 mb-6">
-                Find and compare suppliers in over 70,000 categories. Our team keeps listings up to date
-                and assists with strategic sourcing opportunities.
+                Explore the listed suppliers in our supplier directory. We are constantly updating the supplier list and are here to assist you with strategic sourcing opportunities.
               </p>
               <Button variant="secondary" className="w-full sm:w-auto">
                 Discover Suppliers
@@ -101,27 +100,27 @@ export default function Index() {
             {/* Get an Instant Quote */}
             <div className="text-center">
               <div className="bg-white/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
-                <DollarSign className="w-10 h-10 text-white" />
+                <IndianRupee className="w-10 h-10 text-white" />
               </div>
               <h3 className="text-white text-lg md:text-xl font-bold mb-4">Get an Instant Quote</h3>
               <p className="text-white/80 mb-6">
-                Upload a CAD model to get a quote within seconds for CNC machining, 3D printing, sheet
-                metal fabrication, and more.
+                Explore listed suppliers, view their catalogs, and submit instant RFQs to multiple suppliers with a single click and share your needs to multiple suppliers.
               </p>
               <Button variant="secondary" className="w-full sm:w-auto">
-                Get an Instant Quote
+                <Link href="/search">
+                  Get an Instant Quote
+                </Link>
               </Button>
             </div>
 
             {/* Register as a Buyer */}
             <div className="text-center sm:col-span-2 md:col-span-1">
               <div className="bg-white/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
-                <DollarSign className="w-10 h-10 text-white" />
+                <ShoppingBag className="w-10 h-10 text-white" />
               </div>
               <h3 className="text-white text-lg md:text-xl font-bold mb-4">Register as a Buyer</h3>
               <p className="text-white/80 mb-6">
-                Registered buyers can contact and quote with multiple suppliers, check out with a quote,
-                and pay on terms within one platform.
+                Registered as a buyer to reduce lead time, increase profitability, and access quality products/services from professional suppliers registered on the platform.
               </p>
               <Button variant="secondary" className="w-full sm:w-auto">
                 Register as a Buyer

@@ -1,1 +1,2 @@
-Do match all the names of keys in database and in the code file
+Update the metadata check constraints to only allow one input for category (main-category) instead of the array.
+Added otherECPs, otherCurrency, Terms 

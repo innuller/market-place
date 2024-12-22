@@ -24,6 +24,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { Badge } from "@/components/ui/badge"
+import {fetchMainCategories,fetchSubCategories} from "@/lib/supabase-categories-fetch"
 
 const categories = [
   "Manufacturing",

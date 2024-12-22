@@ -30,6 +30,9 @@ export default function OrganizationsPage() {
     const { data, error } = await query;
     if (error) console.error('Error fetching data:', error);
     else setResults(data as Organization[]);
+
+    console.log(results);
+    
   };
 
   useEffect(() => {

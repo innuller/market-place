@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
+import { signOutAction } from "@/app/actions";
 
 export const updateSession = async (request: NextRequest) => {
   // This `try/catch` block is only here for the interactive tutorial.
@@ -38,30 +39,50 @@ export const updateSession = async (request: NextRequest) => {
     // This will refresh session if expired - required for Server Components
     // https://supabase.com/docs/guides/auth/server-side/nextjs
     const user = await supabase.auth.getUser();
+    // console.log("middleware,tsx Users: ",user);
+    
 
     // protected routes
     if (request.nextUrl.pathname.startsWith("/protected") && user.error) {
-      return NextResponse.redirect(new URL("/signin", request.url));
+      return NextResponse.redirect(new URL("/users/signin", request.url));
     }
 
-    if (request.nextUrl.pathname.startsWith("/registration-form") && user.error) {
-      return NextResponse.redirect(new URL("/signin", request.url));
+    // if (request.nextUrl.pathname.startsWith("/registration-form") && user.error) {
+    //   return NextResponse.redirect(new URL("/companies/signup", request.url));
+    // }
+
+    if (request.nextUrl.pathname.startsWith("/companies/signin") && !user.error) {
+      await signOutAction();
     }
+    if (request.nextUrl.pathname.startsWith("/companies/signup") && !user.error) {
+      await signOutAction();
+    }
+    if (request.nextUrl.pathname.startsWith("/users/signin") && !user.error) {
+      await signOutAction();
+    }
+    if (request.nextUrl.pathname.startsWith("/users/signup") && !user.error) {
+      await signOutAction();
+    }
+
+    // if (request.nextUrl.pathname.startsWith("/registration-form") && !user.error && user.data.user.user_metadata.user_type != "company") {
+    //   await signOutAction();
+    //   return NextResponse.redirect(new URL("/companies/signup", request.url));
+    // }
 
     if (request.nextUrl.pathname === "/landing-page" && !user.error) {
       return NextResponse.redirect(new URL("/", request.url));
     }
 
-    if (request.nextUrl.pathname === "/signin" && !user.error) {
+    if (request.nextUrl.pathname === "/users/signin" && !user.error) {
       return NextResponse.redirect(new URL("/protected", request.url));
     }
 
-    if (request.nextUrl.pathname === "/signup" && !user.error) {
+    if (request.nextUrl.pathname === "/users.signup" && !user.error) {
       return NextResponse.redirect(new URL("/protected", request.url));
     }
 
     if (request.nextUrl.pathname.startsWith("/admin") && user.error) {
-      return NextResponse.redirect(new URL("/signin", request.url));
+      return NextResponse.redirect(new URL("/users/signin", request.url));
     }
 
     return response;

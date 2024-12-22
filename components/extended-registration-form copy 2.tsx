@@ -109,7 +109,6 @@ const reputedEPCs = [
   "Tecnimont",
   "Sabic",
   "Aramco",
-  "Other",
 ]
 
 const currencyOptions = [
@@ -118,7 +117,7 @@ const currencyOptions = [
   { value: "USD", label: "USD" },
   { value: "YEN", label: "YEN" },
   { value: "RMB", label: "RMB" },
-  { value: "Other", label: "Other" },
+  { value: "OTHER", label: "Other" },
 ]
 
 const logisticOptions = [
@@ -218,7 +217,6 @@ const formSchema = z.object({
   })),
   hasDocumentedProcedures: z.enum(["yes", "no"]),
   experienceWithEPCs: z.array(z.string()),
-  otherExperienceWithEPCs: z.string().optional(),
   majorCustomers: z.array(z.object({
     name: z.string().min(1, { message: "Customer name is required" }),
     location: z.string().min(1, { message: "Customer location is required" }),
@@ -255,7 +253,6 @@ const formSchema = z.object({
   hasEmergencyProcedures: z.enum(["yes", "no"]),
   hasEmergencyResponseTeam: z.enum(["yes", "no"]),
   currencyTransactions: z.array(z.string()).min(1, "Select at least one currency"),
-  otherCurrencyTransactions: z.string().optional(),
   annualTurnover: z.string().min(1, "Annual turnover is required"),
   forecastEBITA: z.string().min(1, "Forecast EBITA is required"),
   currentRatio: z.string().min(1, "Current ratio is required"),
@@ -275,7 +272,6 @@ const formSchema = z.object({
   exportExperience: z.enum(["yes", "no"]),
   importExportRestrictions: z.enum(["yes", "no"]),
   dataSecurityPractices: z.enum(["yes", "no"]),
-  termsConditions: z.enum(["agree", "disagree"]),
   otherDocumentation: z.any().optional(),
 })
 
@@ -414,7 +410,6 @@ export default function ExtendedRegistrationForm() {
       hsnCodes: [{ code: "", description: "" }],
       hasDocumentedProcedures: "no",
       experienceWithEPCs: [],
-      otherExperienceWithEPCs: "",
       majorCustomers: [{ name: "", location: "", businessPercentage: 0 }],
       majorSubSuppliers: [{ name: "", location: "", sourcingPercentage: 0 }],
       majorProjects: [{ name: "", location: "", endCustomer: "" }],
@@ -432,7 +427,6 @@ export default function ExtendedRegistrationForm() {
       hasEmergencyProcedures: "no",
       hasEmergencyResponseTeam: "no",
       currencyTransactions: [],
-      otherCurrencyTransactions: "",
       annualTurnover: "",
       forecastEBITA: "",
       currentRatio: "",
@@ -453,7 +447,6 @@ export default function ExtendedRegistrationForm() {
       exportExperience: "no",
       importExportRestrictions: "no",
       dataSecurityPractices: "no",
-      termsConditions: "disagree",
     },
   })
 
@@ -533,7 +526,6 @@ export default function ExtendedRegistrationForm() {
       })),
       has_documented_procedures: restValues.hasDocumentedProcedures === "yes",
       experience_with_epcs: restValues.experienceWithEPCs || [],
-      other_experience_with_epcs: restValues.otherExperienceWithEPCs || null,
       major_customers: restValues.majorCustomers.map(cust => ({
         name: cust.name,
         location: cust.location,
@@ -565,7 +557,6 @@ export default function ExtendedRegistrationForm() {
       has_emergency_procedures: restValues.hasEmergencyProcedures === "yes",
       has_emergency_response_team: restValues.hasEmergencyResponseTeam === "yes",
       currency_transactions: restValues.currencyTransactions || [],
-      other_currency_transactions: restValues.otherCurrencyTransactions || null,
       annual_turnover: restValues.annualTurnover || null,
       forecast_ebita: restValues.forecastEBITA || null,
       current_ratio: restValues.currentRatio || null,
@@ -584,8 +575,7 @@ export default function ExtendedRegistrationForm() {
       distance_from_seaport: parseInt(restValues.distanceFromSeaport, 10) || null,
       export_experience: restValues.exportExperience === "yes",
       import_export_restrictions: restValues.importExportRestrictions === "yes",
-      data_security_practices: restValues.dataSecurityPractices === "yes",
-      terms_conditions: restValues.termsConditions === "disagree",
+      data_security_practices: restValues.dataSecurityPractices === "yes"
     };
 
     // Fetch Current Logged in User's Data
@@ -1605,7 +1595,6 @@ export default function ExtendedRegistrationForm() {
                               }
                               const publicUrl = supabase.storage.from("catalogs").getPublicUrl(filePath).data?.publicUrl;
                               if (publicUrl) {
-                                console.log("Uploaded Catalog URL:", publicUrl);
                                 // Update the field value with the uploaded URL
                                 field.onChange(publicUrl);
                               }
@@ -1645,7 +1634,7 @@ export default function ExtendedRegistrationForm() {
             name="standardOrganization"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Standard Organization Follows in Product/Process. *</FormLabel>
+                <FormLabel>Standard Organization Follow</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
@@ -1883,22 +1872,6 @@ export default function ExtendedRegistrationForm() {
               </FormItem>
             )}
           />
-
-          {form.watch("experienceWithEPCs")?.includes("Other") && (
-            <FormField
-              control={form.control}
-              name="otherExperienceWithEPCs"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Specify Other EPC's</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
 
           <div>
             <h3 className="text-lg font-semibold mb-4">Major Current/Potential Customers</h3>
@@ -2780,110 +2753,92 @@ export default function ExtendedRegistrationForm() {
               )}
             />
 
-            {form.watch("currencyTransactions")?.includes("Other") && (
-              <FormField
-                control={form.control}
-                name="otherCurrencyTransactions"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Specify Other Currency</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            )}
+            <FormField
+              control={form.control}
+              name="annualTurnover"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Annual Turnover</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-            <div className="mt-5">
-              <FormField
-                control={form.control}
-                name="annualTurnover"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Annual Turnover *</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <FormField
+              control={form.control}
+              name="forecastEBITA"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Forecast EBITA for current year</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <FormField
-                control={form.control}
-                name="forecastEBITA"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Forecast EBITA for current year</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <FormField
+              control={form.control}
+              name="currentRatio"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Current Ratio</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <FormField
-                control={form.control}
-                name="currentRatio"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Current Ratio</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <FormField
+              control={form.control}
+              name="inventoryTurnover"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Inventory Turnover</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <FormField
-                control={form.control}
-                name="inventoryTurnover"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Inventory Turnover</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <FormField
+              control={form.control}
+              name="bankName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Bank Name</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <FormField
-                control={form.control}
-                name="bankName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Bank Name *</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <FormField
+              control={form.control}
+              name="bankBranchAddress"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Bank Branch Address</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <FormField
-                control={form.control}
-                name="bankBranchAddress"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Bank Branch Address *</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div className="mt-6">
-              <h4 className="text-md font-semibold mb-2">Company Size - Turnover for Last 3 Years *</h4>
+            <div>
+              <h4 className="text-md font-semibold mb-2">Company Size - Turnover for Last 3 Years</h4>
               {form.watch("turnoverLastThreeYears").map((yearData, index) => (
                 <FormField
                   key={yearData.year}
@@ -2891,7 +2846,7 @@ export default function ExtendedRegistrationForm() {
                   name={`turnoverLastThreeYears.${index}.turnover`}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{yearData.year} (Cr)</FormLabel>
+                      <FormLabel>{yearData.year}</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -2910,7 +2865,7 @@ export default function ExtendedRegistrationForm() {
               name="childLabor"
               render={({ field }) => (
                 <FormItem className="space-y-3">
-                  <FormLabel>No Child labor?</FormLabel>
+                  <FormLabel>Child labor?</FormLabel>
                   <FormControl>
                     <RadioGroup
                       onValueChange={field.onChange}
@@ -2941,7 +2896,7 @@ export default function ExtendedRegistrationForm() {
               name="forcedLabor"
               render={({ field }) => (
                 <FormItem className="space-y-3">
-                  <FormLabel>No Forced labor?</FormLabel>
+                  <FormLabel>Forced labor?</FormLabel>
                   <FormControl>
                     <RadioGroup
                       onValueChange={field.onChange}
@@ -3204,49 +3159,7 @@ export default function ExtendedRegistrationForm() {
             />
           </div>
 
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Terms & Condition</h3>
-            <FormField
-              control={form.control}
-              name="termsConditions"
-              render={({ field }) => (
-                <FormItem className="space-y-3">
-                  <FormLabel>By completing and submitting form, you acknowledge and agree our Privacy Policy and Terms and Conditions, and consent to the collection and use of your company information as outlined therein *</FormLabel>
-                  <FormControl>
-                    <RadioGroup
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      className="flex flex-row space-x-4"
-                    >
-                      <FormItem className="flex items-center space-x-3 space-y-0">
-                        <FormControl>
-                          <RadioGroupItem value="agree" />
-                        </FormControl>
-                        <FormLabel className="font-normal">Agree</FormLabel>
-                      </FormItem>
-                      <FormItem className="flex items-center space-x-3 space-y-0">
-                        <FormControl>
-                          <RadioGroupItem value="disagree" />
-                        </FormControl>
-                        <FormLabel className="font-normal">Disagree</FormLabel>
-                      </FormItem>
-                    </RadioGroup>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          {form.watch("termsConditions") === "agree" ? (
-            <Button type="submit">Submit</Button>
-          ) :
-            <>
-              <p className="text-sm text-red-500">Please Agree Terms and Condition to Submit Form</p>
-              <Button className="disabled: cursor-not-allowed" disabled>Submit</Button>
-            </>
-          }
-
+          <Button type="submit">Submit</Button>
         </form>
       </Form>
     </div>

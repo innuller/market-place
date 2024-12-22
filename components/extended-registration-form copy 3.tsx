@@ -1605,7 +1605,6 @@ export default function ExtendedRegistrationForm() {
                               }
                               const publicUrl = supabase.storage.from("catalogs").getPublicUrl(filePath).data?.publicUrl;
                               if (publicUrl) {
-                                console.log("Uploaded Catalog URL:", publicUrl);
                                 // Update the field value with the uploaded URL
                                 field.onChange(publicUrl);
                               }

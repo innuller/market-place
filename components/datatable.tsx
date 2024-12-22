@@ -10,6 +10,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Edit, Trash2, Plus } from 'lucide-react';
+import {Category, ComplianceStandard, Organization, OrganizationCategory, OrganizationSubCategory} from '@/types/types'
 
 interface DataTableProps<T> {
   data: T[];
@@ -18,6 +19,7 @@ interface DataTableProps<T> {
   onDelete: (id: number) => void;
   onAdd: () => void;
 }
+
 
 export function DataTable<T extends { id: number }>({ 
   data, 

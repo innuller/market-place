@@ -46,32 +46,55 @@ export const api = {
   async getSubCategories() {
     const { data, error } = await supabase
       .from('sub_categories')
-      .select('*')
-      .order('id');
+      .select(`
+        *,
+        categories (
+          category
+        )
+      `);
+  
     if (error) throw error;
     return data;
   },
 
-  async createSubCategory(subCategory: string) {
+  async createSubCategory(subCategory: string, mainCategoryId: string) {
     const { data, error } = await supabase
       .from('sub_categories')
-      .insert([{ sub_category: subCategory }])
-      .select();
+      .insert([
+        { 
+          sub_category: subCategory, 
+          main_category_id: mainCategoryId 
+        }
+      ])
+      .select(`
+        *,
+        category:categories(id, category)
+      `)
+      .single();
+
     if (error) throw error;
-    return data[0];
+    return data;
   },
 
-  async updateSubCategory(id: number, subCategory: string) {
+  async updateSubCategory(id: string, subCategory: string, mainCategoryId: string) {
     const { data, error } = await supabase
       .from('sub_categories')
-      .update({ sub_category: subCategory })
+      .update({ 
+        sub_category: subCategory, 
+        main_category_id: mainCategoryId 
+      })
       .eq('id', id)
-      .select();
+      .select(`
+        *,
+        category:categories(id, category)
+      `)
+      .single();
+
     if (error) throw error;
-    return data[0];
+    return data;
   },
 
-  async deleteSubCategory(id: number) {
+  async deleteSubCategory(id: string) {
     const { error } = await supabase
       .from('sub_categories')
       .delete()
@@ -113,6 +136,24 @@ export const api = {
       .from('compliance_standards')
       .delete()
       .eq('id', id);
+    if (error) throw error;
+  },
+
+  getFilters: async () => {
+    const { data, error } = await supabase.from('filters').select('*');
+    if (error) throw error;
+    return data;
+  },
+  createFilter: async (filter: any) => {
+    const { error } = await supabase.from('filters').insert(filter);
+    if (error) throw error;
+  },
+  updateFilter: async (id:any, filter:any) => {
+    const { error } = await supabase.from('filters').update(filter).eq('id', id);
+    if (error) throw error;
+  },
+  deleteFilter: async (id:any) => {
+    const { error } = await supabase.from('filters').delete().eq('id', id);
     if (error) throw error;
   },
 };
