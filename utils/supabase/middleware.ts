@@ -47,8 +47,8 @@ export const updateSession = async (request: NextRequest) => {
       return NextResponse.redirect(new URL("/users/signin", request.url));
     }
 
-    // if (request.nextUrl.pathname.startsWith("/registration-form") && user.error) {
-    //   return NextResponse.redirect(new URL("/companies/signup", request.url));
+    // if (request.nextUrl.pathname.startsWith("/registration-form") && !user.error ) {     
+    //   return NextResponse.redirect(new URL("/chat/company", request.url));
     // }
 
     if (request.nextUrl.pathname.startsWith("/companies/signin") && !user.error) {
@@ -68,6 +68,10 @@ export const updateSession = async (request: NextRequest) => {
     //   await signOutAction();
     //   return NextResponse.redirect(new URL("/companies/signup", request.url));
     // }
+
+    if (request.nextUrl.pathname.startsWith("/registration-form") && !user.error && user.data.user.user_metadata.user_type == "company") {
+      return NextResponse.redirect(new URL("/chat/company", request.url));
+    }
 
     if (request.nextUrl.pathname === "/landing-page" && !user.error) {
       return NextResponse.redirect(new URL("/", request.url));

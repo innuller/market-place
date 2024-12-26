@@ -13,9 +13,10 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, useFieldArray } from "react-hook-form"
 import * as z from "zod"
 import { Badge } from "@/components/ui/badge"
-import { X, Plus } from "lucide-react"
+import { X, Plus, Eye, EyeOff, Upload } from "lucide-react"
 import { createClient } from "@/utils/supabase/client";
 import { Session } from "@supabase/supabase-js";
+import { useRouter } from "next/navigation";
 // import { redirect } from "next/navigation"
 
 
@@ -130,7 +131,24 @@ const logisticOptions = [
   { value: "SEAPORT", label: "Seaport" },
 ]
 
+const initialProductFields: ProductField[] = [{ id: "1", name: "", catalog: null }];
+
+interface ProductField {
+  id: string;
+  name: string;
+  catalog: File | null;
+}
+
 const supabase = createClient();
+
+// Define the type for the organization data
+interface Organization {
+  id: string;
+  organization_name: string;
+  email: string;
+  metadata?: any;
+  user: string;
+}
 
 const formSchema = z.object({
   organizationName: z.string().min(2, {
@@ -139,6 +157,7 @@ const formSchema = z.object({
   email: z.string().email({
     message: "Please enter a valid email address.",
   }),
+  password: z.string().min(6, { message: "Password must be at least 6 characters." }),
   categories: z.string().min(1, { message: "Please select a main category." }),
   // subCategories: z.array(z.string()).min(1, {
   //   message: "Please select at least one sub-category.",
@@ -281,6 +300,8 @@ const formSchema = z.object({
 
 export default function ExtendedRegistrationForm() {
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [mainCategories, setMainCategories] = useState<any[]>([]);
   const [subCategories, setSubCategories] = useState<any[]>([]);
   const [loadingSubcategories, setLoadingSubcategories] = useState(false);
@@ -290,7 +311,14 @@ export default function ExtendedRegistrationForm() {
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [fileUrl, setFileUrl] = useState<string>('');
 
+  const [error, setError] = useState(null)
+  const [showPassword, setShowPassword] = useState(false)
+
   const [userId, setUserId] = useState<String | any>(null);
+
+  const [ProductFields, setProductFields] = useState(initialProductFields);
+
+  const router = useRouter()
 
   useEffect(() => {
     // Fetch main categories on load
@@ -337,42 +365,42 @@ export default function ExtendedRegistrationForm() {
   };
 
   // Handle file upload
-  const handleFileUpload = async (): Promise<void> => {
-    if (!selectedFile) {
-      alert('Please select a file to upload.');
-      return;
-    }
+  // const handleFileUpload = async (): Promise<void> => {
+  //   if (!selectedFile) {
+  //     alert('Please select a file to upload.');
+  //     return;
+  //   }
 
-    try {
-      setUploading(true);
-      setUploadError(null);
+  //   try {
+  //     setUploading(true);
+  //     setUploadError(null);
 
-      const fileName = `${Date.now()}_${selectedFile.name}`; // Unique file name
-      const { data, error } = await supabase.storage
-        .from('your_bucket_name') // Replace with your bucket name
-        .upload(fileName, selectedFile);
+  //     const fileName = `${Date.now()}_${selectedFile.name}`; // Unique file name
+  //     const { data, error } = await supabase.storage
+  //       .from('your_bucket_name') // Replace with your bucket name
+  //       .upload(fileName, selectedFile);
 
-      if (error) {
-        throw error;
-      }
+  //     if (error) {
+  //       throw error;
+  //     }
 
-      const { data: publicData } = supabase.storage
-        .from('your_bucket_name')
-        .getPublicUrl(fileName);
+  //     const { data: publicData } = supabase.storage
+  //       .from('your_bucket_name')
+  //       .getPublicUrl(fileName);
 
-      if (publicData) {
-        setFileUrl(publicData.publicUrl);
-        alert('File uploaded successfully!');
-      } else {
-        throw new Error('Failed to retrieve the public URL.');
-      }
-    } catch (error: any) {
-      console.error('Error uploading file:', error.message);
-      setUploadError(error.message || 'An unknown error occurred.');
-    } finally {
-      setUploading(false);
-    }
-  };
+  //     if (publicData) {
+  //       setFileUrl(publicData.publicUrl);
+  //       alert('File uploaded successfully!');
+  //     } else {
+  //       throw new Error('Failed to retrieve the public URL.');
+  //     }
+  //   } catch (error: any) {
+  //     console.error('Error uploading file:', error.message);
+  //     setUploadError(error.message || 'An unknown error occurred.');
+  //   } finally {
+  //     setUploading(false);
+  //   }
+  // };
 
   const currentYear = new Date().getFullYear()
   const form = useForm<z.infer<typeof formSchema>>({
@@ -380,6 +408,7 @@ export default function ExtendedRegistrationForm() {
     defaultValues: {
       organizationName: "",
       email: "",
+      password: "",
       categories: "",
       subCategories: [],
       officeAddress: "",
@@ -406,7 +435,8 @@ export default function ExtendedRegistrationForm() {
       totalEmployees: "",
       departments: [],
       manpowerDetails: {},
-      productsServices: [{ name: "", catalog: null }],
+      productsServices: [{ name: "", catalog: "" }],
+      // productsServices: initialProductFields,
       standardOrganization: "",
       otherStandardOrganization: "",
       complianceStandards: [],
@@ -457,6 +487,23 @@ export default function ExtendedRegistrationForm() {
     },
   })
 
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword)
+  }
+
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "productsServices",
+  });
+
+  const addProductService = () => {
+    form.setValue('productsServices', [...form.getValues('productsServices'), { name: '', catalog: null }]);
+  };
+
+  const removeProductService = (index: number) => {
+    form.setValue('productsServices', form.getValues('productsServices').filter((_, i) => i !== index));
+  };
+
   const { fields: productFields, append: appendProduct, remove: removeProduct } = useFieldArray({
     control: form.control,
     name: "productsServices",
@@ -482,144 +529,213 @@ export default function ExtendedRegistrationForm() {
     name: "majorProjects",
   })
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Extract top-level fields
-    const { organizationName, email, ...restValues } = values;
-
-    // Prepare metadata by mapping form values to schema-compliant types and structures
-    const metadata = {
-      categories: restValues.categories,
-      sub_categories: restValues.subCategories,
-      office_address: restValues.officeAddress,
-      office_pincode: restValues.officePincode,
-      plant_address: restValues.plantAddress,
-      plant_pincode: restValues.plantPincode,
-      office_start_time: restValues.officeStartTime,
-      office_end_time: restValues.officeEndTime,
-      max_floor_space: parseInt(restValues.maxFloorSpace, 10) || null,
-      legal_status: restValues.legalStatus || [],
-      is_part_of_larger_org: restValues.isPartOfLargerOrg === "yes",
-      is_manufacturing_facility_owned: restValues.isManufacturingFacilityOwned === "yes",
-      year_of_incorporation: parseInt(restValues.yearOfIncorporation, 10) || null,
-      gst_number: restValues.gstNumber || null,
-      gst_registration_state: restValues.gstRegistrationState || null,
-      is_msme: restValues.isMSME === "yes",
-      pan_number: restValues.panNumber || null,
-      cin_number: restValues.cinNumber || null,
-      website: restValues.website || null,
-      contact_number: restValues.contactNumber || null,
-      director_name: restValues.directorName || null,
-      director_email: restValues.directorEmail || null,
-      director_contact_number: restValues.directorContactNumber || null,
-      management_name: restValues.managementName || null,
-      management_email: restValues.managementEmail || null,
-      management_contact_number: restValues.managementContactNumber || null,
-      emergency_person_name: restValues.emergencyPersonName || null,
-      emergency_person_email: restValues.emergencyPersonEmail || null,
-      emergency_person_contact_number: restValues.emergencyPersonContactNumber || null,
-      total_employees: restValues.totalEmployees || null,
-      departments: restValues.departments || [],
-      manpower_details: restValues.manpowerDetails,
-      products_services: restValues.productsServices.map(ps => ({
-        name: ps.name,
-        catalog: ps.catalog || null
-      })),
-      standard_organization: restValues.standardOrganization || null,
-      other_standard_organization: restValues.otherStandardOrganization || null,
-      compliance_standards: restValues.complianceStandards || [],
-      hsn_codes: restValues.hsnCodes.map(code => ({
-        code: code.code,
-        description: code.description
-      })),
-      has_documented_procedures: restValues.hasDocumentedProcedures === "yes",
-      experience_with_epcs: restValues.experienceWithEPCs || [],
-      other_experience_with_epcs: restValues.otherExperienceWithEPCs || null,
-      major_customers: restValues.majorCustomers.map(cust => ({
-        name: cust.name,
-        location: cust.location,
-        business_percentage: parseFloat(String(cust.businessPercentage)) || 0
-      })),
-      major_sub_suppliers: restValues.majorSubSuppliers.map(sub => ({
-        name: sub.name,
-        location: sub.location,
-        sourcing_percentage: parseFloat(String(sub.sourcingPercentage)) || 0
-      })),
-      major_projects: restValues.majorProjects.map(proj => ({
-        name: proj.name,
-        location: proj.location,
-        end_customer: proj.endCustomer
-      })),
-      has_been_blacklisted: restValues.hasBeenBlacklisted === "yes",
-      has_engaged_consultant: restValues.hasEngagedConsultant === "yes",
-      has_documented_qms: restValues.hasDocumentedQMS === "yes",
-      is_quality_system_documentation_available: restValues.isQualitySystemDocumentationAvailable === "yes",
-      has_completed_management_review: restValues.hasCompletedManagementReview === "yes",
-      has_documented_hsse_system: restValues.hasDocumentedHSSESystem === "yes",
-      is_hse_management_system_certified: restValues.isHSEManagementSystemCertified === "yes",
-      hse_overseer_info: restValues.hseOverseerInfo || null,
-      has_drugs_alcohol_policy: restValues.hasDrugsAlcoholPolicy === "yes",
-      identifies_hazards_and_controls: restValues.identifiesHazardsAndControls === "yes",
-      workers_inducted_and_trained: restValues.workersInductedAndTrained === "yes",
-      maintains_hse_incident_reports: restValues.maintainsHSEIncidentReports === "yes",
-      received_legal_notices: restValues.receivedLegalNotices === "yes",
-      has_emergency_procedures: restValues.hasEmergencyProcedures === "yes",
-      has_emergency_response_team: restValues.hasEmergencyResponseTeam === "yes",
-      currency_transactions: restValues.currencyTransactions || [],
-      other_currency_transactions: restValues.otherCurrencyTransactions || null,
-      annual_turnover: restValues.annualTurnover || null,
-      forecast_ebita: restValues.forecastEBITA || null,
-      current_ratio: restValues.currentRatio || null,
-      inventory_turnover: restValues.inventoryTurnover || null,
-      bank_name: restValues.bankName || null,
-      bank_branch_address: restValues.bankBranchAddress || null,
-      turnover_last_three_years: restValues.turnoverLastThreeYears.map(turnover => ({
-        year: turnover.year,
-        turnover: turnover.turnover
-      })),
-      child_labor: restValues.childLabor === "yes",
-      forced_labor: restValues.forcedLabor === "yes",
-      non_discrimination: restValues.nonDiscrimination === "yes",
-      wages_and_benefits: restValues.wagesAndBenefits === "yes",
-      logistic_access: restValues.logisticAccess || [],
-      distance_from_seaport: parseInt(restValues.distanceFromSeaport, 10) || null,
-      export_experience: restValues.exportExperience === "yes",
-      import_export_restrictions: restValues.importExportRestrictions === "yes",
-      data_security_practices: restValues.dataSecurityPractices === "yes",
-      terms_conditions: restValues.termsConditions === "disagree",
-    };
-
-    // Fetch Current Logged in User's Data
-    const { data: userData, error: userErr } = await supabase.auth.getSession();
-    if (userErr) {
-      console.error('Error fetching session:', userErr);
-      return;
-    }
-    if (userData.session && userData.session.user) {
-      setUserId(userData.session.user.id);
-
-    }
-
-    // Insert organization data into Supabase
-    const { data, error } = await createClient().from('organizations_main').insert([
-      {
-        organization_name: organizationName,
-        email: email,
-        metadata: metadata,  // Store all validated metadata
-        user: userId,
-      }
-    ]);
-    console.log("Insert operation result:", { data, error }); // Add this line
+  async function uploadFile(file: File) {
+    const supabase = createClient();
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Math.random()}.${fileExt}`;
+    const { data, error } = await supabase.storage
+      .from('catalogs')
+      .upload(fileName, file);
 
     if (error) {
-      console.log(values);
-      console.error('Error inserting data:', error.message);
-    } else {
-      console.log(values);
-      console.log('Successfully inserted data:', data);
+      console.error('Error uploading file:', error);
+      return null;
     }
-    if (data) {
-      console.log(values);
-      console.log('Successfully inserted data:', data);
+
+    const { data: { publicUrl } } = supabase.storage
+      .from('catalogs')
+      .getPublicUrl(fileName);
+
+    return publicUrl;
+  }
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    // Extract top-level fields
+    setIsSubmitting(true)
+    const { organizationName, email, ...restValues } = values;
+
+    try {
+
+      // Sign up the user
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email: values.email,
+        password: values.password,
+        options: {
+          data: {
+            user_type: 'company'
+          }
+        }
+      })
+      if (authError) throw authError
+      if (!authData.user) {
+        throw new Error('User not authenticated');
+      }
+
+
+      const productsServicesWithUrls = await Promise.all(
+        values.productsServices.map(async (ps) => ({
+          name: ps.name,
+          catalog: ps.catalog ? await uploadFile(ps.catalog) : null,
+        }))
+      );
+
+
+      // Prepare metadata by mapping form values to schema-compliant types and structures
+      const metadata = {
+        categories: restValues.categories,
+        sub_categories: restValues.subCategories,
+        office_address: restValues.officeAddress,
+        office_pincode: restValues.officePincode,
+        plant_address: restValues.plantAddress,
+        plant_pincode: restValues.plantPincode,
+        office_start_time: restValues.officeStartTime,
+        office_end_time: restValues.officeEndTime,
+        max_floor_space: parseInt(restValues.maxFloorSpace, 10) || null,
+        legal_status: restValues.legalStatus || [],
+        is_part_of_larger_org: restValues.isPartOfLargerOrg === "yes",
+        is_manufacturing_facility_owned: restValues.isManufacturingFacilityOwned === "yes",
+        year_of_incorporation: parseInt(restValues.yearOfIncorporation, 10) || null,
+        gst_number: restValues.gstNumber || null,
+        gst_registration_state: restValues.gstRegistrationState || null,
+        is_msme: restValues.isMSME === "yes",
+        pan_number: restValues.panNumber || null,
+        cin_number: restValues.cinNumber || null,
+        website: restValues.website || null,
+        contact_number: restValues.contactNumber || null,
+        director_name: restValues.directorName || null,
+        director_email: restValues.directorEmail || null,
+        director_contact_number: restValues.directorContactNumber || null,
+        management_name: restValues.managementName || null,
+        management_email: restValues.managementEmail || null,
+        management_contact_number: restValues.managementContactNumber || null,
+        emergency_person_name: restValues.emergencyPersonName || null,
+        emergency_person_email: restValues.emergencyPersonEmail || null,
+        emergency_person_contact_number: restValues.emergencyPersonContactNumber || null,
+        total_employees: restValues.totalEmployees || null,
+        departments: restValues.departments || [],
+        manpower_details: restValues.manpowerDetails,
+        products_services: productsServicesWithUrls,
+        standard_organization: restValues.standardOrganization || null,
+        other_standard_organization: restValues.otherStandardOrganization || null,
+        compliance_standards: restValues.complianceStandards || [],
+        hsn_codes: restValues.hsnCodes.map(code => ({
+          code: code.code,
+          description: code.description
+        })),
+        has_documented_procedures: restValues.hasDocumentedProcedures === "yes",
+        experience_with_epcs: restValues.experienceWithEPCs || [],
+        other_experience_with_epcs: restValues.otherExperienceWithEPCs || null,
+        major_customers: restValues.majorCustomers.map(cust => ({
+          name: cust.name,
+          location: cust.location,
+          business_percentage: parseFloat(String(cust.businessPercentage)) || 0
+        })),
+        major_sub_suppliers: restValues.majorSubSuppliers.map(sub => ({
+          name: sub.name,
+          location: sub.location,
+          sourcing_percentage: parseFloat(String(sub.sourcingPercentage)) || 0
+        })),
+        major_projects: restValues.majorProjects.map(proj => ({
+          name: proj.name,
+          location: proj.location,
+          end_customer: proj.endCustomer
+        })),
+        has_been_blacklisted: restValues.hasBeenBlacklisted === "yes",
+        has_engaged_consultant: restValues.hasEngagedConsultant === "yes",
+        has_documented_qms: restValues.hasDocumentedQMS === "yes",
+        is_quality_system_documentation_available: restValues.isQualitySystemDocumentationAvailable === "yes",
+        has_completed_management_review: restValues.hasCompletedManagementReview === "yes",
+        has_documented_hsse_system: restValues.hasDocumentedHSSESystem === "yes",
+        is_hse_management_system_certified: restValues.isHSEManagementSystemCertified === "yes",
+        hse_overseer_info: restValues.hseOverseerInfo || null,
+        has_drugs_alcohol_policy: restValues.hasDrugsAlcoholPolicy === "yes",
+        identifies_hazards_and_controls: restValues.identifiesHazardsAndControls === "yes",
+        workers_inducted_and_trained: restValues.workersInductedAndTrained === "yes",
+        maintains_hse_incident_reports: restValues.maintainsHSEIncidentReports === "yes",
+        received_legal_notices: restValues.receivedLegalNotices === "yes",
+        has_emergency_procedures: restValues.hasEmergencyProcedures === "yes",
+        has_emergency_response_team: restValues.hasEmergencyResponseTeam === "yes",
+        currency_transactions: restValues.currencyTransactions || [],
+        other_currency_transactions: restValues.otherCurrencyTransactions || null,
+        annual_turnover: restValues.annualTurnover || null,
+        forecast_ebita: restValues.forecastEBITA || null,
+        current_ratio: restValues.currentRatio || null,
+        inventory_turnover: restValues.inventoryTurnover || null,
+        bank_name: restValues.bankName || null,
+        bank_branch_address: restValues.bankBranchAddress || null,
+        turnover_last_three_years: restValues.turnoverLastThreeYears.map(turnover => ({
+          year: turnover.year,
+          turnover: turnover.turnover
+        })),
+        child_labor: restValues.childLabor === "yes",
+        forced_labor: restValues.forcedLabor === "yes",
+        non_discrimination: restValues.nonDiscrimination === "yes",
+        wages_and_benefits: restValues.wagesAndBenefits === "yes",
+        logistic_access: restValues.logisticAccess || [],
+        distance_from_seaport: parseInt(restValues.distanceFromSeaport, 10) || null,
+        export_experience: restValues.exportExperience === "yes",
+        import_export_restrictions: restValues.importExportRestrictions === "yes",
+        data_security_practices: restValues.dataSecurityPractices === "yes",
+        terms_conditions: restValues.termsConditions === "disagree",
+      };
+
+      // Prepare data for database insertion
+      // const updatedValues = {
+      //   ...restValues,
+      //   productsServices: updatedProductsServices,
+      // };
+
+      // Fetch Current Logged in User's Data
+      // const { data: userData, error: userErr } = await supabase.auth.getSession();
+      // if (userErr) {
+      //   console.error('Error fetching session:', userErr);
+      //   return;
+      // }
+      // if (userData.session && userData.session.user) {
+      //   setUserId(userData.session.user.id);
+
+      // }
+
+      // Insert organization data into Supabase
+      const { data: orgData, error: orgError } = await supabase.from('organizations_main').insert([
+        {
+          organization_name: organizationName,
+          email: email,
+          metadata: metadata,  // Store all validated metadata
+          user: authData.user?.id,
+        }
+      ]).select()
+        .returns<Organization[]>();
+      console.log("Insert operation result Data: ", orgData, " Error: ", orgError); // Add this line
+
+      if (orgError) {
+        console.log(values);
+        console.error('Error inserting data:', orgError.message);
+        throw orgError
+      }
+      if (orgData) {
+        console.log(values);
+        console.log('Successfully inserted data:', orgData);
+      }
+
+      // Update user metadata with organization_id
+      if (orgData && orgData[0]) {
+        const { error: updateError } = await supabase.auth.updateUser({
+          data: { organization_id: orgData[0].id }
+        })
+
+        if (updateError) throw updateError
+      } else {
+        throw new Error("Failed to create organization record")
+      }
+
+      console.log('Successfully inserted data:', orgData)
+      router.push('/dashboard')
+
+    } catch (error) {
+      console.error('Error in form submission --->', error);
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -657,6 +773,28 @@ export default function ExtendedRegistrationForm() {
                 <FormControl>
                   <Input type="email" placeholder="Enter organization email" {...field} />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <div className="relative">
+                  <FormControl>
+                    <Input type={showPassword ? "text" : "password"} {...field} className="pr-10" />
+                  </FormControl>
+                  <button
+                    type="button"
+                    onClick={toggleShowPassword}
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  >
+                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  </button>
+                </div>
                 <FormMessage />
               </FormItem>
             )}
@@ -1568,7 +1706,7 @@ export default function ExtendedRegistrationForm() {
             )}
           />
 
-          <div>
+          {/* <div>
             <h3 className="text-lg font-semibold mb-4">Products/Services Offered</h3>
             {productFields.map((field, index) => (
               <div key={field.id} className="flex items-end gap-4 mb-4">
@@ -1594,22 +1732,9 @@ export default function ExtendedRegistrationForm() {
                       <FormControl>
                         <Input
                           type="file"
-                          onChange={async (e) => {
-                            const file = e.target.files?.[0];
-                            if (file) {
-                              const filePath = `catalogs/${file.name}`;
-                              const { data, error } = await supabase.storage.from("catalogs").upload(filePath, file);
-                              if (error) {
-                                console.error("File upload failed:", error.message);
-                                return;
-                              }
-                              const publicUrl = supabase.storage.from("catalogs").getPublicUrl(filePath).data?.publicUrl;
-                              if (publicUrl) {
-                                console.log("Uploaded Catalog URL:", publicUrl);
-                                // Update the field value with the uploaded URL
-                                field.onChange(publicUrl);
-                              }
-                            }
+                          onChange={(e) => {
+                            const file = e.target.files?.[0] || null;
+                            field.onChange(file); // Pass the File object to the form field
                           }}
                         />
                       </FormControl>
@@ -1617,6 +1742,7 @@ export default function ExtendedRegistrationForm() {
                     </FormItem>
                   )}
                 />
+
                 <Button
                   type="button"
                   variant="outline"
@@ -1632,7 +1758,118 @@ export default function ExtendedRegistrationForm() {
               variant="outline"
               size="sm"
               className="mt-2"
-              onClick={() => appendProduct({ name: "", catalog: null })}
+              onClick={() => appendProduct({ name: "", catalog: "null" })}
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Add Product/Service
+            </Button>
+          </div> */}
+
+          {/* <div>
+            {form.watch('productsServices').map((productService, index) => (
+              <div key={index}>
+                <FormField
+                  control={form.control}
+                  name={`productsServices.${index}.name`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Product/Service Name</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name={`productsServices.${index}.catalog`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Catalog</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="file"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              const reader = new FileReader();
+                              reader.onload = (event) => {
+                                if (event.target) {
+                                  field.onChange(event.target.result);
+                                }
+                              };
+                              reader.readAsDataURL(file);
+                            } else {
+                              field.onChange(null);
+                            }
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <button type="button" onClick={() => removeProductService(index)}>
+                  Remove Product/Service
+                </button>
+              </div>
+            ))}
+
+            <button type="button" onClick={addProductService}>
+              Add Product/Service
+            </button>
+          </div> */}
+
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Products/Services Offered</h3>
+            {fields.map((field, index) => (
+              <div key={field.id} className="flex items-end gap-4 mb-4">
+                <FormField
+                  control={form.control}
+                  name={`productsServices.${index}.name`}
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Product/Service Name</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name={`productsServices.${index}.catalog`}
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Catalog</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="file"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            field.onChange(file);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => remove(index)}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => append({ name: "", catalog: null })}
             >
               <Plus className="h-4 w-4 mr-2" />
               Add Product/Service
