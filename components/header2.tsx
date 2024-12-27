@@ -96,9 +96,9 @@ export async function Header() {
           </Link>
           {user?.user_metadata.user_type === 'company' && (
             <>
-              <Link href="/registration-form" className="hidden lg:inline-block text-white/90 hover:text-white">
+              {/* <Link href="/registration-form" className="hidden lg:inline-block text-white/90 hover:text-white">
                 Register Your Business
-              </Link>
+              </Link> */}
               <Link href="/chat/company" className="hidden lg:inline-block text-white/90 hover:text-white">
                 Messages
               </Link>

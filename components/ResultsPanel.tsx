@@ -112,7 +112,7 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
             onChange={(e) => setSearchTerm(e.target.value)}
             className="flex-grow bg-white/10 text-white placeholder-white/50 border-white/20"
           />
-          <Button type="submit" className="bg-[#7AB80E] hover:bg-[#8BC727] text-white">
+          <Button type="submit" className="text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white">
             <Search className="h-4 w-4" />
           </Button>
         </form>
@@ -127,7 +127,7 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
             <DialogTrigger asChild>
               <Button 
                 variant="outline" 
-                className="text-white border-white/20 hover:bg-[#7AB80E] hover:text-white"
+                className="text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white"
                 disabled={selectedCompanies.length === 0}
               >
                 Send Message
@@ -147,7 +147,7 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
                 className="bg-white/10 text-white placeholder-white/50 border-white/20"
               />
               <DialogFooter>
-                <Button onClick={handleSendMessage} className="bg-[#7AB80E] hover:bg-[#8BC727] text-white">
+                <Button onClick={handleSendMessage} className="text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white">
                   Send
                 </Button>
               </DialogFooter>
@@ -157,7 +157,7 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
             <DialogTrigger asChild>
               <Button 
                 variant="outline" 
-                className="text-white border-white/20 hover:bg-[#7AB80E] hover:text-white"
+                className="text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white"
                 disabled={selectedCompanies.length === 0}
               >
                 Request Quote
@@ -177,7 +177,7 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
                 className="bg-white/10 text-white placeholder-white/50 border-white/20"
               />
               <DialogFooter>
-                <Button onClick={handleRequestQuote} className="bg-[#7AB80E] hover:bg-[#8BC727] text-white">
+                <Button onClick={handleRequestQuote} className="text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white">
                   Send Request
                 </Button>
               </DialogFooter>
@@ -272,7 +272,7 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
                 <CardFooter className="flex justify-between">
                   <Dialog>
                     <DialogTrigger asChild>
-                      <Button variant="outline" className="text-white border-white/20 hover:bg-[#7AB80E] hover:text-white">
+                      <Button variant="outline" className="text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white">
                         <BookOpen className="h-4 w-4 mr-2" />
                         View Catalog
                       </Button>
@@ -305,7 +305,7 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
                   <div className="space-x-2">
                     <Button 
                       variant="outline" 
-                      className="text-white border-white/20 hover:bg-[#7AB80E] hover:text-white"
+                      className="text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white"
                       onClick={() => {
                         setSelectedCompanies([org.id]);
                         setMessageDialogOpen(true);
@@ -315,7 +315,7 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
                     </Button>
                     <Button 
                       variant="outline" 
-                      className="text-white border-white/20 hover:bg-[#7AB80E] hover:text-white"
+                      className="text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white"
                       onClick={() => {
                         setSelectedCompanies([org.id]);
                         setQuoteDialogOpen(true);
