@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { Filter, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
@@ -119,7 +119,6 @@ const FilterSection = ({ filter, selectedFilters, onFilterChange }: FilterSectio
 
 export default function FilterPanel({ filters, setFilters }: FilterPanelProps) {
   const [dynamicFilters, setDynamicFilters] = useState<Filter[]>([])
-  const scrollAreaRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     fetchFilters()
@@ -140,7 +139,7 @@ export default function FilterPanel({ filters, setFilters }: FilterPanelProps) {
     setFilters({})
   }
 
-  const handleFilterChange = useCallback((field: string, value: string[]) => {
+  const handleFilterChange = (field: string, value: string[]) => {
     setFilters((prev) => {
       const updatedFilters = { ...prev };
       if (value.length === 0) {
@@ -148,18 +147,12 @@ export default function FilterPanel({ filters, setFilters }: FilterPanelProps) {
       } else {
         updatedFilters[field] = value;
       }
+      console.log('Filters updated in FilterPanel:', updatedFilters);
       return updatedFilters;
     });
-  }, []);
+  };
 
-  useEffect(() => {
-    if (scrollAreaRef.current) {
-      const scrollPosition = scrollAreaRef.current.scrollTop;
-      scrollAreaRef.current.scrollTop = scrollPosition;
-    }
-  }, [filters]);
-
-  const FilterContent = useCallback(() => (
+  const FilterContent = () => (
     <div className="h-full flex flex-col bg-[#003853]">
       <div className="px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
@@ -184,41 +177,39 @@ export default function FilterPanel({ filters, setFilters }: FilterPanelProps) {
       </div>
       <Separator className="my-2 bg-white/10" />
       <ScrollArea className="flex-1">
-        <div ref={scrollAreaRef}>
-          <Accordion type="multiple" className="w-full" defaultValue={dynamicFilters.map(filter => filter.id)}>
-            {dynamicFilters.map((filter) => (
-              <AccordionItem key={filter.id} value={filter.id} className="border-b border-white/10">
-                <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-white/5">
-                  <span className="flex items-center gap-2 text-white">
-                    {filter.name}
-                    {filters[filter.field]?.length > 0 && (
-                      <Badge variant="secondary" className="ml-auto bg-[#7AB80E] text-white">
-                        {filters[filter.field].length}
-                      </Badge>
-                    )}
-                  </span>
-                </AccordionTrigger>
-                <AccordionContent className="px-4 pb-3">
-                  <FilterSection
-                    filter={filter}
-                    selectedFilters={filters[filter.field] || []}
-                    onFilterChange={handleFilterChange}
-                  />
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </div>
+        <Accordion type="multiple" className="w-full" defaultValue={dynamicFilters.map(filter => filter.id)}>
+          {dynamicFilters.map((filter) => (
+            <AccordionItem key={filter.id} value={filter.id} className="border-b border-white/10">
+              <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-white/5">
+                <span className="flex items-center gap-2 text-white">
+                  {filter.name}
+                  {filters[filter.field]?.length > 0 && (
+                    <Badge variant="secondary" className="ml-auto bg-[#7AB80E] text-white">
+                      {filters[filter.field].length}
+                    </Badge>
+                  )}
+                </span>
+              </AccordionTrigger>
+              <AccordionContent className="px-4 pb-3">
+                <FilterSection
+                  filter={filter}
+                  selectedFilters={filters[filter.field] || []}
+                  onFilterChange={handleFilterChange}
+                />
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
       </ScrollArea>
     </div>
-  ), [dynamicFilters, filters, totalActiveFilters, clearAllFilters, handleFilterChange]);
+  )
 
   return (
     <>
       <div className="lg:hidden">
         <Sheet>
           <SheetTrigger asChild>
-            <Button size="icon" className="fixed bottom-4 right-4 h-12 w-12 rounded-full shadow-lg bg-[#7AB80E] hover:bg-[#8BC727] z-50">
+            <Button size="icon" className="fixed bottom-4 right-4 h-12 w-12 rounded-full shadow-lg bg-[#7AB80E] hover:bg-[#8BC727]">
               <Filter className="h-6 w-6 text-white" />
               {totalActiveFilters > 0 && (
                 <Badge
@@ -235,7 +226,7 @@ export default function FilterPanel({ filters, setFilters }: FilterPanelProps) {
         </Sheet>
       </div>
 
-      <aside className="hidden lg:block w-64 border-r border-white/10 bg-[#003853] overflow-hidden">
+      <aside className="hidden lg:block w-64 border-r border-white/10 bg-[#003853]">
         <FilterContent />
       </aside>
     </>

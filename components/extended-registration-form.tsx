@@ -867,7 +867,7 @@ export default function ExtendedRegistrationForm() {
                     </SelectTrigger>
                     <SelectContent>
                       {mainCategories.map((category) => (
-                        <SelectItem key={category.id} value={category.id}>
+                        <SelectItem key={category.id} value={category.category}>
                           {category.category}
                         </SelectItem>
                       ))}

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import { Search, MapPin, Users, Briefcase, Calendar, Building, DollarSign, Tag, BookOpen, Save } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -47,29 +47,8 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
   const [messageContent, setMessageContent] = useState('')
   const [quoteContent, setQuoteContent] = useState('')
 
-  const filteredResults = useMemo(() => {
-    if (!searchTerm) return results;
-    const lowercasedTerm = searchTerm.toLowerCase();
-    return results.filter(org => 
-      org.organization_name.toLowerCase().includes(lowercasedTerm) ||
-      org.email.toLowerCase().includes(lowercasedTerm) ||
-      Object.entries(org.metadata).some(([key, value]) => {
-        if (typeof value === 'string') {
-          return value.toLowerCase().includes(lowercasedTerm);
-        }
-        if (Array.isArray(value)) {
-          return value.some(item => 
-            typeof item === 'string' && item.toLowerCase().includes(lowercasedTerm)
-          );
-        }
-        return false;
-      })
-    );
-  }, [results, searchTerm]);
-
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
-    // The search is already being performed in the useMemo hook above
     console.log('Searching for:', searchTerm)
   }
 
@@ -120,7 +99,7 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
 
       <div className="p-4 border-b border-white/10 flex justify-between items-center">
         <div>
-          <span className="font-semibold">{filteredResults.length}</span> companies found
+          <span className="font-semibold">{results.length}</span> companies found
         </div>
         <div className="space-x-2">
           <Dialog open={messageDialogOpen} onOpenChange={setMessageDialogOpen}>
@@ -188,13 +167,13 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
 
       <ScrollArea className="flex-grow">
         <div className="p-4 space-y-4">
-          {filteredResults.length === 0 ? (
+          {results.length === 0 ? (
             <div className="text-center py-8">
               <p className="text-lg">No results found</p>
-              <p className="text-sm text-white/70">Try adjusting your search or filters</p>
+              <p className="text-sm text-white/70">Try adjusting your filters</p>
             </div>
           ) : (
-            filteredResults.map((org) => (
+            results.map((org) => (
               <Card key={org.id} className="bg-white/5 text-white border-white/10">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <div>
