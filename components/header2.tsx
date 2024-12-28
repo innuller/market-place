@@ -31,10 +31,10 @@ export async function Header() {
                   <DropdownMenuTrigger className="text-lg">For Buyers</DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropdownMenuItem>
-                      <Link href="#" className="w-full">Find Supplier</Link>
+                      <Link href="/" className="w-full">Find Supplier</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                      <Link href="#" className="w-full">Find Catalog</Link>
+                      <Link href="/" className="w-full">Find Catalog</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
                       <Link href="#" className="w-full">Contact Us</Link>
@@ -65,10 +65,10 @@ export async function Header() {
               <DropdownMenuTrigger className="hover:text-white">For Buyers</DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem>
-                  <Link href="#" className="w-full">Find Supplier</Link>
+                  <Link href="/" className="w-full">Find Supplier</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link href="#" className="w-full">Find Catalog</Link>
+                  <Link href="/" className="w-full">Find Catalog</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Link href="#" className="w-full">Contact Us</Link>

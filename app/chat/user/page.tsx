@@ -5,7 +5,7 @@ type Props = {}
 
 const page = (props: Props) => {
   return (
-    <div>
+    <div className="min-h-screen bg-[#003853]">
         <UserQuotes/>
     </div>
   )

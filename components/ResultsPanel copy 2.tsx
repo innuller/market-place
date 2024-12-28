@@ -1,17 +1,18 @@
 'use client'
 
 import { useState, useEffect, useMemo } from 'react'
-import { Search, MapPin, Users, Briefcase, Calendar, Building, DollarSign, Tag, BookOpen, Save, MessageSquare, FileText } from 'lucide-react'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
+import { Search, MapPin, Users, Briefcase, Calendar, Building, DollarSign, Tag, BookOpen, Save } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Badge } from '@/components/ui/badge'
+import { Separator } from '@/components/ui/separator'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { createClient } from '@/utils/supabase/client'
 
 const supabase = createClient()
@@ -38,45 +39,18 @@ interface ResultsPanelProps {
   results: Organization[];
 }
 
-interface QuoteForm {
-  project_title: string;
-  project_description: string;
-  date_needed: string;
-  project_file: File | null;
-  phone_number: string;
-  zip_code: string;
-  shipping_instructions: string;
-  first_name: string;
-  last_name: string;
-  company_name: string;
-  email: string;
-}
-
 export default function ResultsPanel({ results }: ResultsPanelProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCompanies, setSelectedCompanies] = useState<string[]>([])
   const [messageDialogOpen, setMessageDialogOpen] = useState(false)
   const [quoteDialogOpen, setQuoteDialogOpen] = useState(false)
   const [messageContent, setMessageContent] = useState('')
-  const [quoteForm, setQuoteForm] = useState<QuoteForm>({
-    project_title: '',
-    project_description: '',
-    date_needed: '',
-    project_file: null,
-    phone_number: '',
-    zip_code: '',
-    shipping_instructions: '',
-    first_name: '',
-    last_name: '',
-    company_name: '',
-    email: '',
-  })
-  const [currentUserId, setCurrentUserId] = useState<string | null>(null)
+  const [quoteContent, setQuoteContent] = useState('')
 
   const filteredResults = useMemo(() => {
     if (!searchTerm) return results;
     const lowercasedTerm = searchTerm.toLowerCase();
-    return results.filter(org =>
+    return results.filter(org => 
       org.organization_name.toLowerCase().includes(lowercasedTerm) ||
       org.email.toLowerCase().includes(lowercasedTerm) ||
       Object.entries(org.metadata).some(([key, value]) => {
@@ -84,7 +58,7 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
           return value.toLowerCase().includes(lowercasedTerm);
         }
         if (Array.isArray(value)) {
-          return value.some(item =>
+          return value.some(item => 
             typeof item === 'string' && item.toLowerCase().includes(lowercasedTerm)
           );
         }
@@ -93,23 +67,14 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
     );
   }, [results, searchTerm]);
 
-  useEffect(() => {
-    const fetchCurrentUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        setCurrentUserId(user.id)
-      }
-    }
-    fetchCurrentUser()
-  }, [])
-
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
+    // The search is already being performed in the useMemo hook above
     console.log('Searching for:', searchTerm)
   }
 
   const handleCompanySelection = (id: string) => {
-    setSelectedCompanies(prev =>
+    setSelectedCompanies(prev => 
       prev.includes(id) ? prev.filter(companyId => companyId !== id) : [...prev, id]
     )
   }
@@ -118,97 +83,23 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
     console.log('Saving company:', id)
   }
 
-  const handleSendMessage = async () => {
-    if (currentUserId && selectedCompanies.length > 0 && messageContent.trim()) {
-      const newMessage = {
-        sender_id: currentUserId,
-        receiver_id: selectedCompanies[0],
-        content: messageContent,
-        timestamp: new Date().toISOString(),
-      }
-      const { data, error } = await supabase
-        .from('messages')
-        .insert(newMessage)
-      if (error) {
-        console.error('Error sending message:', error)
-      } else {
-        console.log('Message sent successfully:', data)
-        setMessageContent('')
-        setMessageDialogOpen(false)
-      }
-    }
+  const handleSendMessage = () => {
+    console.log('Sending message to:', selectedCompanies)
+    console.log('Message content:', messageContent)
+    setMessageDialogOpen(false)
+    setMessageContent('')
   }
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setQuoteForm(prev => ({ ...prev, project_file: e.target.files![0] }))
-    }
+  const handleRequestQuote = () => {
+    console.log('Requesting quote from:', selectedCompanies)
+    console.log('Quote content:', quoteContent)
+    setQuoteDialogOpen(false)
+    setQuoteContent('')
   }
 
-  const handleRequestQuote = async () => {
-    if (currentUserId && selectedCompanies.length > 0) {
-      let project_file_url = null;
-      if (quoteForm.project_file) {
-        const fileExt = quoteForm.project_file.name.split('.').pop()
-        const fileName = `${Math.random()}_${Date.now()}.${fileExt}`
-        const { data, error } = await supabase.storage
-          .from('project-files')
-          .upload(fileName, quoteForm.project_file)
-
-        if (error) {
-          console.error('Error uploading file:', error)
-          return
-        }
-
-        const { data: { publicUrl } } = supabase.storage
-          .from('project-files')
-          .getPublicUrl(fileName)
-
-        project_file_url = publicUrl
-      }
-
-      const newQuote = {
-        user_id: currentUserId,
-        company_id: selectedCompanies[0],
-        project_title: quoteForm.project_title,
-        project_description: quoteForm.project_description,
-        date_needed: quoteForm.date_needed,
-        project_file_url,
-        phone_number: quoteForm.phone_number,
-        zip_code: quoteForm.zip_code,
-        shipping_instructions: quoteForm.shipping_instructions,
-        first_name: quoteForm.first_name,
-        last_name: quoteForm.last_name,
-        company_name: quoteForm.company_name,
-        email: quoteForm.email,
-        status: 'pending',
-      }
-
-      const { data, error } = await supabase
-        .from('quotes')
-        .insert(newQuote)
-
-      if (error) {
-        console.error('Error requesting quote:', error)
-      } else {
-        console.log('Quote requested successfully:', data)
-        setQuoteForm({
-          project_title: '',
-          project_description: '',
-          date_needed: '',
-          project_file: null,
-          phone_number: '',
-          zip_code: '',
-          shipping_instructions: '',
-          first_name: '',
-          last_name: '',
-          company_name: '',
-          email: '',
-        })
-        setQuoteDialogOpen(false)
-      }
-    }
-  }
+  useEffect(() => {
+    console.log('Results updated in ResultsPanel:', results);
+  }, [results]);
 
   return (
     <div className="flex flex-col h-full bg-[#003853] text-white">
@@ -234,8 +125,8 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
         <div className="space-x-2">
           <Dialog open={messageDialogOpen} onOpenChange={setMessageDialogOpen}>
             <DialogTrigger asChild>
-              <Button
-                variant="outline"
+              <Button 
+                variant="outline" 
                 className="text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white"
                 disabled={selectedCompanies.length === 0}
               >
@@ -262,11 +153,10 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
               </DialogFooter>
             </DialogContent>
           </Dialog>
-
           <Dialog open={quoteDialogOpen} onOpenChange={setQuoteDialogOpen}>
             <DialogTrigger asChild>
-              <Button
-                variant="outline"
+              <Button 
+                variant="outline" 
                 className="text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white"
                 disabled={selectedCompanies.length === 0}
               >
@@ -280,124 +170,12 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
                   Request a quote from {selectedCompanies.length} selected companies.
                 </DialogDescription>
               </DialogHeader>
-              <div className="space-y-4">
-                <div>
-                  <h3 className="text-lg font-semibold mb-2">Project Details</h3>
-                  <div className="space-y-2">
-                    <div>
-                      <Label htmlFor="project_title">Project Title</Label>
-                      <Input
-                        id="project_title"
-                        value={quoteForm.project_title}
-                        onChange={(e) => setQuoteForm(prev => ({ ...prev, project_title: e.target.value }))}
-                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="project_description">Project Description</Label>
-                      <Textarea
-                        id="project_description"
-                        value={quoteForm.project_description}
-                        onChange={(e) => setQuoteForm(prev => ({ ...prev, project_description: e.target.value }))}
-                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="date_needed">Date Needed</Label>
-                      <Input
-                        id="date_needed"
-                        type="date"
-                        value={quoteForm.date_needed}
-                        onChange={(e) => setQuoteForm(prev => ({ ...prev, date_needed: e.target.value }))}
-                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="project_file">Upload Project Files</Label>
-                      <Input
-                        id="project_file"
-                        type="file"
-                        onChange={handleFileChange}
-                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold mb-2">Fulfillment Details</h3>
-                  <div className="space-y-2">
-                    <div>
-                      <Label htmlFor="phone_number">Phone Number</Label>
-                      <Input
-                        id="phone_number"
-                        value={quoteForm.phone_number}
-                        onChange={(e) => setQuoteForm(prev => ({ ...prev, phone_number: e.target.value }))}
-                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="zip_code">Zip/Postal Code</Label>
-                      <Input
-                        id="zip_code"
-                        value={quoteForm.zip_code}
-                        onChange={(e) => setQuoteForm(prev => ({ ...prev, zip_code: e.target.value }))}
-                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="shipping_instructions">Shipping Instructions</Label>
-                      <Textarea
-                        id="shipping_instructions"
-                        value={quoteForm.shipping_instructions}
-                        onChange={(e) => setQuoteForm(prev => ({ ...prev, shipping_instructions: e.target.value }))}
-                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold mb-2">Contact Details</h3>
-                  <div className="space-y-2">
-                    <div>
-                      <Label htmlFor="first_name">First Name</Label>
-                      <Input
-                        id="first_name"
-                        value={quoteForm.first_name}
-                        onChange={(e) => setQuoteForm(prev => ({ ...prev, first_name: e.target.value }))}
-                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="last_name">Last Name</Label>
-                      <Input
-                        id="last_name"
-                        value={quoteForm.last_name}
-                        onChange={(e) => setQuoteForm(prev => ({ ...prev, last_name: e.target.value }))}
-                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="company_name">Company Name</Label>
-                      <Input
-                        id="company_name"
-                        value={quoteForm.company_name}
-                        onChange={(e) => setQuoteForm(prev => ({ ...prev, company_name: e.target.value }))}
-                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="email">Email</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        value={quoteForm.email}
-                        onChange={(e) => setQuoteForm(prev => ({ ...prev, email: e.target.value }))}
-                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <Textarea
+                value={quoteContent}
+                onChange={(e) => setQuoteContent(e.target.value)}
+                placeholder="Describe your quote request here..."
+                className="bg-white/10 text-white placeholder-white/50 border-white/20"
+              />
               <DialogFooter>
                 <Button onClick={handleRequestQuote} className="text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white">
                   Send Request
@@ -405,7 +183,6 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
               </DialogFooter>
             </DialogContent>
           </Dialog>
-
         </div>
       </div>
 
@@ -526,26 +303,24 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
                     </DialogContent>
                   </Dialog>
                   <div className="space-x-2">
-                    <Button
-                      variant="outline"
+                    <Button 
+                      variant="outline" 
                       className="text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white"
                       onClick={() => {
                         setSelectedCompanies([org.id]);
                         setMessageDialogOpen(true);
                       }}
                     >
-                      <MessageSquare className="h-4 w-4 mr-2" />
                       Send Message
                     </Button>
-                    <Button
-                      variant="outline"
+                    <Button 
+                      variant="outline" 
                       className="text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white"
                       onClick={() => {
                         setSelectedCompanies([org.id]);
                         setQuoteDialogOpen(true);
                       }}
                     >
-                      <FileText className="h-4 w-4 mr-2" />
                       Request Quote
                     </Button>
                   </div>
@@ -558,3 +333,4 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
     </div>
   )
 }
+

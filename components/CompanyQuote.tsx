@@ -1,4 +1,3 @@
-// @ts-nocheck
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -19,13 +18,15 @@ export default function CompanyQuotes() {
   const [messages, setMessages] = useState([])
   const [newMessage, setNewMessage] = useState('')
   const [companyId, setCompanyId] = useState(null)
+  const [userId, setUserId] = useState(null)
 
   useEffect(() => {
     const fetchCompanyAndQuotes = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (user) {
+        setUserId(user.id)
         // Assuming the company ID is stored in the user's metadata
-        const companyId = user.user_metadata.company_id
+        const companyId = user.user_metadata.organization_id
         setCompanyId(companyId)
         fetchQuotes(companyId)
       }
@@ -82,13 +83,13 @@ export default function CompanyQuotes() {
   }
 
   const handleSendMessage = async () => {
-    if (!newMessage.trim()) return
+    if (!newMessage.trim() || !userId) return
 
     const { error } = await supabase
       .from('messages')
       .insert({
         quote_id: selectedQuote.id,
-        sender_id: companyId,
+        sender_id: userId,
         content: newMessage,
       })
 
@@ -162,7 +163,7 @@ export default function CompanyQuotes() {
               {messages.map((message) => (
                 <Card key={message.id} className="mb-2 bg-white/5 text-white border-white/10">
                   <CardHeader>
-                    <CardTitle>{message.sender_id === companyId ? 'You' : 'Customer'}</CardTitle>
+                    <CardTitle>{message.sender_id === userId ? 'You' : 'Customer'}</CardTitle>
                     <CardDescription>{new Date(message.created_at).toLocaleString()}</CardDescription>
                   </CardHeader>
                   <CardContent>
