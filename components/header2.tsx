@@ -31,6 +31,9 @@ export async function Header() {
                   <DropdownMenuTrigger className="text-lg">For Buyers</DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropdownMenuItem>
+                      <Link href="/" className="w-full">Find Product/Service</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
                       <Link href="/" className="w-full">Find Supplier</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
@@ -45,7 +48,7 @@ export async function Header() {
                   <DropdownMenuTrigger className="text-lg">For Suppliers</DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropdownMenuItem>
-                      <Link href="/registration-form" className="w-full">Register Your Business</Link>
+                      <Link href="/auth" className="w-full">Register Your Business</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
                       <Link href="#" className="w-full">Contact Us</Link>
@@ -53,7 +56,7 @@ export async function Header() {
                   </DropdownMenuContent>
                 </DropdownMenu>
                 <Link href="#" className="text-lg">About Us</Link>
-                <Link href="/registration-form" className="text-lg">Register your business</Link>
+                <Link href="/auth" className="text-lg">Register your business</Link>
               </div>
             </SheetContent>
           </Sheet>
@@ -65,10 +68,13 @@ export async function Header() {
               <DropdownMenuTrigger className="hover:text-white">For Buyers</DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem>
-                  <Link href="/" className="w-full">Find Supplier</Link>
+                  <Link href="/search" className="w-full">Find Product/Service</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link href="/" className="w-full">Find Catalog</Link>
+                  <Link href="/search" className="w-full">Find Supplier</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link href="/search" className="w-full">Find Catalog</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Link href="#" className="w-full">Contact Us</Link>
@@ -79,7 +85,7 @@ export async function Header() {
               <DropdownMenuTrigger className="hover:text-white">For Suppliers</DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem>
-                  <Link href="/registration-form" className="w-full">Register Your Business</Link>
+                  <Link href="/auth" className="w-full">Register Your Business</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Link href="#" className="w-full">Contact Us</Link>
@@ -96,7 +102,7 @@ export async function Header() {
           </Link>
           {user?.user_metadata.user_type === 'company' && (
             <>
-              {/* <Link href="/registration-form" className="hidden lg:inline-block text-white/90 hover:text-white">
+              {/* <Link href="/auth" className="hidden lg:inline-block text-white/90 hover:text-white">
                 Register Your Business
               </Link> */}
               <Link href="/chat/company" className="hidden lg:inline-block text-white/90 hover:text-white">
@@ -116,10 +122,10 @@ export async function Header() {
           )}
           {!user ? (
             <>
-              <Link href="/signin" className="text-white/90 hover:text-white">
+              <Link href="/auth" className="text-white/90 hover:text-white">
                 Login
               </Link>
-              <Link href="/signup">
+              <Link href="/auth">
                 <Button className="bg-[#7AB80E] hover:bg-[#8BC727] text-white text-sm md:text-base">
                   Register
                 </Button>
