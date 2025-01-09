@@ -26,7 +26,7 @@ export default function UserSignIn() {
         password
       })
       if (error) throw error
-      router.push('/dashboard')
+      router.push('/search')
     } catch (error:any) {
       setError(error.message)
     }

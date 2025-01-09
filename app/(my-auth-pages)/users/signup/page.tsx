@@ -35,7 +35,7 @@ export default function UserSignUp() {
         }
       })
       if (error) throw error
-      router.push('/dashboard')
+      router.push('/search')
     } catch (error: any) {
       setError(error.message)
     }

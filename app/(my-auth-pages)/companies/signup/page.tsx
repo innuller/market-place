@@ -64,7 +64,7 @@ export default function CompanySignUp() {
 
       if (updateError) throw updateError
 
-      router.push('/dashboard')
+      router.push('/chat/company')
     } catch (error:any) {
       setError(error.message)
     }

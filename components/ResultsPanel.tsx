@@ -232,12 +232,16 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
           <span className="font-semibold">{filteredResults.length}</span> companies found
         </div>
         <div className="space-x-2">
-          <Dialog open={messageDialogOpen} onOpenChange={setMessageDialogOpen}>
+          {/* <Dialog open={messageDialogOpen} onOpenChange={setMessageDialogOpen}>
             <DialogTrigger asChild>
               <Button
                 variant="outline"
-                className="text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white"
-                disabled={selectedCompanies.length === 0}
+                // className="text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white"
+                className={`text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white ${
+                  !currentUserId ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+                disabled={selectedCompanies.length === 0 && !currentUserId}
+
               >
                 Send Message
               </Button>
@@ -261,9 +265,60 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
                 </Button>
               </DialogFooter>
             </DialogContent>
+          </Dialog> */}
+
+          <Dialog
+            open={messageDialogOpen}
+            onOpenChange={(isOpen) => {
+              // Ensure both conditions are met before allowing the dialog to open
+              if (!currentUserId || selectedCompanies.length < 1) return;
+              setMessageDialogOpen(isOpen);
+            }}
+          >
+            {/* Conditionally render the DialogTrigger based on the conditions */}
+            {(!currentUserId || selectedCompanies.length < 1) ? (
+              <Button
+                variant="outline"
+                className="text-white bg-[#7AB80E] border-white/20 opacity-50 cursor-not-allowed"
+                disabled
+              >
+                Send Message
+              </Button>
+            ) : (
+              <DialogTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white"
+                >
+                  Send Message
+                </Button>
+              </DialogTrigger>
+            )}
+            <DialogContent className="bg-[#003853] text-white border-white/10">
+              <DialogHeader>
+                <DialogTitle>Send Message</DialogTitle>
+                <DialogDescription>
+                  Send a message to {selectedCompanies.length} selected companies.
+                </DialogDescription>
+              </DialogHeader>
+              <Textarea
+                value={messageContent}
+                onChange={(e) => setMessageContent(e.target.value)}
+                placeholder="Type your message here..."
+                className="bg-white/10 text-white placeholder-white/50 border-white/20"
+              />
+              <DialogFooter>
+                <Button
+                  onClick={handleSendMessage}
+                  className="text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white"
+                >
+                  Send
+                </Button>
+              </DialogFooter>
+            </DialogContent>
           </Dialog>
 
-          <Dialog open={quoteDialogOpen} onOpenChange={setQuoteDialogOpen}>
+          {/* <Dialog open={quoteDialogOpen} onOpenChange={setQuoteDialogOpen}>
             <DialogTrigger asChild>
               <Button
                 variant="outline"
@@ -404,7 +459,221 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
                 </Button>
               </DialogFooter>
             </DialogContent>
+          </Dialog> */}
+
+          <Dialog
+            open={quoteDialogOpen}
+            onOpenChange={(isOpen) => {
+              // Ensure both conditions are met before allowing the dialog to open
+              if (!currentUserId || selectedCompanies.length < 1) return;
+              setQuoteDialogOpen(isOpen);
+            }}
+          >
+            {/* Conditionally render the DialogTrigger based on the conditions */}
+            {(!currentUserId || selectedCompanies.length < 1) ? (
+              <Button
+                variant="outline"
+                className="text-white bg-[#7AB80E] border-white/20 opacity-50 cursor-not-allowed"
+                disabled
+              >
+                Request Quote
+              </Button>
+            ) : (
+              <DialogTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white"
+                >
+                  Request Quote
+                </Button>
+              </DialogTrigger>
+            )}
+            <DialogContent className="bg-[#003853] text-white border-white/10 max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>Request Quote</DialogTitle>
+                <DialogDescription>
+                  Request a quote from {selectedCompanies.length} selected companies.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="space-y-4 py-4">
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Project Details</h3>
+                  <div className="space-y-2">
+                    <div>
+                      <Label htmlFor="project_title">Project Title</Label>
+                      <Input
+                        id="project_title"
+                        value={quoteForm.project_title}
+                        onChange={(e) =>
+                          setQuoteForm((prev) => ({
+                            ...prev,
+                            project_title: e.target.value,
+                          }))
+                        }
+                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="project_description">Project Description</Label>
+                      <Textarea
+                        id="project_description"
+                        value={quoteForm.project_description}
+                        onChange={(e) =>
+                          setQuoteForm((prev) => ({
+                            ...prev,
+                            project_description: e.target.value,
+                          }))
+                        }
+                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="date_needed">Date Needed</Label>
+                      <Input
+                        id="date_needed"
+                        type="date"
+                        value={quoteForm.date_needed}
+                        onChange={(e) =>
+                          setQuoteForm((prev) => ({
+                            ...prev,
+                            date_needed: e.target.value,
+                          }))
+                        }
+                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="project_file">Upload Project Files</Label>
+                      <Input
+                        id="project_file"
+                        type="file"
+                        onChange={handleFileChange}
+                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Fulfillment Details</h3>
+                  <div className="space-y-2">
+                    <div>
+                      <Label htmlFor="phone_number">Phone Number</Label>
+                      <Input
+                        id="phone_number"
+                        value={quoteForm.phone_number}
+                        onChange={(e) =>
+                          setQuoteForm((prev) => ({
+                            ...prev,
+                            phone_number: e.target.value,
+                          }))
+                        }
+                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="zip_code">Zip/Postal Code</Label>
+                      <Input
+                        id="zip_code"
+                        value={quoteForm.zip_code}
+                        onChange={(e) =>
+                          setQuoteForm((prev) => ({
+                            ...prev,
+                            zip_code: e.target.value,
+                          }))
+                        }
+                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="shipping_instructions">Shipping Instructions</Label>
+                      <Textarea
+                        id="shipping_instructions"
+                        value={quoteForm.shipping_instructions}
+                        onChange={(e) =>
+                          setQuoteForm((prev) => ({
+                            ...prev,
+                            shipping_instructions: e.target.value,
+                          }))
+                        }
+                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Contact Details</h3>
+                  <div className="space-y-2">
+                    <div>
+                      <Label htmlFor="first_name">First Name</Label>
+                      <Input
+                        id="first_name"
+                        value={quoteForm.first_name}
+                        onChange={(e) =>
+                          setQuoteForm((prev) => ({
+                            ...prev,
+                            first_name: e.target.value,
+                          }))
+                        }
+                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="last_name">Last Name</Label>
+                      <Input
+                        id="last_name"
+                        value={quoteForm.last_name}
+                        onChange={(e) =>
+                          setQuoteForm((prev) => ({
+                            ...prev,
+                            last_name: e.target.value,
+                          }))
+                        }
+                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="company_name">Company Name</Label>
+                      <Input
+                        id="company_name"
+                        value={quoteForm.company_name}
+                        onChange={(e) =>
+                          setQuoteForm((prev) => ({
+                            ...prev,
+                            company_name: e.target.value,
+                          }))
+                        }
+                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="email">Email</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={quoteForm.email}
+                        onChange={(e) =>
+                          setQuoteForm((prev) => ({
+                            ...prev,
+                            email: e.target.value,
+                          }))
+                        }
+                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <DialogFooter>
+                <Button
+                  onClick={handleRequestQuote}
+                  className="text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white"
+                >
+                  Send Request
+                </Button>
+              </DialogFooter>
+            </DialogContent>
           </Dialog>
+
 
         </div>
       </div>
@@ -528,22 +797,26 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
                   <div className="space-x-2">
                     <Button
                       variant="outline"
-                      className="text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white"
+                      // className="text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white"
+                      className={`text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white ${!currentUserId ? "opacity-50 cursor-not-allowed" : ""}`}
                       onClick={() => {
                         setSelectedCompanies([org.id]);
                         setMessageDialogOpen(true);
                       }}
+                      disabled={!currentUserId} // Disable button when currentUserId is null
                     >
                       <MessageSquare className="h-4 w-4 mr-2" />
                       Send Message
                     </Button>
                     <Button
                       variant="outline"
-                      className="text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white"
+                      // className="text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white"
+                      className={`text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white ${!currentUserId ? "opacity-50 cursor-not-allowed" : ""}`}
                       onClick={() => {
                         setSelectedCompanies([org.id]);
                         setQuoteDialogOpen(true);
                       }}
+                      disabled={!currentUserId} // Disable button when currentUserId is null
                     >
                       <FileText className="h-4 w-4 mr-2" />
                       Request Quote

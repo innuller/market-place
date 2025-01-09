@@ -24,7 +24,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { Badge } from "@/components/ui/badge"
-import {fetchMainCategories,fetchSubCategories} from "@/lib/supabase-categories-fetch"
+import { fetchMainCategories, fetchSubCategories } from "@/lib/supabase-categories-fetch"
 
 const categories = [
   "Manufacturing",
@@ -364,10 +364,10 @@ export default function ExtendedRegistrationForm() {
                                 return checked
                                   ? field.onChange([...field.value, item])
                                   : field.onChange(
-                                      field.value?.filter(
-                                        (value) => value !== item
-                                      )
+                                    field.value?.filter(
+                                      (value) => value !== item
                                     )
+                                  )
                               }}
                             />
                           </FormControl>
@@ -486,7 +486,7 @@ export default function ExtendedRegistrationForm() {
               <FormField
                 control={form.control}
                 name="largerOrgName"
-                render={({ field })   => (
+                render={({ field }) => (
                   <FormItem>
                     <FormLabel>Name of the larger organization</FormLabel>
                     <FormControl>

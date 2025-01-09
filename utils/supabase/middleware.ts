@@ -52,16 +52,17 @@ export const updateSession = async (request: NextRequest) => {
     // }
 
     if (request.nextUrl.pathname.startsWith("/companies/signin") && !user.error) {
-      await signOutAction();
+      // await signOutAction();
+      return NextResponse.redirect(new URL("/chat/company", request.url));
     }
     if (request.nextUrl.pathname.startsWith("/companies/signup") && !user.error) {
-      await signOutAction();
+      return NextResponse.redirect(new URL("/chat/company", request.url));
     }
     if (request.nextUrl.pathname.startsWith("/users/signin") && !user.error) {
-      await signOutAction();
+      return NextResponse.redirect(new URL("/protected", request.url));
     }
     if (request.nextUrl.pathname.startsWith("/users/signup") && !user.error) {
-      await signOutAction();
+      return NextResponse.redirect(new URL("/protected", request.url));
     }
 
     // if (request.nextUrl.pathname.startsWith("/registration-form") && !user.error && user.data.user.user_metadata.user_type != "company") {
@@ -81,13 +82,13 @@ export const updateSession = async (request: NextRequest) => {
       return NextResponse.redirect(new URL("/protected", request.url));
     }
 
-    if (request.nextUrl.pathname === "/users.signup" && !user.error) {
+    if (request.nextUrl.pathname === "/users/signup" && !user.error) {
       return NextResponse.redirect(new URL("/protected", request.url));
     }
 
-    if (request.nextUrl.pathname.startsWith("/admin") && user.error) {
-      return NextResponse.redirect(new URL("/users/signin", request.url));
-    }
+    // if (request.nextUrl.pathname.startsWith("/admin") && user.error) {
+    //   return NextResponse.redirect(new URL("/users/signin", request.url));
+    // }
 
     return response;
   } catch (e) {

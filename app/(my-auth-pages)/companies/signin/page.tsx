@@ -36,7 +36,7 @@ export default function CompanySignIn() {
 
       if (userError) throw new Error('This account is not registered as a company')
 
-      router.push('/dashboard')
+      router.push('/chat/company')
     } catch (error: any) {
       setError(error.message)
     }

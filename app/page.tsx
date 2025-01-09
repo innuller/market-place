@@ -219,13 +219,19 @@ export default function Index() {
                     Home
                   </Link>
                   <Link href="#" className="text-white/60 hover:text-white">
-                    Features
+                    About Us
                   </Link>
                   <Link href="#" className="text-white/60 hover:text-white">
-                    Pricing
+                    Terms and Conditions
                   </Link>
                   <Link href="#" className="text-white/60 hover:text-white">
-                    Contact
+                    Privacy Policy
+                  </Link>
+                  <Link href="#" className="text-white/60 hover:text-white">
+                    FAQ
+                  </Link>
+                  <Link href="#" className="text-white/60 hover:text-white">
+                    Contact Us
                   </Link>
                 </div>
               </div>
@@ -240,6 +246,9 @@ export default function Index() {
                   </Link>
                   <Link href="#" className="text-white/60 hover:text-white">
                     Twitter
+                  </Link>
+                  <Link href="#" className="text-white/60 hover:text-white">
+                    LinkedIn
                   </Link>
                 </div>
               </div>

@@ -43,7 +43,8 @@ export default function SearchPage() {
           break;
         case 'all':
         default:
-          query = query.or(`organization_name.ilike.%${searchQuery}%,metadata->products_services->name.ilike.%${searchQuery}%,metadata->products_services->catalog.ilike.%${searchQuery}%`);
+          // query = query.or(`organization_name.ilike.%${searchQuery}%,metadata->products_services->name.ilike.%${searchQuery}%,metadata->products_services->catalog.ilike.%${searchQuery}%`);
+          query = query.ilike('organization_name', `%${searchQuery}%`);
           break;
       }
     }

@@ -23,14 +23,14 @@ export default function AuthOptionsPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <Card className="bg-white/5 border-white/10">
                         <CardHeader>
-                            <CardTitle className="flex items-center">
+                            <CardTitle className="flex items-center text-white">
                                 <Building className="mr-2" />
                                 Company Sign In
                             </CardTitle>
                             <CardDescription>Access your company account</CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <p>Sign in to manage your company profile, quotes, and messages.</p>
+                            <p className='text-white'>Sign in to manage your company profile, quotes, and messages.</p>
                         </CardContent>
                         <CardFooter>
                             <Link href="/companies/signin">
@@ -47,14 +47,14 @@ export default function AuthOptionsPage() {
 
                     <Card className="bg-white/5 border-white/10">
                         <CardHeader>
-                            <CardTitle className="flex items-center">
+                            <CardTitle className="flex items-center text-white">
                                 <Building className="mr-2" />
                                 Company Sign Up
                             </CardTitle>
                             <CardDescription>Create a new company account</CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <p>Register your company to start receiving quotes and connecting with clients.</p>
+                            <p className='text-white'>Register your company to start receiving quotes and connecting with clients.</p>
                         </CardContent>
                         <CardFooter>
                             <Link href="/companies/signup">
@@ -71,14 +71,14 @@ export default function AuthOptionsPage() {
 
                     <Card className="bg-white/5 border-white/10">
                         <CardHeader>
-                            <CardTitle className="flex items-center">
+                            <CardTitle className="flex items-center text-white">
                                 <User className="mr-2" />
                                 User Sign In
                             </CardTitle>
                             <CardDescription>Access your user account</CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <p>Sign in to manage your profile, view quotes, and communicate with companies.</p>
+                            <p className='text-white'>Sign in to manage your profile, view quotes, and communicate with companies.</p>
                         </CardContent>
                         <CardFooter>
                             <Link href="/users/signin">
@@ -95,14 +95,14 @@ export default function AuthOptionsPage() {
 
                     <Card className="bg-white/5 border-white/10">
                         <CardHeader>
-                            <CardTitle className="flex items-center">
+                            <CardTitle className="flex items-center text-white">
                                 <User className="mr-2" />
                                 User Sign Up
                             </CardTitle>
                             <CardDescription>Create a new user account</CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <p>Register as a user to start requesting quotes and interacting with companies.</p>
+                            <p className='text-white'>Register as a user to start requesting quotes and interacting with companies.</p>
                         </CardContent>
                         <CardFooter>
                             <Link href="/users/signup">
