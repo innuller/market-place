@@ -72,7 +72,6 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
     email: '',
   })
   const [currentUserId, setCurrentUserId] = useState<string | null>(null)
-  const [savedCompanies, setSavedCompanies] = useState<string[]>([]);
 
   const filteredResults = useMemo(() => {
     if (!searchTerm) return results;
@@ -95,57 +94,14 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
   }, [results, searchTerm]);
 
   useEffect(() => {
-    const fetchSavedCompanies = async () => {
-      if (!currentUserId) return;
-
-      const { data, error } = await supabase
-        .from('saved_companies')
-        .select('company_id')
-        .eq('user_id', currentUserId);
-
-      if (error) {
-        console.error('Error fetching saved companies:', error);
-        return;
-      }
-
-      setSavedCompanies(data?.map((item: any) => item.company_id) || []);
-    };
-
-    const fetchSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setCurrentUserId(session?.user?.id || null);
-      fetchSavedCompanies();
-    };
-
-    fetchSession();
-  }, [currentUserId, supabase]);
-
-
-  useEffect(() => {
-    const fetchSavedCompanies = async () => {
-      if (!currentUserId) return
-
-      const { data, error } = await supabase
-        .from('saved_companies')
-        .select('company_id')
-        .eq('user_id', currentUserId)
-
-      if (error) {
-        console.error('Error fetching saved companies:', error)
-      } else {
-        setSavedCompanies(data.map(item => item.company_id) || [])
+    const fetchCurrentUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        setCurrentUserId(user.id)
       }
     }
-
-    const fetchSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setCurrentUserId(session?.user?.id || null);
-      fetchSavedCompanies();
-    };
-
-    fetchSession();
-  }, [currentUserId, supabase]);
-
+    fetchCurrentUser()
+  }, [])
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
@@ -158,96 +114,8 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
     )
   }
 
-  // const handleSaveCompany = async (id: string) => {
-  //   console.log('Saving company:', id)
-
-  //   if (!currentUserId) {
-  //     console.log('User not logged in')
-  //     return
-  //   }
-
-  //   try {
-  //     const { data, error } = await supabase
-  //       .from('saved_companies')
-  //       .upsert({ user_id: currentUserId, company_id: id })
-
-  //     if (error) throw error
-
-  //     setSavedCompanies(prev => [...prev, id])
-  //     console.log('Company saved successfully:', id)
-  //   } catch (error) {
-  //     console.error('Error saving company:', error)
-  //   }
-
-  // }
-
-  // const handleSaveCompany = async (id: string) => {
-  //   if (!currentUserId) {
-  //     console.log('User not logged in')
-  //     return
-  //   }
-
-  //   try {
-  //     const { data: companyExists, error: companyCheckError } = await supabase
-  //       .from('organizations_main')
-  //       .select('id')
-  //       .eq('id', id)
-  //       .single()
-
-  //     if (companyCheckError || !companyExists) {
-  //       console.error('Company does not exist in the main table')
-  //       return
-  //     }
-
-  //     const { data, error } = await supabase
-  //       .from('saved_companies')
-  //       .upsert({ user_id: currentUserId, company_id: id })
-
-  //     if (error) throw error
-
-  //     setSavedCompanies(prev => [...prev, id])
-  //     console.log('Company saved successfully:', id)
-  //   } catch (error) {
-  //     console.error('Error saving company:', error)
-  //   }
-  // }
-
-  const handleSaveCompany = async (id: string) => {
-    if (!currentUserId) {
-      console.log('User not logged in')
-      return
-    }
-
-    try {
-      // Check if the company is already saved
-      const isSaved = savedCompanies.includes(id)
-
-      if (isSaved) {
-        // If saved, delete the entry
-        const { error } = await supabase
-          .from('saved_companies')
-          .delete()
-          .eq('user_id', currentUserId)
-          .eq('company_id', id)
-
-        if (error) throw error
-
-        setSavedCompanies(prev => prev.filter(companyId => companyId !== id))
-        console.log('Company removed from saved list:', id)
-      } else {
-        // If not saved, insert the entry
-        const { error } = await supabase
-          .from('saved_companies')
-          .insert({ user_id: currentUserId, company_id: id })
-
-        if (error) throw error
-
-        setSavedCompanies(prev => [...prev, id])
-        console.log('Company saved successfully:', id)
-      }
-    } catch (error) {
-      console.error('Error toggling saved company:', error)
-    }
+  const handleSaveCompany = (id: string) => {
+    console.log('Saving company:', id)
   }
 
   const handleSendMessage = async () => {
@@ -836,11 +704,9 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
                       variant="ghost"
                       size="icon"
                       onClick={() => handleSaveCompany(org.id)}
-                      // className="text-white hover:text-[#7AB80E] hover:bg-white/10"
-                      className={`text-white hover:text-[#7AB80E] hover:bg-white/10 ${savedCompanies.includes(org.id) ? 'text-[#7AB80E]' : ''
-                        }`}
+                      className="text-white hover:text-[#7AB80E] hover:bg-white/10"
                     >
-                      <Save className={`h-4 w-4 ${savedCompanies.includes(org.id) ? 'text-[#7AB80E]' : ''}`} />
+                      <Save className="h-4 w-4" />
                     </Button>
                     <Checkbox
                       checked={selectedCompanies.includes(org.id)}
@@ -961,7 +827,7 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
             ))
           )}
         </div>
-      </ScrollArea >
-    </div >
+      </ScrollArea>
+    </div>
   )
 }

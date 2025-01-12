@@ -25,12 +25,12 @@ export default function AuthOptionsPage() {
                         <CardHeader>
                             <CardTitle className="flex items-center text-white">
                                 <Building className="mr-2" />
-                                Company Sign In
+                                Supplier Sign In
                             </CardTitle>
-                            <CardDescription>Access your company account</CardDescription>
+                            <CardDescription>Access your supplier account</CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <p className='text-white'>Sign in to manage your company profile, quotes, and messages.</p>
+                            <p className='text-white'>Sign in to manage your supplier profile, quotes, and messages.</p>
                         </CardContent>
                         <CardFooter>
                             <Link href="/companies/signin">
@@ -49,12 +49,12 @@ export default function AuthOptionsPage() {
                         <CardHeader>
                             <CardTitle className="flex items-center text-white">
                                 <Building className="mr-2" />
-                                Company Sign Up
+                                Supplier Sign Up
                             </CardTitle>
-                            <CardDescription>Create a new company account</CardDescription>
+                            <CardDescription>Create a new supplier account</CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <p className='text-white'>Register your company to start receiving quotes and connecting with clients.</p>
+                            <p className='text-white'>Register your supplier to start receiving quotes and connecting with clients.</p>
                         </CardContent>
                         <CardFooter>
                             <Link href="/companies/signup">
@@ -73,9 +73,9 @@ export default function AuthOptionsPage() {
                         <CardHeader>
                             <CardTitle className="flex items-center text-white">
                                 <User className="mr-2" />
-                                User Sign In
+                                Buyer Sign In
                             </CardTitle>
-                            <CardDescription>Access your user account</CardDescription>
+                            <CardDescription>Access your buyer account</CardDescription>
                         </CardHeader>
                         <CardContent>
                             <p className='text-white'>Sign in to manage your profile, view quotes, and communicate with companies.</p>
@@ -97,9 +97,9 @@ export default function AuthOptionsPage() {
                         <CardHeader>
                             <CardTitle className="flex items-center text-white">
                                 <User className="mr-2" />
-                                User Sign Up
+                                Buyer Sign Up
                             </CardTitle>
-                            <CardDescription>Create a new user account</CardDescription>
+                            <CardDescription>Create a new buyer account</CardDescription>
                         </CardHeader>
                         <CardContent>
                             <p className='text-white'>Register as a user to start requesting quotes and interacting with companies.</p>

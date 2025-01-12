@@ -88,8 +88,8 @@ export default function Index() {
             </Button>
           </form>
           <div className="mt-4 text-white">
-            <Link href="#" className="text-[#7AB80E] ml-2 underline">
-              Join Free for Full Access
+            <Link href="/users/signin" className="text-[#7AB80E] ml-2 underline">
+              Join Free To Explore
             </Link>
           </div>
         </div>
@@ -114,9 +114,11 @@ export default function Index() {
               <p className="text-white/80 mb-6">
                 Explore the listed suppliers in our supplier directory. We are constantly updating the supplier list and are here to assist you with strategic sourcing opportunities.
               </p>
-              <Button variant="secondary" className="w-full sm:w-auto">
-                Discover Suppliers
-              </Button>
+              <Link href="/search">
+                <Button variant="secondary" className="w-full sm:w-auto">
+                  Discover Suppliers
+                </Button>
+              </Link>
             </div>
 
             {/* Get an Instant Quote */}
@@ -144,9 +146,11 @@ export default function Index() {
               <p className="text-white/80 mb-6">
                 Registered as a buyer to reduce lead time, increase profitability, and access quality products/services from professional suppliers registered on the platform.
               </p>
-              <Button variant="secondary" className="w-full sm:w-auto">
-                Register as a Buyer
-              </Button>
+              <Link href="/companies/signin">
+                <Button variant="secondary" className="w-full sm:w-auto">
+                  Register as a Buyer
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -215,16 +219,16 @@ export default function Index() {
               <div>
                 <h4 className="text-white text-lg font-bold mb-4">Quick Links</h4>
                 <div className="flex flex-col gap-2">
-                  <Link href="#" className="text-white/60 hover:text-white">
+                  <Link href="/" className="text-white/60 hover:text-white">
                     Home
                   </Link>
-                  <Link href="#" className="text-white/60 hover:text-white">
+                  <Link href="/about" className="text-white/60 hover:text-white">
                     About Us
                   </Link>
-                  <Link href="#" className="text-white/60 hover:text-white">
+                  <Link href="/terms-conditions" className="text-white/60 hover:text-white">
                     Terms and Conditions
                   </Link>
-                  <Link href="#" className="text-white/60 hover:text-white">
+                  <Link href="/privacy-policy" className="text-white/60 hover:text-white">
                     Privacy Policy
                   </Link>
                   <Link href="#" className="text-white/60 hover:text-white">
@@ -255,6 +259,9 @@ export default function Index() {
             </div>
             <div className="mt-12 text-center text-white/60">
               © 2023 Your Company Name. All rights reserved.
+            </div>
+            <div className="mt-2 text-center text-white/60">
+              Website last modified on DD/MM/YYYY
             </div>
           </div>
         </footer>

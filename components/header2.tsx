@@ -31,13 +31,13 @@ export async function Header() {
                   <DropdownMenuTrigger className="text-lg">For Buyers</DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropdownMenuItem>
-                      <Link href="/" className="w-full">Find Product/Service</Link>
+                      <Link href="/search" className="w-full">Find Product/Service</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                      <Link href="/" className="w-full">Find Supplier</Link>
+                      <Link href="/search" className="w-full">Find Supplier</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                      <Link href="/" className="w-full">Find Catalog</Link>
+                      <Link href="/search" className="w-full">Find Catalog</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
                       <Link href="#" className="w-full">Contact Us</Link>
@@ -55,7 +55,7 @@ export async function Header() {
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-                <Link href="#" className="text-lg">About Us</Link>
+                <Link href="/about" className="text-lg">About Us</Link>
                 <Link href="/auth" className="text-lg">Register your business</Link>
               </div>
             </SheetContent>
@@ -97,7 +97,7 @@ export async function Header() {
           </nav>
         </div>
         <div className="flex items-center gap-2 md:gap-4">
-          <Link href="#" className="hidden lg:inline-block text-white/90 hover:text-white">
+          <Link href="/about" className="hidden lg:inline-block text-white/90 hover:text-white">
             About Us
           </Link>
           {user?.user_metadata.user_type === 'company' && (
@@ -108,6 +108,9 @@ export async function Header() {
               <Link href="/chat/company" className="hidden lg:inline-block text-white/90 hover:text-white">
                 Messages
               </Link>
+              <Link href="/saved-list" className="hidden lg:inline-block text-white/90 hover:text-white">
+                Favorites
+              </Link>
             </>
           )}
           {user?.user_metadata.user_type === 'user' && (
@@ -117,6 +120,9 @@ export async function Header() {
               </Link>
               <Link href="/chat/user" className="hidden lg:inline-block text-white/90 hover:text-white">
                 Messages
+              </Link>
+              <Link href="/saved-list" className="hidden lg:inline-block text-white/90 hover:text-white">
+                Favorites
               </Link>
             </>
           )}

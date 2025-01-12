@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 'use client'
 
 import { useState } from 'react'
@@ -11,11 +13,13 @@ import { Eye, EyeOff } from 'lucide-react'
 
 const supabase = createClient()
 
-export default function UserSignUp() {
+export default function CompanySignUp() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
+  const [organizationName, setOrganizationName] = useState('')
+  const [phone, setPhone] = useState('')
+  const [address, setAddress] = useState('')
+  const [website, setWebsite] = useState('')
   const [error, setError] = useState(null)
   const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
@@ -23,20 +27,45 @@ export default function UserSignUp() {
   const handleSignUp = async (e:any) => {
     e.preventDefault()
     try {
-      const { data, error } = await supabase.auth.signUp({
+      // Sign up the user
+      const { data: authData, error: authError } = await supabase.auth.signUp({
         email,
         password,
         options: {
           data: {
-            first_name: firstName,
-            last_name: lastName,
-            user_type: 'user'
+            user_type: 'company'
           }
         }
       })
-      if (error) throw error
-      router.push('/search')
-    } catch (error: any) {
+      if (authError) throw authError
+
+      // Create the organization record
+      const { data: orgData, error: orgError } = await supabase
+        .from('organizations_main')
+        .insert({ 
+          organization_name: organizationName, 
+          email, 
+          phone, 
+          address, 
+          website,
+          user: authData.user.id,
+          metadata: {},
+          is_verified: false,
+          status: 'pending'
+        })
+        .select()
+
+      if (orgError) throw orgError
+
+      // Update user metadata with organization_id
+      const { error: updateError } = await supabase.auth.updateUser({
+        data: { organization_id: orgData[0].id }
+      })
+
+      if (updateError) throw updateError
+
+      router.push('/chat/company')
+    } catch (error:any) {
       setError(error.message)
     }
   }
@@ -49,34 +78,21 @@ export default function UserSignUp() {
     <div className="flex items-center justify-center min-h-screen bg-[#003853] p-4">
       <Card className="w-full max-w-md bg-white/5 text-white border-white/10">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold">Buyer Sign Up</CardTitle>
-          <CardDescription>Create a new buyer account</CardDescription>
+          <CardTitle className="text-2xl font-bold">Company Sign Up</CardTitle>
+          <CardDescription>Create a new company account</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSignUp} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="firstName">First Name</Label>
-                <Input
-                  id="firstName"
-                  type="text"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  required
-                  className="bg-white/10 text-white border-white/20"
-                />
-              </div>
-              <div>
-                <Label htmlFor="lastName">Last Name</Label>
-                <Input
-                  id="lastName"
-                  type="text"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  required
-                  className="bg-white/10 text-white border-white/20"
-                />
-              </div>
+            <div>
+              <Label htmlFor="organizationName">Company Name</Label>
+              <Input
+                id="organizationName"
+                type="text"
+                value={organizationName}
+                onChange={(e) => setOrganizationName(e.target.value)}
+                required
+                className="bg-white/10 text-white border-white/20"
+              />
             </div>
             <div>
               <Label htmlFor="email">Email</Label>
@@ -109,6 +125,36 @@ export default function UserSignUp() {
                 </button>
               </div>
             </div>
+            <div>
+              <Label htmlFor="phone">Phone</Label>
+              <Input
+                id="phone"
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="bg-white/10 text-white border-white/20"
+              />
+            </div>
+            <div>
+              <Label htmlFor="address">Address</Label>
+              <Input
+                id="address"
+                type="text"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                className="bg-white/10 text-white border-white/20"
+              />
+            </div>
+            <div>
+              <Label htmlFor="website">Website</Label>
+              <Input
+                id="website"
+                type="url"
+                value={website}
+                onChange={(e) => setWebsite(e.target.value)}
+                className="bg-white/10 text-white border-white/20"
+              />
+            </div>
             {error && <p className="text-red-500">{error}</p>}
             <Button type="submit" className="w-full bg-[#7AB80E] hover:bg-[#8BC727] text-white">
               Sign Up
@@ -118,7 +164,7 @@ export default function UserSignUp() {
         <CardFooter>
           <p className="text-sm text-center w-full">
             Already have an account?{' '}
-            <a href="/signin/user" className="text-[#7AB80E] hover:underline">
+            <a href="/signin/company" className="text-[#7AB80E] hover:underline">
               Sign In
             </a>
           </p>

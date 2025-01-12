@@ -40,8 +40,8 @@ export default function UserSignIn() {
     <div className="flex items-center justify-center min-h-screen bg-[#003853] p-4">
       <Card className="w-full max-w-md bg-white/5 text-white border-white/10">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold">User Sign In</CardTitle>
-          <CardDescription>Sign in to your user account</CardDescription>
+          <CardTitle className="text-2xl font-bold">Buyer Sign In</CardTitle>
+          <CardDescription>Sign in to your buyer account</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSignIn} className="space-y-4">
