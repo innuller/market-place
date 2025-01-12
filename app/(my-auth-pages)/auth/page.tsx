@@ -57,7 +57,7 @@ export default function AuthOptionsPage() {
                             <p className='text-white'>Register your supplier to start receiving quotes and connecting with clients.</p>
                         </CardContent>
                         <CardFooter>
-                            <Link href="/companies/signup">
+                            <Link href="/registration-form">
                                 <Button
                                     className="w-full bg-[#7AB80E] hover:bg-[#63a029] text-white"
                                     onClick={() => handleNavigation('/signup/company')}

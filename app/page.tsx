@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { useSearchParams } from 'next/navigation';
 
 import Link from "next/link"
-import { Menu, Search, ShoppingBag, IndianRupee, Users, Book, ShoppingCart } from "lucide-react"
+import { Menu, Search, ShoppingBag, IndianRupee, Users, Book, ShoppingCart, Instagram, Facebook, Twitter, Linkedin} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   Select,
@@ -243,16 +243,16 @@ export default function Index() {
                 <h4 className="text-white text-lg font-bold mb-4">Follow Us</h4>
                 <div className="flex gap-4">
                   <Link href="#" className="text-white/60 hover:text-white">
-                    Facebook
+                    <Facebook/>
                   </Link>
                   <Link href="#" className="text-white/60 hover:text-white">
-                    Instagram
+                    <Instagram/>
                   </Link>
                   <Link href="#" className="text-white/60 hover:text-white">
-                    Twitter
+                    <Twitter/>
                   </Link>
                   <Link href="#" className="text-white/60 hover:text-white">
-                    LinkedIn
+                    <Linkedin/>
                   </Link>
                 </div>
               </div>
