@@ -13,6 +13,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { createClient } from '@/utils/supabase/client'
+import { useSearchParams } from 'next/navigation'
 
 const supabase = createClient()
 
@@ -74,40 +75,29 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
   const [currentUserId, setCurrentUserId] = useState<string | null>(null)
   const [savedCompanies, setSavedCompanies] = useState<string[]>([]);
 
-  // const filteredResults = useMemo(() => {
-  //   if (!searchTerm) return results;
-  //   const lowercasedTerm = searchTerm.toLowerCase();
-  //   return results.filter(org =>
-  //     org.organization_name.toLowerCase().includes(lowercasedTerm) ||
-  //     org.email.toLowerCase().includes(lowercasedTerm) ||
-  //     Object.entries(org.metadata).some(([key, value]) => {
-  //       if (typeof value === 'string') {
-  //         return value.toLowerCase().includes(lowercasedTerm);
-  //       }
-  //       if (Array.isArray(value)) {
-  //         return value.some(item =>
-  //           typeof item === 'string' && item.toLowerCase().includes(lowercasedTerm)
-  //         );
-  //       }
-  //       return false;
-  //     })
-  //   );
-  // }, [results, searchTerm]);
+  const searchParams = useSearchParams()
+  const searchType = searchParams.get('type')
+  const query = searchParams.get('query')
 
   const filteredResults = useMemo(() => {
     if (!searchTerm) return results;
     const lowercasedTerm = searchTerm.toLowerCase();
-  
     return results.filter(org =>
       org.organization_name.toLowerCase().includes(lowercasedTerm) ||
       org.email.toLowerCase().includes(lowercasedTerm) ||
-      org.metadata.products_services?.some(product =>
-        product.name.toLowerCase().includes(lowercasedTerm)
-      )
+      Object.entries(org.metadata).some(([key, value]) => {
+        if (typeof value === 'string') {
+          return value.toLowerCase().includes(lowercasedTerm);
+        }
+        if (Array.isArray(value)) {
+          return value.some(item =>
+            typeof item === 'string' && item.toLowerCase().includes(lowercasedTerm)
+          );
+        }
+        return false;
+      })
     );
   }, [results, searchTerm]);
-  
-  
 
   useEffect(() => {
     const fetchSavedCompanies = async () => {
@@ -160,6 +150,12 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
 
     fetchSession();
   }, [currentUserId, supabase]);
+
+  useEffect(() => {
+    if (searchType && query) {
+      setSearchTerm(query)
+    }
+  }, [searchType, query])
 
 
   const handleSearch = (e: React.FormEvent) => {
