@@ -1,43 +1,45 @@
+// Updated FilterPanel.tsx to sync filters with ResultsPanel
 'use client'
 
-import { useState, useEffect, useRef, useCallback } from 'react'
-import { Filter, X } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Badge } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
-import { Slider } from '@/components/ui/slider'
-import { Switch } from '@/components/ui/switch'
-import { Input } from '@/components/ui/input'
-import { createClient } from '@/utils/supabase/client'
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { Filter, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { Slider } from '@/components/ui/slider';
+import { Switch } from '@/components/ui/switch';
+import { Input } from '@/components/ui/input';
+import { createClient } from '@/utils/supabase/client';
 
-const supabase = createClient()
+const supabase = createClient();
 
-type FilterType = 'array' | 'string' | 'number' | 'boolean' | 'object'
+type FilterType = 'array' | 'string' | 'number' | 'boolean' | 'object';
 
 interface Filter {
-  id: string
-  name: string
-  field: string
-  type: FilterType
-  options?: string[]
-  min?: number
-  max?: number
-  step?: number
+  id: string;
+  name: string;
+  field: string;
+  type: FilterType;
+  options?: string[];
+  min?: number;
+  max?: number;
+  step?: number;
 }
 
 interface FilterPanelProps {
-  filters: Record<string, string[]>
-  setFilters: React.Dispatch<React.SetStateAction<Record<string, string[]>>>
+  filters: Record<string, string[]>;
+  setFilters: React.Dispatch<React.SetStateAction<Record<string, string[]>>>;
+  onFilterUpdate: (filters: Record<string, string[]>) => void; // Notify parent
 }
 
 interface FilterSectionProps {
-  filter: Filter
-  selectedFilters: string[]
-  onFilterChange: (field: string, value: string[]) => void
+  filter: Filter;
+  selectedFilters: string[];
+  onFilterChange: (field: string, value: string[]) => void;
 }
 
 const FilterSection = ({ filter, selectedFilters, onFilterChange }: FilterSectionProps) => {
@@ -67,7 +69,7 @@ const FilterSection = ({ filter, selectedFilters, onFilterChange }: FilterSectio
             </div>
           ))}
         </div>
-      )
+      );
     case 'string':
       return (
         <Input
@@ -76,7 +78,7 @@ const FilterSection = ({ filter, selectedFilters, onFilterChange }: FilterSectio
           onChange={(e) => onFilterChange(filter.field, [e.target.value])}
           className="bg-white/10 text-white border-white/20"
         />
-      )
+      );
     case 'number':
       return (
         <div className="space-y-2">
@@ -88,13 +90,19 @@ const FilterSection = ({ filter, selectedFilters, onFilterChange }: FilterSectio
             onValueChange={(value) => onFilterChange(filter.field, [value[0].toString()])}
             className="w-full"
           />
-          <div className="flex justify-between text-sm text-white/70">
-            <span>{filter.min}</span>
-            <span>{selectedFilters[0] || filter.min}</span>
-            <span>{filter.max}</span>
+          <div className="flex justify-between items-center space-x-2">
+            <Input
+              type="number"
+              min={filter.min}
+              max={filter.max}
+              value={selectedFilters[0] || filter.min}
+              onChange={(e) => onFilterChange(filter.field, [e.target.value])}
+              className="w-full bg-white/10 text-white border-white/20"
+            />
+            <span className="text-sm text-white/70">Max: {filter.max}</span>
           </div>
         </div>
-      )
+      );
     case 'boolean':
       return (
         <div className="flex items-center space-x-2">
@@ -111,34 +119,41 @@ const FilterSection = ({ filter, selectedFilters, onFilterChange }: FilterSectio
             {filter.name}
           </label>
         </div>
-      )
+      );
     default:
-      return null
+      return null;
   }
-}
+};
 
-export default function FilterPanel({ filters, setFilters }: FilterPanelProps) {
-  const [dynamicFilters, setDynamicFilters] = useState<Filter[]>([])
-  const scrollAreaRef = useRef<HTMLDivElement>(null)
+export default function FilterPanel({ filters, setFilters, onFilterUpdate }: FilterPanelProps) {
+  const [dynamicFilters, setDynamicFilters] = useState<Filter[]>([]);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    fetchFilters()
-  }, [])
+    fetchFilters();
+  }, []);
 
   async function fetchFilters() {
-    const { data, error } = await supabase.from('filters').select('*')
+    const { data, error } = await supabase.from('filters').select('*');
     if (error) {
-      console.error('Error fetching filters:', error)
+      console.error('Error fetching filters:', error);
     } else {
-      setDynamicFilters(data)
+      setDynamicFilters(data);
     }
   }
 
-  const totalActiveFilters = Object.values(filters || {}).filter(value => value.length > 0).length
-
-  const clearAllFilters = () => {
-    setFilters({})
-  }
+  // const handleFilterChange = useCallback((field: string, value: string[]) => {
+  //   setFilters((prev) => {
+  //     const updatedFilters = { ...prev };
+  //     if (value.length === 0) {
+  //       delete updatedFilters[field];
+  //     } else {
+  //       updatedFilters[field] = value;
+  //     }
+  //     onFilterUpdate(updatedFilters); // Notify parent of the changes.
+  //     return updatedFilters;
+  //   });
+  // }, [setFilters, onFilterUpdate]);
 
   const handleFilterChange = useCallback((field: string, value: string[]) => {
     setFilters((prev) => {
@@ -148,97 +163,59 @@ export default function FilterPanel({ filters, setFilters }: FilterPanelProps) {
       } else {
         updatedFilters[field] = value;
       }
+      onFilterUpdate(updatedFilters); // Notify parent when filters change
       return updatedFilters;
     });
-  }, []);
+  }, [setFilters, onFilterUpdate]);
+  
 
-  useEffect(() => {
-    if (scrollAreaRef.current) {
-      const scrollPosition = scrollAreaRef.current.scrollTop;
-      scrollAreaRef.current.scrollTop = scrollPosition;
-    }
-  }, [filters]);
-
-  const FilterContent = useCallback(() => (
+  const FilterContent = useMemo(() => (
     <div className="h-full flex flex-col bg-[#003853]">
       <div className="px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Filter className="w-5 h-5 text-white" />
           <h2 className="font-semibold text-lg text-white">Filters</h2>
-          {totalActiveFilters > 0 && (
-            <Badge variant="secondary" className="bg-[#7AB80E] text-white">
-              {totalActiveFilters}
-            </Badge>
-          )}
         </div>
-        {totalActiveFilters > 0 && (
+        {Object.values(filters).some((v) => v.length > 0) && (
           <Button
             variant="ghost"
             size="sm"
-            onClick={clearAllFilters}
+            onClick={() => {
+              setFilters({});
+              onFilterUpdate({});
+            }}
             className="text-white hover:text-white/80 hover:bg-white/10"
           >
-            Clear all
+            Clear All
           </Button>
         )}
       </div>
-      <Separator className="my-2 bg-white/10" />
-      <ScrollArea className="flex-1">
-        <div ref={scrollAreaRef}>
-          <Accordion type="multiple" className="w-full" defaultValue={dynamicFilters.map(filter => filter.id)}>
-            {dynamicFilters.map((filter) => (
-              <AccordionItem key={filter.id} value={filter.id} className="border-b border-white/10">
-                <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-white/5">
-                  <span className="flex items-center gap-2 text-white">
-                    {filter.name}
-                    {filters[filter.field]?.length > 0 && (
-                      <Badge variant="secondary" className="ml-auto bg-[#7AB80E] text-white">
-                        {filters[filter.field].length}
-                      </Badge>
-                    )}
-                  </span>
-                </AccordionTrigger>
-                <AccordionContent className="px-4 pb-3">
-                  <FilterSection
-                    filter={filter}
-                    selectedFilters={filters[filter.field] || []}
-                    onFilterChange={handleFilterChange}
-                  />
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </div>
+      <ScrollArea className="flex-1" ref={scrollAreaRef}>
+        <Accordion type="multiple" className="w-full">
+          {dynamicFilters.map((filter) => (
+            <AccordionItem key={filter.id} value={filter.id} className="border-b border-white/10">
+              <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-white/5">
+                <span className="flex items-center gap-2 text-white">
+                  {filter.name}
+                </span>
+              </AccordionTrigger>
+              <AccordionContent className="px-4 pb-3">
+                <FilterSection
+                  filter={filter}
+                  selectedFilters={filters[filter.field] || []}
+                  onFilterChange={handleFilterChange}
+                />
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
       </ScrollArea>
     </div>
-  ), [dynamicFilters, filters, totalActiveFilters, clearAllFilters, handleFilterChange]);
+  ), [filters, dynamicFilters, handleFilterChange]);
 
   return (
-    <>
-      <div className="lg:hidden">
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button size="icon" className="fixed bottom-4 right-4 h-12 w-12 rounded-full shadow-lg bg-[#7AB80E] hover:bg-[#8BC727] z-50">
-              <Filter className="h-6 w-6 text-white" />
-              {totalActiveFilters > 0 && (
-                <Badge
-                  className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0 flex items-center justify-center bg-[#003853] text-white"
-                >
-                  {totalActiveFilters}
-                </Badge>
-              )}
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="right" className="w-full sm:max-w-md p-0 bg-[#003853]">
-            <FilterContent />
-          </SheetContent>
-        </Sheet>
-      </div>
-
-      <aside className="hidden lg:block w-64 border-r border-white/10 bg-[#003853] overflow-hidden">
-        <FilterContent />
-      </aside>
-    </>
-  )
+    <aside className="w-64 border-r border-white/10 bg-[#003853]">
+      {FilterContent}
+    </aside>
+  );
 }
-

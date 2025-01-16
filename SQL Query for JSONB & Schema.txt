@@ -387,3 +387,345 @@ CREATE TRIGGER update_messages_updated_at
 BEFORE UPDATE ON messages
 FOR EACH ROW
 EXECUTE FUNCTION update_updated_at_column();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+create table
+  organizations_main (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid (),
+    organization_name varchar(255) not null,
+    email varchar(255) unique not null,
+    metadata JSONB default '{}',
+    created_at timestamp default current_timestamp,
+    updated_at timestamp default current_timestamp,
+    check (
+      jsonb_matches_schema (
+        '{
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+            "categories": { "type": "array", "items": { "type": "string" } },
+            "subCategories": { "type": "array", "items": { "type": "string" } },
+            "officeAddress": { "type": "string" },
+            "officePincode": { "type": "string", "pattern": "^\\d{6}$" },
+            "plantAddress": { "type": "string" },
+            "plantPincode": { "type": "string", "pattern": "^\\d{6}$" },
+            "officeStartTime": { "type": "string" },
+            "officeEndTime": { "type": "string" },
+            "offDays": { "type": "array", "items": { "type": "string" } },
+            "maxFloorSpace": { "type": "string" },
+            "legalStatus": { "type": "array", "items": { "type": "string" } },
+            "isPartOfLargerOrg": { "type": "string" },
+            "yearOfIncorporation": { "type": "string", "pattern": "^\\d{4}$" },
+            "gstNumber": { "type": "string" },
+            "gstRegistrationState": { "type": "string" },
+            "isMSME": { "type": "string" },
+            "panNumber": { "type": "string" },
+            "cinNumber": { "type": "string" },
+            "website": { "type": "string", "format": "uri" },
+            "contactNumber": { "type": "string", "pattern": "^\\d{10,15}$" },
+            "directorName": { "type": "string" },
+            "directorEmail": { "type": "string", "format": "email" },
+            "directorContactNumber": { "type": "string", "pattern": "^\\d{10,15}$" },
+            "managementName": { "type": "string" },
+            "managementEmail": { "type": "string", "format": "email" },
+            "managementContactNumber": { "type": "string", "pattern": "^\\d{10,15}$" },
+            "emergencyPersonName": { "type": "string" },
+            "emergencyPersonEmail": { "type": "string", "format": "email" },
+            "emergencyPersonContactNumber": { "type": "string", "pattern": "^\\d{10,15}$" },
+            "totalEmployees": { "type": "string" },
+            "departments": { "type": "array", "items": { "type": "string" } },
+            "manpowerDetails": {
+                "type": "object",
+                "properties": {
+                    "Engineers": { "type": "string" },
+                    "Skilled Operators": { "type": "string" },
+                    "Welders/Fitters": { "type": "string" },
+                    "Unskilled Labour": { "type": "string" },
+                    "Separate Quality Inspectors": { "type": "string" }
+                },
+                "additionalProperties": false
+            },
+            "productsServices": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "name": { "type": "string" },
+                        "catalog": { "type": ["string", "null"] }
+                    }
+                }
+            },
+            "standardOrganization": { "type": "string" },
+            "otherStandardOrganization": { "type": "string" },
+            "complianceStandards": { "type": "array", "items": { "type": "string" } },
+            "otherComplianceStandard": { "type": "string" },
+            "hsnCodes": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "code": { "type": "string" },
+                        "description": { "type": "string" }
+                    }
+                }
+            },
+            "hasDocumentedProcedures": { "type": "string" },
+            "experienceWithEPCs": { "type": "array", "items": { "type": "string" } },
+            "majorCustomers": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "name": { "type": "string" },
+                        "location": { "type": "string" },
+                        "businessPercentage": { "type": "number" }
+                    },
+                    "required": ["name", "location", "businessPercentage"]
+                }
+            },
+            "majorSubSuppliers": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "name": { "type": "string" },
+                        "location": { "type": "string" },
+                        "sourcingPercentage": { "type": "number" }
+                    }
+                }
+            },
+            "majorProjects": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "name": { "type": "string" },
+                        "location": { "type": "string" },
+                        "endCustomer": { "type": "string" }
+                    }
+                }
+            },
+            "hasBeenBlacklisted": { "type": "string" },
+            "hasEngagedConsultant": { "type": "string" },
+            "hasDocumentedQMS": { "type": "string" },
+            "isQualitySystemDocumentationAvailable": { "type": "string" },
+            "hasCompletedManagementReview": { "type": "string" },
+            "hasDocumentedHSSESystem": { "type": "string" },
+            "hseOverseerInfo": { "type": "string" },
+            "hasDrugsAlcoholPolicy": { "type": "string" },
+            "identifiesHazardsAndControls": { "type": "string" },
+            "workersInductedAndTrained": { "type": "string" },
+            "maintainsHSEIncidentReports": { "type": "string" },
+            "receivedLegalNotices": { "type": "string" },
+            "hasEmergencyProcedures": { "type": "string" },
+            "hasEmergencyResponseTeam": { "type": "string" },
+            "currencyTransactions": { "type": "array", "items": { "type": "string" } },
+            "annualTurnover": { "type": "string" },
+            "forecastEBITA": { "type": "string" },
+            "currentRatio": { "type": "string" },
+            "inventoryTurnover": { "type": "string" },
+            "bankName": { "type": "string" },
+            "bankBranchAddress": { "type": "string" },
+            "turnoverLastThreeYears": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "year": { "type": "string" },
+                        "turnover": { "type": "string" }
+                    }
+                }
+            },
+            "childLabor": { "type": "string" },
+            "forcedLabor": { "type": "string" },
+            "nonDiscrimination": { "type": "string" },
+            "wagesAndBenefits": { "type": "string" },
+            "logisticAccess": { "type": "array", "items": { "type": "string" } },
+            "distanceFromSeaport": { "type": "string" },
+            "exportExperience": { "type": "string" },
+            "importExportRestrictions": { "type": "string" },
+            "dataSecurityPractices": { "type": "string" }
+        }
+    }',
+        metadata
+      )
+    )
+  );
+
+
+SQL Query Version 2
+
+-- Step 1: Drop the existing constraint
+ALTER TABLE public.organizations_main
+DROP CONSTRAINT organizations_main_metadata_check;
+
+-- Step 2: Add the new constraint with categories as a single item
+ALTER TABLE public.organizations_main
+ADD CONSTRAINT organizations_main_metadata_check CHECK (
+  extensions.jsonb_matches_schema (
+    '{
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "type": "object",
+      "properties": {
+        "categories": { "type": "string" },
+        "sub_categories": { "type": "array", "items": { "type": "string" } },
+        "office_address": { "type": "string" },
+        "office_pincode": { "type": "string", "pattern": "^\\d{6}$" },
+        "plant_address": { "type": "string" },
+        "plant_pincode": { "type": "string", "pattern": "^\\d{6}$" },
+        "office_start_time": { "type": "string" },
+        "office_end_time": { "type": "string" },
+        "off_days": { "type": "array", "items": { "type": "string" } },
+        "max_floor_space": { "type": "string" },
+        "legal_status": { "type": "array", "items": { "type": "string" } },
+        "is_part_of_larger_org": { "type": "string" },
+        "year_of_incorporation": { "type": "string", "pattern": "^\\d{4}$" },
+        "gst_number": { "type": "string" },
+        "gst_registration_state": { "type": "string" },
+        "is_msme": { "type": "string" },
+        "pan_number": { "type": "string" },
+        "cin_number": { "type": "string" },
+        "website": { "type": "string", "format": "uri" },
+        "contact_number": { "type": "string", "pattern": "^\\d{10,15}$" },
+        "director_name": { "type": "string" },
+        "director_email": { "type": "string", "format": "email" },
+        "director_contact_number": { "type": "string", "pattern": "^\\d{10,15}$" },
+        "management_name": { "type": "string" },
+        "management_email": { "type": "string", "format": "email" },
+        "management_contact_number": { "type": "string", "pattern": "^\\d{10,15}$" },
+        "emergency_person_name": { "type": "string" },
+        "emergency_person_email": { "type": "string", "format": "email" },
+        "emergency_person_contact_number": { "type": "string", "pattern": "^\\d{10,15}$" },
+        "total_employees": { "type": "string" },
+        "departments": { "type": "array", "items": { "type": "string" } },
+        "manpower_details": {
+            "type": "object",
+            "properties": {
+                "Engineers": { "type": "string" },
+                "Skilled Operators": { "type": "string" },
+                "Welders/Fitters": { "type": "string" },
+                "Unskilled Labour": { "type": "string" },
+                "Separate Quality Inspectors": { "type": "string" }
+            },
+            "additionalProperties": false
+        },
+        "products_services": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": { "type": "string" },
+                    "catalog": { "type": ["string", "null"] }
+                }
+            }
+        },
+        "standard_organization": { "type": "string" },
+        "other_standard_organization": { "type": "string" },
+        "compliance_standards": { "type": "array", "items": { "type": "string" } },
+        "other_compliance_standard": { "type": "string" },
+        "hsn_codes": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "code": { "type": "string" },
+                    "description": { "type": "string" }
+                }
+            }
+        },
+        "has_documented_procedures": { "type": "string" },
+        "experience_with_epcs": { "type": "array", "items": { "type": "string" } },
+        "major_customers": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": { "type": "string" },
+                    "location": { "type": "string" },
+                    "businessPercentage": { "type": "number" }
+                },
+                "required": ["name", "location", "businessPercentage"]
+            }
+        },
+        "major_sub_suppliers": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": { "type": "string" },
+                    "location": { "type": "string" },
+                    "sourcingPercentage": { "type": "number" }
+                }
+            }
+        },
+        "major_projects": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": { "type": "string" },
+                    "location": { "type": "string" },
+                    "end_customer": { "type": "string" }
+                }
+            }
+        },
+        "has_been_blacklisted": { "type": "string" },
+        "has_engaged_consultant": { "type": "string" },
+        "has_documented_qms": { "type": "string" },
+        "is_quality_system_documentation_available": { "type": "string" },
+        "has_completed_management_review": { "type": "string" },
+        "has_documented_hsse_system": { "type": "string" },
+        "hse_overseer_info": { "type": "string" },
+        "has_drugs_alcohol_policy": { "type": "string" },
+        "identifies_hazards_and_controls": { "type": "string" },
+        "workers_inducted_and_trained": { "type": "string" },
+        "maintains_hse_incident_reports": { "type": "string" },
+        "received_legal_notices": { "type": "string" },
+        "has_emergency_procedures": { "type": "string" },
+        "has_emergency_response_team": { "type": "string" },
+        "currency_transactions": { "type": "array", "items": { "type": "string" } },
+        "annual_turnover": { "type": "string" },
+        "forecast_ebita": { "type": "string" },
+        "current_ratio": { "type": "string" },
+        "inventory_turnover": { "type": "string" },
+        "bank_name": { "type": "string" },
+        "bank_branch_address": { "type": "string" },
+        "turnover_last_three_years": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "year": { "type": "string" },
+                    "turnover": { "type": "string" }
+                }
+            }
+        },
+        "child_labor": { "type": "string" },
+        "forced_labor": { "type": "string" },
+        "non_discrimination": { "type": "string" },
+        "wages_and_benefits": { "type": "string" },
+        "logistic_access": { "type": "array", "items": { "type": "string" } },
+        "distance_from_seaport": { "type": "string" },
+        "export_experience": { "type": "string" },
+        "import_export_restrictions": { "type": "string" },
+        "data_security_practices": { "type": "string" }
+    }
+  }'::json,
+      metadata
+    )
+  )

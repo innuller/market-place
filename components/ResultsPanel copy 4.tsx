@@ -58,7 +58,6 @@ interface QuoteForm {
 export default function ResultsPanel({ results }: ResultsPanelProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [searchType, setSearchType] = useState('all')
-  const [sortBy, setSortBy] = useState('none')
   const [selectedCompanies, setSelectedCompanies] = useState<string[]>([])
   const [messageDialogOpen, setMessageDialogOpen] = useState(false)
   const [quoteDialogOpen, setQuoteDialogOpen] = useState(false)
@@ -90,82 +89,33 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
   }, [searchParams])
 
   const filteredResults = useMemo(() => {
-    let filtered = results
-    if (searchTerm) {
-      const lowercasedTerm = searchTerm.toLowerCase()
-      filtered = results.filter(org => {
-        switch (searchType) {
-          case 'supplier':
-            return org.organization_name.toLowerCase().includes(lowercasedTerm)
-          case 'product_service':
-            return org.metadata.products_services?.some(product =>
-              product.name.toLowerCase().includes(lowercasedTerm)
-            )
-          case 'catalog':
-            return org.metadata.products_services?.some(product =>
+    if (!searchTerm) return results
+    const lowercasedTerm = searchTerm.toLowerCase()
+    return results.filter(org => {
+      switch (searchType) {
+        case 'supplier':
+          return org.organization_name.toLowerCase().includes(lowercasedTerm)
+        case 'product_service':
+          return org.metadata.products_services?.some(product =>
+            product.name.toLowerCase().includes(lowercasedTerm)
+          )
+        case 'catalog':
+          return org.metadata.products_services?.some(product =>
+            product.catalog?.toLowerCase().includes(lowercasedTerm)
+          )
+        case 'all':
+        default:
+          return (
+            org.organization_name.toLowerCase().includes(lowercasedTerm) ||
+            org.email.toLowerCase().includes(lowercasedTerm) ||
+            org.metadata.products_services?.some(product =>
+              product.name.toLowerCase().includes(lowercasedTerm) ||
               product.catalog?.toLowerCase().includes(lowercasedTerm)
             )
-          case 'all':
-          default:
-            return (
-              org.organization_name.toLowerCase().includes(lowercasedTerm) ||
-              org.email.toLowerCase().includes(lowercasedTerm) ||
-              org.metadata.products_services?.some(product =>
-                product.name.toLowerCase().includes(lowercasedTerm) ||
-                product.catalog?.toLowerCase().includes(lowercasedTerm)
-              )
-            )
-        }
-      })
-    }
-
-    // Apply sorting
-    if (sortBy !== 'none') {
-      filtered.sort((a, b) => {
-        if (sortBy === 'year_of_incorporation') {
-          const yearA = parseInt(a.metadata.year_of_incorporation?.toString() || '0')
-          const yearB = parseInt(b.metadata.year_of_incorporation?.toString() || '0')
-          return yearB - yearA // Sort in descending order (newest first)
-        } else if (sortBy === 'annual_turnover') {
-          const turnoverA = parseFloat(a.metadata.annual_turnover?.replace(/[^0-9.-]+/g,"") || '0')
-          const turnoverB = parseFloat(b.metadata.annual_turnover?.replace(/[^0-9.-]+/g,"") || '0')
-          return turnoverB - turnoverA // Sort in descending order (highest first)
-        }
-        return 0
-      })
-    }
-
-    return filtered
-  }, [results, searchTerm, searchType, sortBy])
-
-  // const filteredResults = useMemo(() => {
-  //   if (!searchTerm) return results
-  //   const lowercasedTerm = searchTerm.toLowerCase()
-  //   return results.filter(org => {
-  //     switch (searchType) {
-  //       case 'supplier':
-  //         return org.organization_name.toLowerCase().includes(lowercasedTerm)
-  //       case 'product_service':
-  //         return org.metadata.products_services?.some(product =>
-  //           product.name.toLowerCase().includes(lowercasedTerm)
-  //         )
-  //       case 'catalog':
-  //         return org.metadata.products_services?.some(product =>
-  //           product.catalog?.toLowerCase().includes(lowercasedTerm)
-  //         )
-  //       case 'all':
-  //       default:
-  //         return (
-  //           org.organization_name.toLowerCase().includes(lowercasedTerm) ||
-  //           org.email.toLowerCase().includes(lowercasedTerm) ||
-  //           org.metadata.products_services?.some(product =>
-  //             product.name.toLowerCase().includes(lowercasedTerm) ||
-  //             product.catalog?.toLowerCase().includes(lowercasedTerm)
-  //           )
-  //         )
-  //     }
-  //   })
-  // }, [results, searchTerm, searchType])
+          )
+      }
+    })
+  }, [results, searchTerm, searchType])
 
   // const filteredResults = useMemo(() => {
   //   if (!searchTerm) return results;
@@ -190,7 +140,7 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
   // const filteredResults = useMemo(() => {
   //   if (!searchTerm) return results;
   //   const lowercasedTerm = searchTerm.toLowerCase();
-
+  
   //   return results.filter(org =>
   //     org.organization_name.toLowerCase().includes(lowercasedTerm) ||
   //     org.email.toLowerCase().includes(lowercasedTerm) ||
@@ -199,8 +149,8 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
   //     )
   //   );
   // }, [results, searchTerm]);
-
-
+  
+  
 
   // useEffect(() => {
   //   const fetchSavedCompanies = async () => {
@@ -480,7 +430,7 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
     <div className="flex flex-col h-full bg-[#003853] text-white">
       <div className="p-4 border-b border-white/10">
         <form onSubmit={handleSearch} className="flex gap-2">
-          <Select value={searchType} onValueChange={setSearchType}>
+        <Select value={searchType} onValueChange={setSearchType}>
             <SelectTrigger className="w-[180px] bg-white/10 text-white border-white/20">
               <SelectValue placeholder="Search type" />
             </SelectTrigger>
@@ -505,18 +455,8 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
       </div>
 
       <div className="p-4 border-b border-white/10 flex justify-between items-center">
-        <div className="flex items-center gap-2">
+        <div>
           <span className="font-semibold">{filteredResults.length}</span> companies found
-          <Select value={sortBy} onValueChange={setSortBy}>
-            <SelectTrigger className="w-[200px] bg-white/10 text-white border-white/20">
-              <SelectValue placeholder="Sort by" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="none">No sorting</SelectItem>
-              <SelectItem value="year_of_incorporation">Year of Incorporation</SelectItem>
-              <SelectItem value="annual_turnover">Annual Turnover</SelectItem>
-            </SelectContent>
-          </Select>
         </div>
         <div className="space-x-2">
           {/* <Dialog open={messageDialogOpen} onOpenChange={setMessageDialogOpen}>
@@ -1021,10 +961,10 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
                       </p>
                     </div>
                     <div className="space-y-2">
-                      {/* <p className="flex items-center gap-2">
+                      <p className="flex items-center gap-2">
                         <Tag className="h-4 w-4" />
                         Categories: {org.metadata.categories || 'N/A'}
-                      </p> */}
+                      </p>
                       <p className="flex items-center gap-2">
                         <Building className="h-4 w-4" />
                         Legal Status: {org.metadata.legal_status?.join(', ') || 'N/A'}

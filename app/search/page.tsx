@@ -1,3 +1,4 @@
+// app/search/page.tsx
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
@@ -20,109 +21,17 @@ export default function SearchPage() {
   const [results, setResults] = useState<Organization[]>([]);
   const searchParams = useSearchParams();
 
-  // const fetchData = useCallback(async () => {
-  //   const searchType = searchParams.get('type') || 'all';
-  //   const searchQuery = searchParams.get('query') || '';
-
-  //   // console.log('Fetching data with filterssss:', filters, 'searchType:', searchType, 'searchQuery:', searchQuery);
-    
-  //   let query = supabase.from('organizations_main').select('*');
-    
-  //   // let query: any;
-
-  //   // Apply search based on type
-  //   // if (searchQuery) {
-  //   //   switch (searchType) {
-  //   //     case 'supplier':
-  //   //       query = query.ilike('organization_name', `%${searchQuery}%`);
-  //   //       break;
-  //   //     case 'product_service':
-  //   //       query = query.filter('metadata->products_services', 'cs', `[{"name": "${searchQuery}"}]`);
-  //   //       break;
-  //   //     case 'catalog':
-  //   //       query = query.filter('metadata->products_services', 'cs', `[{"catalog":"${searchQuery}]"}`);
-  //   //       break;
-  //   //     case 'all':
-  //   //     default:
-  //   //       // query = query.or(`organization_name.ilike.%${searchQuery}%,metadata->products_services->name.ilike.%${searchQuery}%,metadata->products_services->catalog.ilike.%${searchQuery}%`);
-  //   //       query = query.ilike('organization_name', `%${searchQuery}%`);
-  //   //       break;
-  //   //   }
-  //   // }
-
-  //   if (searchQuery) {
-  //     switch (searchType) {
-  //       case 'supplier':
-  //         query = query.ilike('organization_name', `%${searchQuery}%`);
-  //         break;
-  //       case 'product_service':
-  //         query = query.or(
-  //           `metadata->products_services->>name.ilike.%${searchQuery}%`
-  //         );
-  //         break;
-  //       case 'catalog':
-  //         query = query.or(
-  //           `metadata->products_services->>catalog.ilike.%${searchQuery}%`
-  //         );
-  //         break;
-  //       case 'all':
-  //       default:
-  //         query = query.or(
-  //           `organization_name.ilike.%${searchQuery}%,metadata->products_services->>name.ilike.%${searchQuery}%,metadata->products_services->>catalog.ilike.%${searchQuery}%`
-  //         );
-  //         break;
-  //     }
-  //   }
-    
-
-  //   console.log('Search Type:', searchType);
-  //   console.log('Search Query:', searchQuery);
-  //   console.log('Supabase Query:', query.toString())
-    
-
-
-  //   // Apply additional filters
-  //   Object.entries(filters).forEach(([key, values]) => {
-  //     if (values.length > 0) {
-  //       if (Array.isArray(values) && values.length > 1) {
-  //         // For array type filters
-  //         query = query.contains(`metadata->${key}`, values);
-  //       } else {
-  //         const value = values[0];
-  //         if (value === 'true' || value === 'false') {
-  //           // Boolean filters
-  //           query = query.eq(`metadata->>${key}`, value);
-  //         } else if (!isNaN(Number(value))) {
-  //           // Number filters
-  //           query = query.gte(`metadata->>${key}`, value);
-  //         } else {
-  //           // String filters
-  //           query = query.ilike(`metadata->>${key}`, `%${value}%`);
-  //         }
-  //       }
-  //     }
-  //   });
-
-  //   const { data, error } = await query;
-  //   if (error) {
-  //     console.error('Error fetching data:', error);
-  //   } else {
-  //     console.log('Fetched results:', data);
-  //     setResults(data as Organization[]);
-  //   }
-  // }, [filters, searchParams]);
-
   const fetchData = useCallback(async () => {
     const searchType = searchParams.get('type') || 'all';
     const searchQuery = searchParams.get('query') || '';
-  
+
     console.log('Calling RPC with:', { searchType, searchQuery });
-  
+
     const { data, error } = await supabase.rpc('search_organizations', {
       search_type: searchType,
       search_query: searchQuery,
     });
-  
+
     if (error) {
       console.error('Error calling RPC:', error);
     } else {
@@ -130,7 +39,7 @@ export default function SearchPage() {
       setResults(data);
     }
   }, [searchParams]);
-  
+
   useEffect(() => {
     fetchData();
   }, [fetchData]);
@@ -140,13 +49,56 @@ export default function SearchPage() {
     setFilters(newFilters);
   };
 
+  const fetchFilteredResults = async (filters: Record<string, string[]>) => {
+    // Ensure filters is an object
+    if (!filters || Object.keys(filters).length === 0) {
+      console.error('Filters must be a valid object');
+      return;
+    }
+  
+    try {
+      const formattedFilters = Object.entries(filters).reduce((acc, [key, values]) => {
+        acc[key] = Array.isArray(values) ? values : [values];
+        return acc;
+      }, {} as Record<string, string[]>);
+  
+      console.log('Formatted filters:', formattedFilters);
+  
+      const { data, error } = await supabase.rpc('filter_organizations', {
+        filters: formattedFilters,
+      });
+  
+      if (error) {
+        console.error('Error calling RPC:', error);
+      } else {
+        console.log('Filtered results:', data);
+        setResults(data);
+      }
+    } catch (err) {
+      console.error('Unexpected error:', err);
+    }
+  };
+  
+  
+
+  useEffect(() => {
+    if (Object.keys(filters).length > 0) {
+      fetchFilteredResults(filters);
+    } else {
+      fetchData();
+    }
+  }, [filters, fetchData]);
+
   return (
     <div className="flex h-screen">
-      <FilterPanel filters={filters} setFilters={handleFilterChange} />
+      <FilterPanel
+        filters={filters}
+        setFilters={setFilters}
+        onFilterUpdate={handleFilterChange}
+      />
       <div className="flex-1 overflow-hidden">
         <ResultsPanel results={results} />
       </div>
     </div>
   );
 }
-

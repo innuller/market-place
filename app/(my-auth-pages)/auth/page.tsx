@@ -60,7 +60,7 @@ export default function AuthOptionsPage() {
                             <Link href="/registration-form">
                                 <Button
                                     className="w-full bg-[#7AB80E] hover:bg-[#63a029] text-white"
-                                    onClick={() => handleNavigation('/signup/company')}
+                                    onClick={() => handleNavigation('/registration-form')}
                                     disabled={isLoading}
                                 >
                                     Sign Up

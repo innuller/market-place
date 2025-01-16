@@ -4,34 +4,50 @@ import { SubmitButton } from "@/components/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { SmtpMessage } from "../smtp-message";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Mail } from 'lucide-react';
 
 export default async function ForgotPassword(props: {
   searchParams: Promise<Message>;
 }) {
   const searchParams = await props.searchParams;
   return (
-    <>
-      <form className="flex-1 flex flex-col w-full gap-2 text-foreground [&>input]:mb-6 min-w-64 max-w-64 mx-auto">
-        <div>
-          <h1 className="text-2xl font-medium">Reset Password</h1>
-          <p className="text-sm text-secondary-foreground">
-            Already have an account?{" "}
-            <Link className="text-primary underline" href="/sign-in">
-              Sign in
-            </Link>
+    <div className="flex justify-center items-center min-h-screen bg-[#003853] text-white">
+      <Card className="w-full max-w-md bg-white/10 border-white/20">
+        <CardHeader className="space-y-1">
+          <CardTitle className="text-2xl font-bold text-center text-white">Reset Password</CardTitle>
+          <p className="text-sm text-center text-white/60">
+            Enter your email to receive a password reset link
           </p>
-        </div>
-        <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
-          <Label htmlFor="email">Email</Label>
-          <Input name="email" placeholder="you@example.com" required />
-          <SubmitButton formAction={forgotPasswordAction}>
-            Reset Password
-          </SubmitButton>
+        </CardHeader>
+        <CardContent>
+          <form className="flex flex-col gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-white">Email</Label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/60" />
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="you@example.com"
+                  required
+                  className="pl-10 bg-white/5 border-white/20 text-white placeholder:text-white/40"
+                />
+              </div>
+            </div>
+            <SubmitButton formAction={forgotPasswordAction} className="w-full bg-[#7AB80E] hover:bg-[#63a029] text-white">
+              Send Reset Link
+            </SubmitButton>
+          </form>
           <FormMessage message={searchParams} />
-        </div>
-      </form>
-      <SmtpMessage />
-    </>
+          <div className="mt-4 text-center text-sm">
+            <Link className="text-[#7AB80E] hover:underline" href="/auth">
+              Back to Sign In
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 }

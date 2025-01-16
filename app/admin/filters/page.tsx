@@ -1,108 +1,106 @@
-'use client'
+// pages/admin/filters.tsx
+'use client';
 
-import { useState, useEffect } from 'react'
-import { Plus, Edit, Trash } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { Label } from '@/components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { createClient } from '@/utils/supabase/client'
+import { useState, useEffect } from 'react';
+import { createClient } from '@/utils/supabase/client';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-const supabase = createClient()
-
-type FilterType = 'array' | 'string' | 'number' | 'boolean' | 'object'
+const supabase = createClient();
 
 interface Filter {
-  id: string
-  name: string
-  field: string
-  type: FilterType
-  options?: string[]
-  min?: number
-  max?: number
-  step?: number
+  id: string;
+  name: string;
+  field: string;
+  type: string;
+  options: string[] | null;
+  min: number | null;
+  max: number | null;
+  step: number | null;
 }
 
-export default function FilterManagement() {
-  const [filters, setFilters] = useState<Filter[]>([])
-  const [newFilter, setNewFilter] = useState<Omit<Filter, 'id'>>({ name: '', field: '', type: 'array', options: [] })
-  const [editingFilter, setEditingFilter] = useState<Filter | null>(null)
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
+export default function ManageFilters() {
+  const [filters, setFilters] = useState<Filter[]>([]);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editFilter, setEditFilter] = useState<Filter | null>(null);
 
   useEffect(() => {
-    fetchFilters()
-  }, [])
+    fetchFilters();
+  }, []);
 
   async function fetchFilters() {
-    const { data, error } = await supabase.from('filters').select('*')
+    const { data, error } = await supabase.from('filters').select('*');
     if (error) {
-      console.error('Error fetching filters:', error)
+      console.error('Error fetching filters:', error);
     } else {
-      setFilters(data)
+      setFilters(data);
     }
   }
 
-  async function handleSaveFilter() {
-    const filterToSave = editingFilter || newFilter
-    const { type, ...filterData } = filterToSave
+  async function handleSave() {
+    if (!editFilter) return;
 
-    // Remove unnecessary fields based on the filter type
-    if (type !== 'array') {
-      delete filterData.options
-    }
-    if (type !== 'number') {
-      delete filterData.min
-      delete filterData.max
-      delete filterData.step
-    }
+    const { id, ...payload } = editFilter;
+    const { error } = id
+      ? await supabase.from('filters').update(payload).eq('id', id)
+      : await supabase.from('filters').insert(payload);
 
-    if (editingFilter) {
-      const { error } = await supabase
-        .from('filters')
-        .update({ ...filterData, type })
-        .eq('id', editingFilter.id)
-      if (error) {
-        console.error('Error updating filter:', error)
-      } else {
-        fetchFilters()
-      }
+    if (error) {
+      console.error('Error saving filter:', error);
     } else {
-      const { error } = await supabase.from('filters').insert({ ...filterData, type })
-      if (error) {
-        console.error('Error creating filter:', error)
-      } else {
-        fetchFilters()
-      }
+      setDialogOpen(false);
+      setEditFilter(null);
+      fetchFilters();
     }
-    setIsDialogOpen(false)
-    setNewFilter({ name: '', field: '', type: 'array', options: [] })
-    setEditingFilter(null)
   }
 
-  async function handleDeleteFilter(id: string) {
-    const { error } = await supabase.from('filters').delete().eq('id', id)
+  async function handleDelete(id: string) {
+    const { error } = await supabase.from('filters').delete().eq('id', id);
     if (error) {
-      console.error('Error deleting filter:', error)
+      console.error('Error deleting filter:', error);
     } else {
-      fetchFilters()
+      fetchFilters();
     }
   }
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Filter Management</h1>
-      <Button onClick={() => setIsDialogOpen(true)} className="mb-4">
-        <Plus className="mr-2 h-4 w-4" /> Add New Filter
-      </Button>
+    <div className="p-6 space-y-6">
+      <div className="flex justify-between items-center">
+        <h1 className="text-xl font-semibold">Manage Filters</h1>
+        <Button onClick={() => {
+          setEditFilter({
+            id: '',
+            name: '',
+            field: '',
+            type: 'string',
+            options: null,
+            min: null,
+            max: null,
+            step: null,
+          });
+          setDialogOpen(true);
+        }}>
+          Add Filter
+        </Button>
+      </div>
+
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead>Name</TableHead>
             <TableHead>Field</TableHead>
             <TableHead>Type</TableHead>
-            <TableHead>Options/Range</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -113,132 +111,133 @@ export default function FilterManagement() {
               <TableCell>{filter.field}</TableCell>
               <TableCell>{filter.type}</TableCell>
               <TableCell>
-                {filter.type === 'array' && filter.options?.join(', ')}
-                {filter.type === 'number' && `${filter.min} - ${filter.max} (step: ${filter.step})`}
-              </TableCell>
-              <TableCell>
-                <Button variant="ghost" onClick={() => { setEditingFilter(filter); setIsDialogOpen(true); }}>
-                  <Edit className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" onClick={() => handleDeleteFilter(filter.id)}>
-                  <Trash className="h-4 w-4" />
-                </Button>
+                <div className="flex space-x-2">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => {
+                      setEditFilter(filter);
+                      setDialogOpen(true);
+                    }}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="destructive"
+                    onClick={() => handleDelete(filter.id)}
+                  >
+                    Delete
+                  </Button>
+                </div>
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{editingFilter ? 'Edit Filter' : 'Add New Filter'}</DialogTitle>
+            <DialogTitle>{editFilter?.id ? 'Edit Filter' : 'Add Filter'}</DialogTitle>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                Name
-              </Label>
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="name">Name</Label>
               <Input
                 id="name"
-                value={editingFilter ? editingFilter.name : newFilter.name}
-                onChange={(e) => editingFilter ? setEditingFilter({ ...editingFilter, name: e.target.value }) : setNewFilter({ ...newFilter, name: e.target.value })}
-                className="col-span-3"
+                value={editFilter?.name || ''}
+                onChange={(e) =>
+                  setEditFilter((prev) => prev && { ...prev, name: e.target.value })
+                }
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="field" className="text-right">
-                Field
-              </Label>
+            <div>
+              <Label htmlFor="field">Field</Label>
               <Input
                 id="field"
-                value={editingFilter ? editingFilter.field : newFilter.field}
-                onChange={(e) => editingFilter ? setEditingFilter({ ...editingFilter, field: e.target.value }) : setNewFilter({ ...newFilter, field: e.target.value })}
-                className="col-span-3"
+                value={editFilter?.field || ''}
+                onChange={(e) =>
+                  setEditFilter((prev) => prev && { ...prev, field: e.target.value })
+                }
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="type" className="text-right">
-                Type
-              </Label>
+            <div>
+              <Label htmlFor="type">Type</Label>
               <Select
-                value={editingFilter ? editingFilter.type : newFilter.type}
-                onValueChange={(value: FilterType) => editingFilter ? setEditingFilter({ ...editingFilter, type: value }) : setNewFilter({ ...newFilter, type: value })}
+                value={editFilter?.type || 'string'}
+                onValueChange={(value) =>
+                  setEditFilter((prev) => prev && { ...prev, type: value })
+                }
               >
-                <SelectTrigger className="col-span-3">
-                  <SelectValue placeholder="Select filter type" />
+                <SelectTrigger>
+                  <SelectValue placeholder="Select type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="array">Array</SelectItem>
                   <SelectItem value="string">String</SelectItem>
+                  <SelectItem value="array">Array</SelectItem>
                   <SelectItem value="number">Number</SelectItem>
                   <SelectItem value="boolean">Boolean</SelectItem>
-                  <SelectItem value="object">Object</SelectItem>
                 </SelectContent>
               </Select>
             </div>
-            {(editingFilter?.type === 'array' || newFilter.type === 'array') && (
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="options" className="text-right">
-                  Options
-                </Label>
+            {editFilter?.type === 'array' && (
+              <div>
+                <Label htmlFor="options">Options (comma-separated)</Label>
                 <Input
                   id="options"
-                  value={editingFilter ? editingFilter.options?.join(', ') : newFilter.options?.join(', ')}
-                  onChange={(e) => {
-                    const options = e.target.value.split(',').map(option => option.trim())
-                    editingFilter ? setEditingFilter({ ...editingFilter, options }) : setNewFilter({ ...newFilter, options })
-                  }}
-                  className="col-span-3"
+                  value={editFilter?.options?.join(', ') || ''}
+                  onChange={(e) =>
+                    setEditFilter((prev) =>
+                      prev && { ...prev, options: e.target.value.split(',').map((o) => o.trim()) }
+                    )
+                  }
                 />
               </div>
             )}
-            {(editingFilter?.type === 'number' || newFilter.type === 'number') && (
-              <>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="min" className="text-right">
-                    Min
-                  </Label>
+            {editFilter?.type === 'number' && (
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <Label htmlFor="min">Min</Label>
                   <Input
                     id="min"
                     type="number"
-                    value={editingFilter ? editingFilter.min : newFilter.min}
-                    onChange={(e) => editingFilter ? setEditingFilter({ ...editingFilter, min: Number(e.target.value) }) : setNewFilter({ ...newFilter, min: Number(e.target.value) })}
-                    className="col-span-3"
+                    value={editFilter?.min || ''}
+                    onChange={(e) =>
+                      setEditFilter((prev) => prev && { ...prev, min: parseFloat(e.target.value) })
+                    }
                   />
                 </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="max" className="text-right">
-                    Max
-                  </Label>
+                <div>
+                  <Label htmlFor="max">Max</Label>
                   <Input
                     id="max"
                     type="number"
-                    value={editingFilter ? editingFilter.max : newFilter.max}
-                    onChange={(e) => editingFilter ? setEditingFilter({ ...editingFilter, max: Number(e.target.value) }) : setNewFilter({ ...newFilter, max: Number(e.target.value) })}
-                    className="col-span-3"
+                    value={editFilter?.max || ''}
+                    onChange={(e) =>
+                      setEditFilter((prev) => prev && { ...prev, max: parseFloat(e.target.value) })
+                    }
                   />
                 </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="step" className="text-right">
-                    Step
-                  </Label>
+                <div>
+                  <Label htmlFor="step">Step</Label>
                   <Input
                     id="step"
                     type="number"
-                    value={editingFilter ? editingFilter.step : newFilter.step}
-                    onChange={(e) => editingFilter ? setEditingFilter({ ...editingFilter, step: Number(e.target.value) }) : setNewFilter({ ...newFilter, step: Number(e.target.value) })}
-                    className="col-span-3"
+                    value={editFilter?.step || ''}
+                    onChange={(e) =>
+                      setEditFilter((prev) => prev && { ...prev, step: parseFloat(e.target.value) })
+                    }
                   />
                 </div>
-              </>
+              </div>
             )}
           </div>
           <DialogFooter>
-            <Button onClick={handleSaveFilter}>{editingFilter ? 'Update' : 'Create'}</Button>
+            <Button onClick={handleSave}>Save</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
-  )
+  );
 }
-

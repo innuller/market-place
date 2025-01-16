@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Eye, EyeOff } from 'lucide-react'
+import Link from 'next/link'
 
 const supabase = createClient()
 
@@ -85,9 +86,9 @@ export default function UserSignIn() {
         <CardFooter>
           <p className="text-sm text-center w-full">
             Don't have an account?{' '}
-            <a href="/signup/user" className="text-[#7AB80E] hover:underline">
+            <Link href="/users/signup" className="text-[#7AB80E] hover:underline">
               Sign Up
-            </a>
+            </Link>
           </p>
         </CardFooter>
       </Card>
