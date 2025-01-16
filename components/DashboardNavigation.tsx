@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 const links = [
   { href: '/admin/category', label: 'Category' },
   { href: '/admin/sub-category', label: 'Sub-category' },
-  { href: '/admin/compliance-standards', label: 'Compliance Standards' },
+  { href: '/admin/filters', label: 'Filters Management' },
 ];
 
 export function DashboardNavigation() {
