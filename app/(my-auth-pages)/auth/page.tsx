@@ -16,6 +16,18 @@ export default function AuthOptionsPage() {
         router.push(path)
     }
 
+    const handleEmailClick = () => {
+        const email = 'test@gmail.com';
+        const subject = 'Contact Request';
+        const body = `Name: %0D%0APhone: %0D%0AReason:`;
+
+        const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+        window.location.href = mailtoLink;
+    };
+
+
+
     return (
         <div className="min-h-screen bg-[#003853] text-white flex items-center justify-center p-4">
             <div className="w-full max-w-4xl">
@@ -57,15 +69,16 @@ export default function AuthOptionsPage() {
                             <p className='text-white'>Register your supplier to start receiving quotes and connecting with clients.</p>
                         </CardContent>
                         <CardFooter>
-                            <Link href="/registration-form">
+                            <div>
                                 <Button
                                     className="w-full bg-[#7AB80E] hover:bg-[#63a029] text-white"
-                                    onClick={() => handleNavigation('/registration-form')}
+                                    // onClick={() => handleNavigation('/registration-form')}
+                                    onClick={handleEmailClick}
                                     disabled={isLoading}
                                 >
                                     Sign Up
                                 </Button>
-                            </Link>
+                            </div>
                         </CardFooter>
                     </Card>
 
