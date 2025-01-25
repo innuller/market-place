@@ -1,39 +1,19 @@
-'use client'
 
-import { useState, useEffect } from 'react'
 import Link from "next/link"
-import { useRouter } from 'next/navigation'
-import { Menu } from 'lucide-react'
+import { Menu } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTrigger, } from "@/components/ui/sheet"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { createClient } from '@/utils/supabase/client'
 
-const supabase = createClient()
+import { signOutAction } from "@/app/actions";
+import { createClient } from "@/utils/supabase/server";
+import { SubmitButton } from "./submit-button"
 
-export function Header() {
-  const [user, setUser] = useState<any>(null)
-  const router = useRouter()
+export async function Header() {
 
-  useEffect(() => {
-    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user ?? null)
-    })
-
-    // Initial user check
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setUser(user)
-    })
-
-    return () => {
-      authListener.subscription.unsubscribe()
-    }
-  }, [])
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut()
-    router.push('/')
-  }
+  const {
+    data: { user },
+  } = await createClient().auth.getUser();
 
   return (
     <header className="bg-[#003853] border-b border-white/10">
@@ -112,14 +92,19 @@ export function Header() {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+            {/* <Link href="#" className="hover:text-white">About Us</Link>
+            <Link href="#" className="hover:text-white">Industry Insights</Link> */}
           </nav>
         </div>
         <div className="flex items-center gap-2 md:gap-4">
           <Link href="/about" className="hidden lg:inline-block text-white/90 hover:text-white">
             About Us
           </Link>
-          {user?.user_metadata?.user_type === 'company' && (
+          {user?.user_metadata.user_type === 'company' && (
             <>
+              {/* <Link href="/auth" className="hidden lg:inline-block text-white/90 hover:text-white">
+                Register Your Business
+              </Link> */}
               <Link href="/chat/company" className="hidden lg:inline-block text-white/90 hover:text-white">
                 Messages
               </Link>
@@ -128,7 +113,7 @@ export function Header() {
               </Link>
             </>
           )}
-          {user?.user_metadata?.user_type === 'user' && (
+          {user?.user_metadata.user_type === 'user' && (
             <>
               <Link href="/protected" className="hidden lg:inline-block text-white/90 hover:text-white">
                 My Profile
@@ -153,12 +138,14 @@ export function Header() {
               </Link>
             </>
           ) : (
-            <Button onClick={handleSignOut} className="bg-[#7AB80E] hover:bg-[#8BC727] text-white text-sm md:text-base">
-              Sign Out
-            </Button>
+            <form>
+              <SubmitButton formAction={signOutAction} pendingText="Signing Out..." className="bg-[#7AB80E] hover:bg-[#8BC727] text-white text-sm md:text-base">
+                Sign Out
+              </SubmitButton>
+            </form>
           )}
         </div>
       </div>
-    </header>
+    </header >
   )
 }

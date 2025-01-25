@@ -1,7 +1,11 @@
 'use client'
 
+import { useState, useEffect, useCallback } from 'react';
+import { useRouter } from "next/navigation"
+import { useSearchParams } from 'next/navigation';
+
 import Link from "next/link"
-import { Menu, Search, ShoppingBag, IndianRupee, Users, Book, ShoppingCart } from "lucide-react"
+import { Menu, Search, ShoppingBag, IndianRupee, Users, Book, ShoppingCart, Instagram, Facebook, Twitter, Linkedin} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   Select,
@@ -16,13 +20,31 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { Separator } from "@/components/ui/separator"
+import { Input } from "@/components/ui/input"
 
 import Hero from "@/components/hero";
 import ConnectSupabaseSteps from "@/components/tutorial/connect-supabase-steps";
 import SignUpUserSteps from "@/components/tutorial/sign-up-user-steps";
 import { hasEnvVars } from "@/utils/supabase/check-env-vars";
 
+interface Organization {
+  id: string;
+  organization_name: string;
+  email: string;
+  metadata: Record<string, any>;
+}
+
 export default function Index() {
+
+  const [searchType, setSearchType] = useState("all")
+  const [searchQuery, setSearchQuery] = useState("")
+  const router = useRouter()
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    router.push(`/search?type=${searchType}&query=${encodeURIComponent(searchQuery)}`)
+  }
+
   return (
     // <>
     //   <Hero />
@@ -40,35 +62,34 @@ export default function Index() {
           <h1 className="text-white text-2xl sm:text-3xl md:text-4xl font-bold mb-8">
             Search and Buy with The Leading Industries Exploration Platform.
           </h1>
-          <div className="max-w-3xl mx-auto flex flex-col sm:flex-row gap-2">
-            <Select>
+          <form onSubmit={handleSearch} className="max-w-3xl mx-auto flex flex-col sm:flex-row gap-2">
+            <Select value={searchType} onValueChange={setSearchType}>
               <SelectTrigger className="bg-white w-full sm:w-[150px]">
                 <SelectValue placeholder="All" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All</SelectItem>
-                <SelectItem value="suppliers">Suppliers</SelectItem>
-                <SelectItem value="products_services">Procut / Service </SelectItem>
-                <SelectItem value="catalogue">Catalogue</SelectItem>
+                <SelectItem value="supplier">Supplier</SelectItem>
+                <SelectItem value="product_service">Product / Service</SelectItem>
+                <SelectItem value="catalog">Catalog</SelectItem>
               </SelectContent>
             </Select>
             <div className="flex-1 relative">
-              <input
+              <Input
                 type="text"
                 placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full h-full px-4 rounded-md"
               />
             </div>
-            <Link href={"/search"}>
-              <Button className="bg-[#7AB80E] hover:bg-[#8BC727] text-white px-8 w-full sm:w-auto">
-                Search
-              </Button>
-            </Link>
-          </div>
+            <Button type="submit" className="bg-[#7AB80E] hover:bg-[#8BC727] text-white px-8 w-full sm:w-auto">
+              Search
+            </Button>
+          </form>
           <div className="mt-4 text-white">
-            {/* New to Thomas? */}
-            <Link href="#" className="text-[#7AB80E] ml-2 underline">
-              Join Free for Full Access
+            <Link href="/users/signin" className="text-[#7AB80E] ml-2 underline">
+              Join Free To Explore
             </Link>
           </div>
         </div>
@@ -93,9 +114,11 @@ export default function Index() {
               <p className="text-white/80 mb-6">
                 Explore the listed suppliers in our supplier directory. We are constantly updating the supplier list and are here to assist you with strategic sourcing opportunities.
               </p>
-              <Button variant="secondary" className="w-full sm:w-auto">
-                Discover Suppliers
-              </Button>
+              <Link href="/search">
+                <Button variant="secondary" className="w-full sm:w-auto">
+                  Discover Suppliers
+                </Button>
+              </Link>
             </div>
 
             {/* Get an Instant Quote */}
@@ -123,9 +146,11 @@ export default function Index() {
               <p className="text-white/80 mb-6">
                 Registered as a buyer to reduce lead time, increase profitability, and access quality products/services from professional suppliers registered on the platform.
               </p>
-              <Button variant="secondary" className="w-full sm:w-auto">
-                Register as a Buyer
-              </Button>
+              <Link href="/companies/signin">
+                <Button variant="secondary" className="w-full sm:w-auto">
+                  Register as a Buyer
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -194,17 +219,23 @@ export default function Index() {
               <div>
                 <h4 className="text-white text-lg font-bold mb-4">Quick Links</h4>
                 <div className="flex flex-col gap-2">
-                  <Link href="#" className="text-white/60 hover:text-white">
+                  <Link href="/" className="text-white/60 hover:text-white">
                     Home
                   </Link>
-                  <Link href="#" className="text-white/60 hover:text-white">
-                    Features
+                  <Link href="/about" className="text-white/60 hover:text-white">
+                    About Us
+                  </Link>
+                  <Link href="/terms-conditions" className="text-white/60 hover:text-white">
+                    Terms and Conditions
+                  </Link>
+                  <Link href="/privacy-policy" className="text-white/60 hover:text-white">
+                    Privacy Policy
                   </Link>
                   <Link href="#" className="text-white/60 hover:text-white">
-                    Pricing
+                    FAQ
                   </Link>
                   <Link href="#" className="text-white/60 hover:text-white">
-                    Contact
+                    Contact Us
                   </Link>
                 </div>
               </div>
@@ -212,19 +243,25 @@ export default function Index() {
                 <h4 className="text-white text-lg font-bold mb-4">Follow Us</h4>
                 <div className="flex gap-4">
                   <Link href="#" className="text-white/60 hover:text-white">
-                    Facebook
+                    <Facebook/>
                   </Link>
                   <Link href="#" className="text-white/60 hover:text-white">
-                    Instagram
+                    <Instagram/>
                   </Link>
                   <Link href="#" className="text-white/60 hover:text-white">
-                    Twitter
+                    <Twitter/>
+                  </Link>
+                  <Link href="#" className="text-white/60 hover:text-white">
+                    <Linkedin/>
                   </Link>
                 </div>
               </div>
             </div>
             <div className="mt-12 text-center text-white/60">
               © 2023 Your Company Name. All rights reserved.
+            </div>
+            <div className="mt-2 text-center text-white/60">
+              Website last modified on DD/MM/YYYY
             </div>
           </div>
         </footer>

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { useSearchParams } from 'next/navigation';
 
 import Link from "next/link"
-import { Menu, Search, ShoppingBag, IndianRupee, Users, Book, ShoppingCart, Instagram, Facebook, Twitter, Linkedin} from "lucide-react"
+import { Menu, Search, ShoppingBag, IndianRupee, Users, Book, ShoppingCart, Instagram, Facebook, Twitter, Linkedin } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   Select,
@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/sheet"
 import { Separator } from "@/components/ui/separator"
 import { Input } from "@/components/ui/input"
+import { createClient } from '@/utils/supabase/client'
 
 import Hero from "@/components/hero";
 import ConnectSupabaseSteps from "@/components/tutorial/connect-supabase-steps";
@@ -38,11 +39,50 @@ export default function Index() {
 
   const [searchType, setSearchType] = useState("all")
   const [searchQuery, setSearchQuery] = useState("")
+  const [suggestions, setSuggestions] = useState<Organization[]>([])
   const router = useRouter()
+  const supabase = createClient()
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
     router.push(`/search?type=${searchType}&query=${encodeURIComponent(searchQuery)}`)
+  }
+
+  const fetchSuggestions = useCallback(async (query: string) => {
+    if (query.length < 2) {
+      setSuggestions([])
+      return
+    }
+
+    try {
+      const { data, error } = await supabase.rpc('search_organizations', {
+        search_type: searchType,
+        search_query: query,
+      });
+
+      if (error) {
+        console.error('Error calling RPC:', error);
+        return;
+      }
+
+      setSuggestions(data || []);
+    } catch (err) {
+      console.error('Unexpected error:', err);
+    }
+  }, [searchType])
+
+  useEffect(() => {
+    const debounceTimer = setTimeout(() => {
+      fetchSuggestions(searchQuery)
+    }, 300)
+
+    return () => clearTimeout(debounceTimer)
+  }, [searchQuery, fetchSuggestions])
+
+  const handleSuggestionClick = (suggestion: Organization) => {
+    setSearchQuery(suggestion.organization_name)
+    setSuggestions([])
+    router.push(`/search?type=all&query=${encodeURIComponent(suggestion.organization_name)}`)
   }
 
   return (
@@ -82,6 +122,19 @@ export default function Index() {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full h-full px-4 rounded-md"
               />
+              {suggestions.length > 0 && (
+                <ul className="absolute z-10 w-full bg-white mt-1 rounded-md shadow-lg max-h-60 overflow-auto">
+                  {suggestions.map((suggestion) => (
+                    <li
+                      key={suggestion.id}
+                      onClick={() => handleSuggestionClick(suggestion)}
+                      className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                    >
+                      {suggestion.organization_name}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
             <Button type="submit" className="bg-[#7AB80E] hover:bg-[#8BC727] text-white px-8 w-full sm:w-auto">
               Search
@@ -243,16 +296,16 @@ export default function Index() {
                 <h4 className="text-white text-lg font-bold mb-4">Follow Us</h4>
                 <div className="flex gap-4">
                   <Link href="#" className="text-white/60 hover:text-white">
-                    <Facebook/>
+                    <Facebook />
                   </Link>
                   <Link href="#" className="text-white/60 hover:text-white">
-                    <Instagram/>
+                    <Instagram />
                   </Link>
                   <Link href="#" className="text-white/60 hover:text-white">
-                    <Twitter/>
+                    <Twitter />
                   </Link>
                   <Link href="#" className="text-white/60 hover:text-white">
-                    <Linkedin/>
+                    <Linkedin />
                   </Link>
                 </div>
               </div>

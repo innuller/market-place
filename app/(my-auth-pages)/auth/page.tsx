@@ -19,7 +19,10 @@ export default function AuthOptionsPage() {
     const handleEmailClick = () => {
         const email = 'test@gmail.com';
         const subject = 'Contact Request';
-        const body = `Name: %0D%0APhone: %0D%0AReason:`;
+        const body = `
+        Name: 
+        Phone: 
+        Reason:`;
 
         const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
