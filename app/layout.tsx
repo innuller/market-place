@@ -7,6 +7,7 @@ import { GeistSans } from "geist/font/sans";
 import { ThemeProvider } from "next-themes";
 import Link from "next/link";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/react"
 import { Header } from "@/components/header2";
 
 const defaultUrl = process.env.VERCEL_URL
@@ -27,10 +28,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={GeistSans.className} suppressHydrationWarning>
       <body className="bg-[#003853] text-foreground">
+        <Analytics />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
-          enableSystem = {false}
+          enableSystem={false}
           disableTransitionOnChange
         >
           {/* <main className="min-h-screen flex flex-col items-center"> */}
