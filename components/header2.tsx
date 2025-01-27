@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { createClient } from '@/utils/supabase/client'
+import Image from 'next/image'
 
 const supabase = createClient()
 
@@ -81,7 +82,8 @@ export function Header() {
             </SheetContent>
           </Sheet>
           <Link href="/" className="text-white text-xl md:text-2xl font-bold">
-            Logo
+            {/* Innuller */}
+            <Image src="/images/i/bg-Innuler-1.png" alt="Innuller" width={150} height={40} />
           </Link>
           <nav className="hidden lg:flex items-center gap-6 text-white/90">
             <DropdownMenu>

@@ -751,7 +751,7 @@ export default function ExtendedRegistrationForm() {
       }
 
       console.log('Successfully inserted data:', orgData)
-      router.push('/dashboard')
+      router.push('/landing-page')
 
     } catch (error) {
       console.error('Error in form submission --->', error);

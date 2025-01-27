@@ -1,3 +1,4 @@
+// Updated FilterPanel.tsx to sync filters with ResultsPanel
 'use client'
 
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
@@ -32,7 +33,7 @@ interface Filter {
 interface FilterPanelProps {
   filters: Record<string, string[]>;
   setFilters: React.Dispatch<React.SetStateAction<Record<string, string[]>>>;
-  onFilterUpdate: (filters: Record<string, string[]>) => void;
+  onFilterUpdate: (filters: Record<string, string[]>) => void; // Notify parent
 }
 
 interface FilterSectionProps {
@@ -126,7 +127,6 @@ const FilterSection = ({ filter, selectedFilters, onFilterChange }: FilterSectio
 
 export default function FilterPanel({ filters, setFilters, onFilterUpdate }: FilterPanelProps) {
   const [dynamicFilters, setDynamicFilters] = useState<Filter[]>([]);
-  const [isOpen, setIsOpen] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -142,6 +142,19 @@ export default function FilterPanel({ filters, setFilters, onFilterUpdate }: Fil
     }
   }
 
+  // const handleFilterChange = useCallback((field: string, value: string[]) => {
+  //   setFilters((prev) => {
+  //     const updatedFilters = { ...prev };
+  //     if (value.length === 0) {
+  //       delete updatedFilters[field];
+  //     } else {
+  //       updatedFilters[field] = value;
+  //     }
+  //     onFilterUpdate(updatedFilters); // Notify parent of the changes.
+  //     return updatedFilters;
+  //   });
+  // }, [setFilters, onFilterUpdate]);
+
   const handleFilterChange = useCallback((field: string, value: string[]) => {
     setFilters((prev) => {
       const updatedFilters = { ...prev };
@@ -150,10 +163,11 @@ export default function FilterPanel({ filters, setFilters, onFilterUpdate }: Fil
       } else {
         updatedFilters[field] = value;
       }
-      onFilterUpdate(updatedFilters);
+      onFilterUpdate(updatedFilters); // Notify parent when filters change
       return updatedFilters;
     });
   }, [setFilters, onFilterUpdate]);
+  
 
   const FilterContent = useMemo(() => (
     <div className="h-full flex flex-col bg-[#003853]">
@@ -197,28 +211,11 @@ export default function FilterPanel({ filters, setFilters, onFilterUpdate }: Fil
         </Accordion>
       </ScrollArea>
     </div>
-  ), [filters, dynamicFilters, handleFilterChange, onFilterUpdate]);
+  ), [filters, dynamicFilters, handleFilterChange]);
 
   return (
-    <>
-      <Sheet open={isOpen} onOpenChange={setIsOpen}>
-        <SheetTrigger asChild>
-          <Button
-            variant="outline"
-            size="sm"
-            className="lg:hidden fixed bottom-4 left-4 z-10 bg-[#7AB80E] text-white hover:bg-[#63a029]"
-          >
-            <Filter className="w-4 h-4 mr-2" />
-            Filters
-          </Button>
-        </SheetTrigger>
-        <SheetContent side="left" className="w-[300px] sm:w-[400px] bg-[#003853] border-r border-white/10">
-          {FilterContent}
-        </SheetContent>
-      </Sheet>
-      <aside className="hidden lg:block w-64 border-r border-white/10 bg-[#003853]">
-        {FilterContent}
-      </aside>
-    </>
+    <aside className="w-64 border-r border-white/10 bg-[#003853]">
+      {FilterContent}
+    </aside>
   );
 }

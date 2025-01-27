@@ -1,23 +1,24 @@
 import Image from 'next/image'
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import Link from 'next/link'
 
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#003853] to-[#002538] text-white">
       <div className="max-w-6xl mx-auto px-4 py-12">
-        <h1 className="text-5xl font-bold mb-8 text-center">About XXXX</h1>
+        <h1 className="text-5xl font-bold mb-8 text-center">About innuller</h1>
         
         <section className="mb-16">
           <h2 className="text-3xl font-semibold mb-6 text-[#7AB80E]">Who we are</h2>
           <div className="flex flex-col md:flex-row items-center gap-8">
             <div className="md:w-1/2">
-              <p className="mb-4 text-lg">We are India's largest marketplace and a one-stop expert solution for all business needs, empowering 81 lakh suppliers by connecting them with ~20 crore buyers across the nation.</p>
-              <p className="text-lg">At the heart of XXXX is our commitment to creating value for Indian business communities through strong network effects. We make business effortless for all by ensuring access to a wider market, technology, and finance.</p>
+              <p className="mb-4 text-lg">We are fast growing marketplace and a one-stop expert solution for all business needs, empowering suppliers by connecting them buyers across the nation.</p>
+              <p className="text-lg">At the heart of INNULLER is our commitment to creating value for Indian business communities through strong network effects. We make business effortless for all by ensuring access to a wider market, technology, and finance.</p>
             </div>
             <div className="md:w-1/2">
               <Image 
-                src="/placeholder.svg?height=400&width=600" 
+                src="/images/i/Who we are.jpeg" 
                 alt="Business network illustration" 
                 width={600} 
                 height={400} 
@@ -35,7 +36,7 @@ export default function AboutPage() {
               <Card className="bg-[#004b6e] border-[#7AB80E] mb-4">
                 <CardContent className="p-4">
                   <h3 className="text-xl font-semibold mb-2 text-[#7AB80E]">Key Benefits</h3>
-                  <ul className="list-disc list-inside space-y-2">
+                  <ul className="list-disc list-inside space-y-2 text-[#7AB80E]">
                     <li>Enhanced business visibility</li>
                     <li>Increased brand credibility</li>
                     <li>Efficient lead management</li>
@@ -46,7 +47,7 @@ export default function AboutPage() {
             </div>
             <div className="md:w-1/2">
               <Image 
-                src="/placeholder.svg?height=400&width=600" 
+                src="/images/i/Empowering business.jpg" 
                 alt="Digital marketplace illustration" 
                 width={600} 
                 height={400} 
@@ -65,7 +66,7 @@ export default function AboutPage() {
             </div>
             <div className="md:w-1/2">
               <Image 
-                src="/placeholder.svg?height=400&width=600" 
+                src="/images/i/Digital and Financial Inclusion.jpg" 
                 alt="Tech solutions illustration" 
                 width={600} 
                 height={400} 
@@ -80,14 +81,14 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
               "Pan India presence: Services offered all over India across 100+ cities.",
-              "Attractive value proposition for local MSMEs: Justdial's value-added offerings of huge online visibility, customized website, mobile site and mobile app; all packaged together, make it an attractive value proposition for MSMEs, several of whom have continuous associations with XXXX.",
+              "Attractive value proposition for local MSMEs: Justdial's value-added offerings of huge online visibility, customized website, mobile site and mobile app; all packaged together, make it an attractive value proposition for MSMEs, several of whom have continuous associations with INNULLER.",
               "Local Expertise: With a strong and widespread sales force, years of experience and in-depth local market knowledge, Justdial enjoys significant expertise across all regions of the country.",
               "Long operating history with a proven monetization model.",
               "Experienced management team"
             ].map((highlight, index) => (
               <Card key={index} className="bg-[#004b6e] border-[#7AB80E]">
                 <CardContent className="p-4">
-                  <p className="text-lg">{highlight}</p>
+                  <p className="text-lg text-white">{highlight}</p>
                 </CardContent>
               </Card>
             ))}
@@ -102,10 +103,10 @@ export default function AboutPage() {
 
         <section className="text-center">
           <h2 className="text-3xl font-semibold mb-6 text-[#7AB80E]">Join the Team</h2>
-          <p className="mb-6 text-lg">At XXX, we are always on the lookout for talented individuals who are willing to become a part of our success story. If you share our commitment to empowering businesses, join us.</p>
-          <Button className="bg-[#7AB80E] text-white px-8 py-3 rounded-lg text-lg hover:bg-[#63a029] transition-colors">
-            View Openings
-          </Button>
+          <p className="mb-6 text-lg">At Innuller, we are always on the lookout for talented individuals who are willing to become a part of our success story. If you share our commitment to empowering businesses, contact us without hesitation on email id <u><Link href="mailto:contact@innullar.com" className="text-[#7AB80E]">contact@innullar.com</Link></u></p>
+          {/* <Button className="bg-[#7AB80E] text-white px-8 py-3 rounded-lg text-lg hover:bg-[#63a029] transition-colors" onClick={() => window.open('mailto:contact@innullar.com ', '_blank')}>
+            Mail Us
+          </Button> */}
         </section>
       </div>
     </div>

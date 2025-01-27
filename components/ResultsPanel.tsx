@@ -1,4 +1,3 @@
-// components/ResultsPanel.tsx
 'use client'
 
 import { useState, useEffect, useMemo } from 'react'
@@ -32,7 +31,7 @@ interface Organization {
     categories?: string[];
     legal_status?: string[];
     annual_turnover?: string;
-    year_of_incorporation?: number;
+    year_of_incorporation?: string;
     [key: string]: any;
   };
 }
@@ -123,8 +122,8 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
     if (sortBy !== 'none') {
       filtered.sort((a, b) => {
         if (sortBy === 'year_of_incorporation') {
-          const yearA = parseInt(a.metadata.year_of_incorporation?.toString() || '0')
-          const yearB = parseInt(b.metadata.year_of_incorporation?.toString() || '0')
+          const yearA = parseInt(a.metadata.year_of_incorporation || '0')
+          const yearB = parseInt(b.metadata.year_of_incorporation || '0')
           return yearB - yearA // Sort in descending order (newest first)
         } else if (sortBy === 'annual_turnover') {
           const turnoverA = parseFloat(a.metadata.annual_turnover?.replace(/[^0-9.-]+/g,"") || '0')
@@ -137,122 +136,6 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
 
     return filtered
   }, [results, searchTerm, searchType, sortBy])
-
-  // const filteredResults = useMemo(() => {
-  //   if (!searchTerm) return results
-  //   const lowercasedTerm = searchTerm.toLowerCase()
-  //   return results.filter(org => {
-  //     switch (searchType) {
-  //       case 'supplier':
-  //         return org.organization_name.toLowerCase().includes(lowercasedTerm)
-  //       case 'product_service':
-  //         return org.metadata.products_services?.some(product =>
-  //           product.name.toLowerCase().includes(lowercasedTerm)
-  //         )
-  //       case 'catalog':
-  //         return org.metadata.products_services?.some(product =>
-  //           product.catalog?.toLowerCase().includes(lowercasedTerm)
-  //         )
-  //       case 'all':
-  //       default:
-  //         return (
-  //           org.organization_name.toLowerCase().includes(lowercasedTerm) ||
-  //           org.email.toLowerCase().includes(lowercasedTerm) ||
-  //           org.metadata.products_services?.some(product =>
-  //             product.name.toLowerCase().includes(lowercasedTerm) ||
-  //             product.catalog?.toLowerCase().includes(lowercasedTerm)
-  //           )
-  //         )
-  //     }
-  //   })
-  // }, [results, searchTerm, searchType])
-
-  // const filteredResults = useMemo(() => {
-  //   if (!searchTerm) return results;
-  //   const lowercasedTerm = searchTerm.toLowerCase();
-  //   return results.filter(org =>
-  //     org.organization_name.toLowerCase().includes(lowercasedTerm) ||
-  //     org.email.toLowerCase().includes(lowercasedTerm) ||
-  //     Object.entries(org.metadata).some(([key, value]) => {
-  //       if (typeof value === 'string') {
-  //         return value.toLowerCase().includes(lowercasedTerm);
-  //       }
-  //       if (Array.isArray(value)) {
-  //         return value.some(item =>
-  //           typeof item === 'string' && item.toLowerCase().includes(lowercasedTerm)
-  //         );
-  //       }
-  //       return false;
-  //     })
-  //   );
-  // }, [results, searchTerm]);
-
-  // const filteredResults = useMemo(() => {
-  //   if (!searchTerm) return results;
-  //   const lowercasedTerm = searchTerm.toLowerCase();
-
-  //   return results.filter(org =>
-  //     org.organization_name.toLowerCase().includes(lowercasedTerm) ||
-  //     org.email.toLowerCase().includes(lowercasedTerm) ||
-  //     org.metadata.products_services?.some(product =>
-  //       product.name.toLowerCase().includes(lowercasedTerm)
-  //     )
-  //   );
-  // }, [results, searchTerm]);
-
-
-
-  // useEffect(() => {
-  //   const fetchSavedCompanies = async () => {
-  //     if (!currentUserId) return;
-
-  //     const { data, error } = await supabase
-  //       .from('saved_companies')
-  //       .select('company_id')
-  //       .eq('user_id', currentUserId);
-
-  //     if (error) {
-  //       console.error('Error fetching saved companies:', error);
-  //       return;
-  //     }
-
-  //     setSavedCompanies(data?.map((item: any) => item.company_id) || []);
-  //   };
-
-  //   const fetchSession = async () => {
-  //     const { data: { session } } = await supabase.auth.getSession();
-  //     setCurrentUserId(session?.user?.id || null);
-  //     fetchSavedCompanies();
-  //   };
-
-  //   fetchSession();
-  // }, [currentUserId, supabase]);
-
-
-  // useEffect(() => {
-  //   const fetchSavedCompanies = async () => {
-  //     if (!currentUserId) return
-
-  //     const { data, error } = await supabase
-  //       .from('saved_companies')
-  //       .select('company_id')
-  //       .eq('user_id', currentUserId)
-
-  //     if (error) {
-  //       console.error('Error fetching saved companies:', error)
-  //     } else {
-  //       setSavedCompanies(data.map(item => item.company_id) || [])
-  //     }
-  //   }
-
-  //   const fetchSession = async () => {
-  //     const { data: { session } } = await supabase.auth.getSession();
-  //     setCurrentUserId(session?.user?.id || null);
-  //     fetchSavedCompanies();
-  //   };
-
-  //   fetchSession();
-  // }, [currentUserId, supabase]);
 
   useEffect(() => {
     const fetchSavedCompanies = async () => {
@@ -277,8 +160,7 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
     }
 
     fetchSession()
-  }, [currentUserId, supabase])
-
+  }, [currentUserId]); // Removed supabase from dependencies
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
@@ -292,60 +174,6 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
     )
   }
 
-  // const handleSaveCompany = async (id: string) => {
-  //   console.log('Saving company:', id)
-
-  //   if (!currentUserId) {
-  //     console.log('User not logged in')
-  //     return
-  //   }
-
-  //   try {
-  //     const { data, error } = await supabase
-  //       .from('saved_companies')
-  //       .upsert({ user_id: currentUserId, company_id: id })
-
-  //     if (error) throw error
-
-  //     setSavedCompanies(prev => [...prev, id])
-  //     console.log('Company saved successfully:', id)
-  //   } catch (error) {
-  //     console.error('Error saving company:', error)
-  //   }
-
-  // }
-
-  // const handleSaveCompany = async (id: string) => {
-  //   if (!currentUserId) {
-  //     console.log('User not logged in')
-  //     return
-  //   }
-
-  //   try {
-  //     const { data: companyExists, error: companyCheckError } = await supabase
-  //       .from('organizations_main')
-  //       .select('id')
-  //       .eq('id', id)
-  //       .single()
-
-  //     if (companyCheckError || !companyExists) {
-  //       console.error('Company does not exist in the main table')
-  //       return
-  //     }
-
-  //     const { data, error } = await supabase
-  //       .from('saved_companies')
-  //       .upsert({ user_id: currentUserId, company_id: id })
-
-  //     if (error) throw error
-
-  //     setSavedCompanies(prev => [...prev, id])
-  //     console.log('Company saved successfully:', id)
-  //   } catch (error) {
-  //     console.error('Error saving company:', error)
-  //   }
-  // }
-
   const handleSaveCompany = async (id: string) => {
     if (!currentUserId) {
       console.log('User not logged in')
@@ -353,11 +181,9 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
     }
 
     try {
-      // Check if the company is already saved
       const isSaved = savedCompanies.includes(id)
 
       if (isSaved) {
-        // If saved, delete the entry
         const { error } = await supabase
           .from('saved_companies')
           .delete()
@@ -369,7 +195,6 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
         setSavedCompanies(prev => prev.filter(companyId => companyId !== id))
         console.log('Company removed from saved list:', id)
       } else {
-        // If not saved, insert the entry
         const { error } = await supabase
           .from('saved_companies')
           .insert({ user_id: currentUserId, company_id: id })
@@ -479,9 +304,9 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
   return (
     <div className="flex flex-col h-full bg-[#003853] text-white">
       <div className="p-4 border-b border-white/10">
-        <form onSubmit={handleSearch} className="flex gap-2">
+        <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-2">
           <Select value={searchType} onValueChange={setSearchType}>
-            <SelectTrigger className="w-[180px] bg-white/10 text-white border-white/20">
+            <SelectTrigger className="w-full sm:w-[180px] bg-white/10 text-white border-white/20">
               <SelectValue placeholder="Search type" />
             </SelectTrigger>
             <SelectContent>
@@ -491,24 +316,27 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
               <SelectItem value="catalog">Catalog</SelectItem>
             </SelectContent>
           </Select>
-          <Input
-            type="text"
-            placeholder="Search organizations..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="flex-grow bg-white/10 text-white placeholder-white/50 border-white/20"
-          />
-          <Button type="submit" className="text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white">
-            <Search className="h-4 w-4" />
+          <div className="flex-grow relative">
+            <Input
+              type="text"
+              placeholder="Search organizations..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full bg-white/10 text-white placeholder-white/50 border-white/20"
+            />
+          </div>
+          <Button type="submit" className="w-full sm:w-auto text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white">
+            <Search className="h-4 w-4 mr-2" />
+            Search
           </Button>
         </form>
       </div>
 
-      <div className="p-4 border-b border-white/10 flex justify-between items-center">
-        <div className="flex items-center gap-2">
+      <div className="p-4 border-b border-white/10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
           <span className="font-semibold">{filteredResults.length}</span> companies found
           <Select value={sortBy} onValueChange={setSortBy}>
-            <SelectTrigger className="w-[200px] bg-white/10 text-white border-white/20">
+            <SelectTrigger className="w-full sm:w-[200px] bg-white/10 text-white border-white/20">
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
             <SelectContent>
@@ -518,55 +346,18 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
             </SelectContent>
           </Select>
         </div>
-        <div className="space-x-2">
-          {/* <Dialog open={messageDialogOpen} onOpenChange={setMessageDialogOpen}>
-            <DialogTrigger asChild>
-              <Button
-                variant="outline"
-                // className="text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white"
-                className={`text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white ${
-                  !currentUserId ? "opacity-50 cursor-not-allowed" : ""
-                }`}
-                disabled={selectedCompanies.length === 0 && !currentUserId}
-
-              >
-                Send Message
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="bg-[#003853] text-white border-white/10">
-              <DialogHeader>
-                <DialogTitle>Send Message</DialogTitle>
-                <DialogDescription>
-                  Send a message to {selectedCompanies.length} selected companies.
-                </DialogDescription>
-              </DialogHeader>
-              <Textarea
-                value={messageContent}
-                onChange={(e) => setMessageContent(e.target.value)}
-                placeholder="Type your message here..."
-                className="bg-white/10 text-white placeholder-white/50 border-white/20"
-              />
-              <DialogFooter>
-                <Button onClick={handleSendMessage} className="text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white">
-                  Send
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog> */}
-
+        <div className="flex gap-2 w-full sm:w-auto">
           <Dialog
             open={messageDialogOpen}
             onOpenChange={(isOpen) => {
-              // Ensure both conditions are met before allowing the dialog to open
               if (!currentUserId || selectedCompanies.length < 1) return;
               setMessageDialogOpen(isOpen);
             }}
           >
-            {/* Conditionally render the DialogTrigger based on the conditions */}
             {(!currentUserId || selectedCompanies.length < 1) ? (
               <Button
                 variant="outline"
-                className="text-white bg-[#7AB80E] border-white/20 opacity-50 cursor-not-allowed"
+                className="flex-1 sm:flex-none text-white bg-[#7AB80E] border-white/20 opacity-50 cursor-not-allowed"
                 disabled
               >
                 Send Message
@@ -575,7 +366,7 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
               <DialogTrigger asChild>
                 <Button
                   variant="outline"
-                  className="text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white"
+                  className="flex-1 sm:flex-none text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white"
                 >
                   Send Message
                 </Button>
@@ -605,162 +396,17 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
             </DialogContent>
           </Dialog>
 
-          {/* <Dialog open={quoteDialogOpen} onOpenChange={setQuoteDialogOpen}>
-            <DialogTrigger asChild>
-              <Button
-                variant="outline"
-                className="text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white"
-                disabled={selectedCompanies.length === 0}
-              >
-                Request Quote
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="bg-[#003853] text-white border-white/10">
-              <DialogHeader>
-                <DialogTitle>Request Quote</DialogTitle>
-                <DialogDescription>
-                  Request a quote from {selectedCompanies.length} selected companies.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="space-y-4">
-                <div>
-                  <h3 className="text-lg font-semibold mb-2">Project Details</h3>
-                  <div className="space-y-2">
-                    <div>
-                      <Label htmlFor="project_title">Project Title</Label>
-                      <Input
-                        id="project_title"
-                        value={quoteForm.project_title}
-                        onChange={(e) => setQuoteForm(prev => ({ ...prev, project_title: e.target.value }))}
-                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="project_description">Project Description</Label>
-                      <Textarea
-                        id="project_description"
-                        value={quoteForm.project_description}
-                        onChange={(e) => setQuoteForm(prev => ({ ...prev, project_description: e.target.value }))}
-                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="date_needed">Date Needed</Label>
-                      <Input
-                        id="date_needed"
-                        type="date"
-                        value={quoteForm.date_needed}
-                        onChange={(e) => setQuoteForm(prev => ({ ...prev, date_needed: e.target.value }))}
-                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="project_file">Upload Project Files</Label>
-                      <Input
-                        id="project_file"
-                        type="file"
-                        onChange={handleFileChange}
-                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold mb-2">Fulfillment Details</h3>
-                  <div className="space-y-2">
-                    <div>
-                      <Label htmlFor="phone_number">Phone Number</Label>
-                      <Input
-                        id="phone_number"
-                        value={quoteForm.phone_number}
-                        onChange={(e) => setQuoteForm(prev => ({ ...prev, phone_number: e.target.value }))}
-                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="zip_code">Zip/Postal Code</Label>
-                      <Input
-                        id="zip_code"
-                        value={quoteForm.zip_code}
-                        onChange={(e) => setQuoteForm(prev => ({ ...prev, zip_code: e.target.value }))}
-                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="shipping_instructions">Shipping Instructions</Label>
-                      <Textarea
-                        id="shipping_instructions"
-                        value={quoteForm.shipping_instructions}
-                        onChange={(e) => setQuoteForm(prev => ({ ...prev, shipping_instructions: e.target.value }))}
-                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold mb-2">Contact Details</h3>
-                  <div className="space-y-2">
-                    <div>
-                      <Label htmlFor="first_name">First Name</Label>
-                      <Input
-                        id="first_name"
-                        value={quoteForm.first_name}
-                        onChange={(e) => setQuoteForm(prev => ({ ...prev, first_name: e.target.value }))}
-                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="last_name">Last Name</Label>
-                      <Input
-                        id="last_name"
-                        value={quoteForm.last_name}
-                        onChange={(e) => setQuoteForm(prev => ({ ...prev, last_name: e.target.value }))}
-                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="company_name">Company Name</Label>
-                      <Input
-                        id="company_name"
-                        value={quoteForm.company_name}
-                        onChange={(e) => setQuoteForm(prev => ({ ...prev, company_name: e.target.value }))}
-                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="email">Email</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        value={quoteForm.email}
-                        onChange={(e) => setQuoteForm(prev => ({ ...prev, email: e.target.value }))}
-                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <DialogFooter>
-                <Button onClick={handleRequestQuote} className="text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white">
-                  Send Request
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog> */}
-
           <Dialog
             open={quoteDialogOpen}
             onOpenChange={(isOpen) => {
-              // Ensure both conditions are met before allowing the dialog to open
               if (!currentUserId || selectedCompanies.length < 1) return;
               setQuoteDialogOpen(isOpen);
             }}
           >
-            {/* Conditionally render the DialogTrigger based on the conditions */}
             {(!currentUserId || selectedCompanies.length < 1) ? (
               <Button
                 variant="outline"
-                className="text-white bg-[#7AB80E] border-white/20 opacity-50 cursor-not-allowed"
+                className="flex-1 sm:flex-none text-white bg-[#7AB80E] border-white/20 opacity-50 cursor-not-allowed"
                 disabled
               >
                 Request Quote
@@ -769,7 +415,7 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
               <DialogTrigger asChild>
                 <Button
                   variant="outline"
-                  className="text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white"
+                  className="flex-1 sm:flex-none text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white"
                 >
                   Request Quote
                 </Button>
@@ -783,172 +429,29 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
                 </DialogDescription>
               </DialogHeader>
               <div className="space-y-4 py-4">
-                <div>
-                  <h3 className="text-lg font-semibold mb-2">Project Details</h3>
-                  <div className="space-y-2">
-                    <div>
-                      <Label htmlFor="project_title">Project Title</Label>
-                      <Input
-                        id="project_title"
-                        value={quoteForm.project_title}
-                        onChange={(e) =>
-                          setQuoteForm((prev) => ({
-                            ...prev,
-                            project_title: e.target.value,
-                          }))
-                        }
-                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="project_description">Project Description</Label>
-                      <Textarea
-                        id="project_description"
-                        value={quoteForm.project_description}
-                        onChange={(e) =>
-                          setQuoteForm((prev) => ({
-                            ...prev,
-                            project_description: e.target.value,
-                          }))
-                        }
-                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="date_needed">Date Needed</Label>
-                      <Input
-                        id="date_needed"
-                        type="date"
-                        value={quoteForm.date_needed}
-                        onChange={(e) =>
-                          setQuoteForm((prev) => ({
-                            ...prev,
-                            date_needed: e.target.value,
-                          }))
-                        }
-                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="project_file">Upload Project Files</Label>
-                      <Input
-                        id="project_file"
-                        type="file"
-                        onChange={handleFileChange}
-                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold mb-2">Fulfillment Details</h3>
-                  <div className="space-y-2">
-                    <div>
-                      <Label htmlFor="phone_number">Phone Number</Label>
-                      <Input
-                        id="phone_number"
-                        value={quoteForm.phone_number}
-                        onChange={(e) =>
-                          setQuoteForm((prev) => ({
-                            ...prev,
-                            phone_number: e.target.value,
-                          }))
-                        }
-                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="zip_code">Zip/Postal Code</Label>
-                      <Input
-                        id="zip_code"
-                        value={quoteForm.zip_code}
-                        onChange={(e) =>
-                          setQuoteForm((prev) => ({
-                            ...prev,
-                            zip_code: e.target.value,
-                          }))
-                        }
-                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="shipping_instructions">Shipping Instructions</Label>
-                      <Textarea
-                        id="shipping_instructions"
-                        value={quoteForm.shipping_instructions}
-                        onChange={(e) =>
-                          setQuoteForm((prev) => ({
-                            ...prev,
-                            shipping_instructions: e.target.value,
-                          }))
-                        }
-                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold mb-2">Contact Details</h3>
-                  <div className="space-y-2">
-                    <div>
-                      <Label htmlFor="first_name">First Name</Label>
-                      <Input
-                        id="first_name"
-                        value={quoteForm.first_name}
-                        onChange={(e) =>
-                          setQuoteForm((prev) => ({
-                            ...prev,
-                            first_name: e.target.value,
-                          }))
-                        }
-                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="last_name">Last Name</Label>
-                      <Input
-                        id="last_name"
-                        value={quoteForm.last_name}
-                        onChange={(e) =>
-                          setQuoteForm((prev) => ({
-                            ...prev,
-                            last_name: e.target.value,
-                          }))
-                        }
-                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="company_name">Company Name</Label>
-                      <Input
-                        id="company_name"
-                        value={quoteForm.company_name}
-                        onChange={(e) =>
-                          setQuoteForm((prev) => ({
-                            ...prev,
-                            company_name: e.target.value,
-                          }))
-                        }
-                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="email">Email</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        value={quoteForm.email}
-                        onChange={(e) =>
-                          setQuoteForm((prev) => ({
-                            ...prev,
-                            email: e.target.value,
-                          }))
-                        }
-                        className="bg-white/10 text-white placeholder-white/50 border-white/20"
-                      />
-                    </div>
-                  </div>
-                </div>
+                {/* Quote form fields */}
+                <Label htmlFor="projectTitle">Project Title</Label>
+                <Input id="projectTitle" type="text" value={quoteForm.project_title} onChange={(e) => setQuoteForm(prev => ({ ...prev, project_title: e.target.value }))} className="bg-white/10 text-white placeholder-white/50 border-white/20" />
+                <Label htmlFor="projectDescription">Project Description</Label>
+                <Textarea id="projectDescription" value={quoteForm.project_description} onChange={(e) => setQuoteForm(prev => ({ ...prev, project_description: e.target.value }))} className="bg-white/10 text-white placeholder-white/50 border-white/20" />
+                <Label htmlFor="dateNeeded">Date Needed</Label>
+                <Input id="dateNeeded" type="date" value={quoteForm.date_needed} onChange={(e) => setQuoteForm(prev => ({ ...prev, date_needed: e.target.value }))} className="bg-white/10 text-white placeholder-white/50 border-white/20" />
+                <Label htmlFor="projectFile">Project File</Label>
+                <Input id="projectFile" type="file" onChange={handleFileChange} className="bg-white/10 text-white placeholder-white/50 border-white/20" />
+                <Label htmlFor="phoneNumber">Phone Number</Label>
+                <Input id="phoneNumber" type="tel" value={quoteForm.phone_number} onChange={(e) => setQuoteForm(prev => ({ ...prev, phone_number: e.target.value }))} className="bg-white/10 text-white placeholder-white/50 border-white/20" />
+                <Label htmlFor="zipCode">Zip Code</Label>
+                <Input id="zipCode" type="text" value={quoteForm.zip_code} onChange={(e) => setQuoteForm(prev => ({ ...prev, zip_code: e.target.value }))} className="bg-white/10 text-white placeholder-white/50 border-white/20" />
+                <Label htmlFor="shippingInstructions">Shipping Instructions</Label>
+                <Textarea id="shippingInstructions" value={quoteForm.shipping_instructions} onChange={(e) => setQuoteForm(prev => ({ ...prev, shipping_instructions: e.target.value }))} className="bg-white/10 text-white placeholder-white/50 border-white/20" />
+                <Label htmlFor="firstName">First Name</Label>
+                <Input id="firstName" type="text" value={quoteForm.first_name} onChange={(e) => setQuoteForm(prev => ({ ...prev, first_name: e.target.value }))} className="bg-white/10 text-white placeholder-white/50 border-white/20" />
+                <Label htmlFor="lastName">Last Name</Label>
+                <Input id="lastName" type="text" value={quoteForm.last_name} onChange={(e) => setQuoteForm(prev => ({ ...prev, last_name: e.target.value }))} className="bg-white/10 text-white placeholder-white/50 border-white/20" />
+                <Label htmlFor="companyName">Company Name</Label>
+                <Input id="companyName" type="text" value={quoteForm.company_name} onChange={(e) => setQuoteForm(prev => ({ ...prev, company_name: e.target.value }))} className="bg-white/10 text-white placeholder-white/50 border-white/20" />
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" type="email" value={quoteForm.email} onChange={(e) => setQuoteForm(prev => ({ ...prev, email: e.target.value }))} className="bg-white/10 text-white placeholder-white/50 border-white/20" />
               </div>
               <DialogFooter>
                 <Button
@@ -960,8 +463,6 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
               </DialogFooter>
             </DialogContent>
           </Dialog>
-
-
         </div>
       </div>
 
@@ -975,7 +476,7 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
           ) : (
             filteredResults.map((org) => (
               <Card key={org.id} className="bg-white/5 text-white border-white/10">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-2 sm:space-y-0 pb-2">
                   <div>
                     <CardTitle className="text-xl">{org.organization_name}</CardTitle>
                     <CardDescription className="text-white/70">
@@ -991,9 +492,7 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
                       variant="ghost"
                       size="icon"
                       onClick={() => handleSaveCompany(org.id)}
-                      // className="text-white hover:text-[#7AB80E] hover:bg-white/10"
-                      className={`text-white hover:text-[#7AB80E] hover:bg-white/10 ${savedCompanies.includes(org.id) ? 'text-[#7AB80E]' : ''
-                        }`}
+                      className={`text-white hover:text-[#7AB80E] hover:bg-white/10 ${savedCompanies.includes(org.id) ? 'text-[#7AB80E]' : ''}`}
                     >
                       <Save className={`h-4 w-4 ${savedCompanies.includes(org.id) ? 'text-[#7AB80E]' : ''}`} />
                     </Button>
@@ -1005,7 +504,7 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <p className="flex items-center gap-2">
                         <Users className="h-4 w-4" />
@@ -1021,10 +520,6 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
                       </p>
                     </div>
                     <div className="space-y-2">
-                      {/* <p className="flex items-center gap-2">
-                        <Tag className="h-4 w-4" />
-                        Categories: {org.metadata.categories || 'N/A'}
-                      </p> */}
                       <p className="flex items-center gap-2">
                         <Building className="h-4 w-4" />
                         Legal Status: {org.metadata.legal_status?.join(', ') || 'N/A'}
@@ -1050,10 +545,10 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
                     </div>
                   </div>
                 </CardContent>
-                <CardFooter className="flex justify-between">
+                <CardFooter className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                   <Dialog>
                     <DialogTrigger asChild>
-                      <Button variant="outline" className="text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white">
+                      <Button variant="outline" className="w-full sm:w-auto text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white">
                         <BookOpen className="h-4 w-4 mr-2" />
                         View Catalog
                       </Button>
@@ -1083,29 +578,27 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
                       </div>
                     </DialogContent>
                   </Dialog>
-                  <div className="space-x-2">
+                  <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                     <Button
                       variant="outline"
-                      // className="text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white"
-                      className={`text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white ${!currentUserId ? "opacity-50 cursor-not-allowed" : ""}`}
+                      className={`w-full sm:w-auto text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white ${!currentUserId ? "opacity-50 cursor-not-allowed" : ""}`}
                       onClick={() => {
                         setSelectedCompanies([org.id]);
                         setMessageDialogOpen(true);
                       }}
-                      disabled={!currentUserId} // Disable button when currentUserId is null
+                      disabled={!currentUserId}
                     >
                       <MessageSquare className="h-4 w-4 mr-2" />
                       Send Message
                     </Button>
                     <Button
                       variant="outline"
-                      // className="text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white"
-                      className={`text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white ${!currentUserId ? "opacity-50 cursor-not-allowed" : ""}`}
+                      className={`w-full sm:w-auto text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white ${!currentUserId ? "opacity-50 cursor-not-allowed" : ""}`}
                       onClick={() => {
                         setSelectedCompanies([org.id]);
                         setQuoteDialogOpen(true);
                       }}
-                      disabled={!currentUserId} // Disable button when currentUserId is null
+                      disabled={!currentUserId}
                     >
                       <FileText className="h-4 w-4 mr-2" />
                       Request Quote
@@ -1116,7 +609,9 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
             ))
           )}
         </div>
-      </ScrollArea >
-    </div >
+      </ScrollArea>
+    </div>
   )
 }
+
+// if anything breaks then bring back ResultsPanel copy 5.tsx

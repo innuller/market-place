@@ -35,10 +35,16 @@ export default function UserSignUp() {
           }
         }
       })
-      if (error) throw error
-      router.push('/search')
+      
+      if (error){
+        console.log('babuuuu: ',error)
+      }
+
+      // router.push('/search')
     } catch (error: any) {
       setError(error.message)
+      console.log('Error signing up:', error.message);
+      
     }
   }
 
