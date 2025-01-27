@@ -55,7 +55,7 @@ export default function Index() {
     }
 
     try {
-      const { data, error } = await supabase.rpc('search_organizations', {
+      const { data, error } = await supabase.rpc('search_organizations_2', {
         search_type: searchType,
         search_query: query,
       });
