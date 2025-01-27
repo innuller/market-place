@@ -17,8 +17,8 @@ export default function AuthOptionsPage() {
     }
 
     const handleEmailClick = () => {
-        const email = 'test@gmail.com';
-        const subject = 'Contact Request';
+        const email = 'umeshtak34@gmail.com';
+        const subject = 'New Company Listig Request';
         const body = `
         Name: 
         Phone: 
