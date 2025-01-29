@@ -64,15 +64,15 @@ export default function TermsAndConditionsPage() {
                       <span style={{ fontFamily: "Arial" }}>Agreement</span>
                     </strong>
                     <span style={{ fontFamily: "Arial" }}>
-                      "), applicable to Your use of XXXX.com ("
+                      "), applicable to Your use of INNULLER.com ("
                     </span>
                     <strong>
                       <span style={{ fontFamily: "Arial" }}>Web Site</span>
                     </strong>
                     <span style={{ fontFamily: "Arial" }}>
                       "), which promotes business between suppliers and buyers globally. It is
-                      an agreement between You as the user of the Web Site/XXXX PVT. LTD.
-                      Services and XXXX, xxx Pvt. Ltd.. The expressions “You” “Your” or
+                      an agreement between You as the user of the Web Site/INNULLER PVT. LTD.
+                      Services and INNULLER, xxx Pvt. Ltd.. The expressions “You” “Your” or
                       “User(s)” refers to any person who accesses or uses the Web Site for any
                       purpose.
                     </span>
@@ -143,7 +143,7 @@ export default function TermsAndConditionsPage() {
                       </span>
                       <u>
                         <span style={{ fontFamily: "Arial", color: "#F3E3E3" }}>
-                          Services Provided by XXXX PVT. LTD.
+                          Services Provided by INNULLER PVT. LTD.
                         </span>
                       </u>
                     </p>
@@ -414,7 +414,7 @@ export default function TermsAndConditionsPage() {
                       </span>
                       <u>
                         <span style={{ fontFamily: "Arial", color: "#F3E3E3" }}>
-                          Posting your Contents on XXXX PVT. LTD.
+                          Posting your Contents on INNULLER PVT. LTD.
                         </span>
                       </u>
                     </p>
@@ -650,8 +650,8 @@ export default function TermsAndConditionsPage() {
                     <span style={{ fontFamily: "Arial" }}>
                       The Web Site acts as a match-making platform for User(s) to negotiate
                       and interact with other User(s) for entering into negotiations in
-                      respect thereof for sale or supply of goods or services. XXXX PVT. LTD.
-                      or XXXX.com are not parties to any negotiations that take place between
+                      respect thereof for sale or supply of goods or services. INNULLER PVT. LTD.
+                      or INNULLER.com are not parties to any negotiations that take place between
                       the User(s) of the Web Site and are further not parties to any agreement
                       including an agreement for sale or supply of goods or services or
                       otherwise, concluded between the User(s) of the Web Site.
@@ -659,7 +659,7 @@ export default function TermsAndConditionsPage() {
                     <br />
                     <br />
                     <span style={{ fontFamily: "Arial" }}>
-                      XXXX PVT. LTD. does not control and is not liable in respect of or
+                      INNULLER PVT. LTD. does not control and is not liable in respect of or
                       responsible for the quality, safety, genuineness, lawfulness or
                       availability of the products or services offered for sale
                     </span>
@@ -676,7 +676,7 @@ export default function TermsAndConditionsPage() {
                       the goods or services to complete a sale or the ability of User(s)
                       purchasing goods or services to complete a purchase. This agreement
                       shall not be deemed to create any partnership, joint venture, or any
-                      other joint business relationship between XXXX PVT. LTD. and any other
+                      other joint business relationship between INNULLER PVT. LTD. and any other
                       party.
                     </span>
                     <br />
@@ -688,7 +688,7 @@ export default function TermsAndConditionsPage() {
                     </strong>
                     <br />
                     <span style={{ fontFamily: "Arial" }}>
-                      XXXX PVT. LTD. provides the following services to its Customers and
+                      INNULLER PVT. LTD. provides the following services to its Customers and
                       their respective definitions are classified here under: -
                     </span>
                     <br />
@@ -736,7 +736,7 @@ export default function TermsAndConditionsPage() {
                       </a>
                       <span style={{ fontFamily: "Arial", fontSize: "10pt" }}>
                         ": It gives the User(s)s priority listing within categories of their
-                        choice as available on XXXX, thus increasing visibility of their
+                        choice as available on INNULLER, thus increasing visibility of their
                         products.
                       </span>
                     </p>
@@ -798,7 +798,7 @@ export default function TermsAndConditionsPage() {
                         </u>
                       </a>
                       <span style={{ fontFamily: "Arial", fontSize: "10pt" }}>
-                        " : It is add-on service by XXXX which gives its User(s) priority
+                        " : It is add-on service by INNULLER which gives its User(s) priority
                         listing in their chosen category of products. By availing this
                         service, the User(s) will get benefits of increased leads and
                         enquiries.
@@ -929,7 +929,7 @@ export default function TermsAndConditionsPage() {
                         </u>
                       </a>
                       <span style={{ fontFamily: "Arial", fontSize: "10pt" }}>
-                        ": It is a professionally-designed catalog on XXXX along with
+                        ": It is a professionally-designed catalog on INNULLER along with
                         independent control to add, delete, edit text and images as per
                         requirement of customers.
                       </span>
@@ -958,7 +958,7 @@ export default function TermsAndConditionsPage() {
                       </span>
                       <span style={{ fontFamily: "Arial" }}>
                         "Verified" User(s): Users are said to be verified if any of their
-                        provided primary/ secondary, mobile or email is verified by XXXX PVT.
+                        provided primary/ secondary, mobile or email is verified by INNULLER PVT.
                         LTD..
                       </span>
                     </p>
@@ -989,8 +989,8 @@ export default function TermsAndConditionsPage() {
                     <br />
                     <span style={{ fontFamily: "Arial" }}>
                       User(s) represent and warrant that they have the right to avail or use
-                      the services provided by XXXX PVT. LTD., including but limited to the
-                      Web Site or any other services provided by XXXX PVT. LTD. in relation to
+                      the services provided by INNULLER PVT. LTD., including but limited to the
+                      Web Site or any other services provided by INNULLER PVT. LTD. in relation to
                       the use of the Web Site ("
                     </span>
                     <strong>
@@ -999,13 +999,13 @@ export default function TermsAndConditionsPage() {
                       </span>
                     </strong>
                     <span style={{ fontFamily: "Arial" }}>
-                      "). XXXX PVT. LTD.’s Services can only be availed by those individuals
+                      "). INNULLER PVT. LTD.’s Services can only be availed by those individuals
                       or business entities, including sole proprietorship firms, companies and
                       partnerships etc., which are authorized under applicable law to form
                       legally binding agreements. As such, natural persons below 18 years of
                       age and business entities or organizations that are not authorized by
                       law to operate in India or other countries are not authorized to avail
-                      or use XXXX PVT. LTD.’s Services.
+                      or use INNULLER PVT. LTD.’s Services.
                     </span>
                     <br />
                     <br />
@@ -1022,17 +1022,17 @@ export default function TermsAndConditionsPage() {
                       />
                     </a>
                     <span style={{ fontFamily: "Arial" }}>
-                      &nbsp;XXXX PVT. LTD. or the website shall have no liability to the
+                      &nbsp;INNULLER PVT. LTD. or the website shall have no liability to the
                       User(s) or anyone else for any content, information or any other
-                      material transmitted over XXXX PVT. LTD.’s Services, including any
+                      material transmitted over INNULLER PVT. LTD.’s Services, including any
                       fraudulent, untrue, misleading, inaccurate, defamatory, offensive or
                       illicit material and that the risk of damage from such material rests
                       entirely with each User(s).The user shall do its own due diligence
                       before entering into any transaction with other users on the website.
-                      XXXX PVT. LTD. at it’s sole discretion reserves the right to refuse XXXX
-                      PVT. LTD.’s Services to anyone at any time. XXXX PVT. LTD.’s Services
+                      INNULLER PVT. LTD. at it’s sole discretion reserves the right to refuse INNULLER
+                      PVT. LTD.’s Services to anyone at any time. INNULLER PVT. LTD.’s Services
                       are not available and may not be availed or used by User(s) whose
-                      Accounts have been temporarily or indefinitely suspended by XXXX PVT.
+                      Accounts have been temporarily or indefinitely suspended by INNULLER PVT.
                       LTD..
                     </span>
                     <br />
@@ -1054,7 +1054,7 @@ export default function TermsAndConditionsPage() {
                     <br />
                     <span style={{ fontFamily: "Arial" }}>
                       This Agreement applies to any person who accesses or uses the Web Site
-                      or uses XXXX PVT. LTD. Services for any purpose.&nbsp;
+                      or uses INNULLER PVT. LTD. Services for any purpose.&nbsp;
                     </span>
                     <a name="vi">
                       <img
@@ -1067,27 +1067,27 @@ export default function TermsAndConditionsPage() {
                     <span style={{ fontFamily: "Arial" }}>
                       It also applies to any legal entity which may be represented by any
                       person who accesses or uses the Web Site, under actual or apparent
-                      authority. User(s) may use this Web Site and/or XXXX PVT. LTD. Services
+                      authority. User(s) may use this Web Site and/or INNULLER PVT. LTD. Services
                       solely for their commercial/business purposes. The Users are strictly
                       prohibited from transferring, sublicensing, or assigning any of their
-                      rights, access, or entitlements related to any services provided by XXXX
+                      rights, access, or entitlements related to any services provided by INNULLER
                       to any third party without obtaining explicit prior written consent from
-                      XXXX.
+                      INNULLER.
                     </span>
                     <br />
                     <br />
                     <span style={{ fontFamily: "Arial" }}>
                       This Agreement applies to all services offered on the Web Site and by
-                      XXXX PVT. LTD., collectively with any additional terms and conditions
+                      INNULLER PVT. LTD., collectively with any additional terms and conditions
                       that may be applicable in respect of any specific service used or
                       accessed by User(s) on the Web Site. In the event of any conflict or
                       inconsistency between any provision of this Agreement and any additional
                       terms and conditions applicable in respect of any service offered on the
                       Web Site, such additional terms and conditions applicable in respect of
                       that service shall prevail over this Agreement. This Agreement shall
-                      govern the User’s usage of XXXX PVT. LTD. Services and, the User
+                      govern the User’s usage of INNULLER PVT. LTD. Services and, the User
                       acknowledges that this Agreement shall supersede all or any term,
-                      agreement, contract executed between XXXX PVT. LTD. and the User.
+                      agreement, contract executed between INNULLER PVT. LTD. and the User.
                     </span>
                     <br />
                     <span style={{ fontFamily: "Arial" }}>&nbsp;</span>
@@ -1127,7 +1127,7 @@ export default function TermsAndConditionsPage() {
                   >
                     <br />
                     <span style={{ fontFamily: "Arial" }}>
-                      XXXX PVT. LTD. reserves the right to change, modify, amend, or update
+                      INNULLER PVT. LTD. reserves the right to change, modify, amend, or update
                       the Agreement from time to time and such amended provisions of the
                       Agreement shall be effective immediately upon being posted on the Web
                       Site. If You do not agree to such provisions,&nbsp;
@@ -1161,7 +1161,7 @@ export default function TermsAndConditionsPage() {
                   >
                     <br />
                     <span style={{ fontFamily: "Arial" }}>
-                      XXXX PVT. LTD. is the sole owner and the lawful licensee of all the
+                      INNULLER PVT. LTD. is the sole owner and the lawful licensee of all the
                       rights to the Web Site and its content ("
                     </span>
                     <strong>
@@ -1173,14 +1173,14 @@ export default function TermsAndConditionsPage() {
                       Content embodies trade secrets and other intellectual property rights
                       protected under worldwide copyright and other applicable laws pertaining
                       to intellectual property. All title, ownership and intellectual property
-                      rights in the Web Site and the Web Site Content shall remain in XXXX
+                      rights in the Web Site and the Web Site Content shall remain in INNULLER
                       PVT. LTD., its affiliates or licensor’s of the Web Site content, as the
                       case may be.
                     </span>
                     <br />
                     <br />
                     <span style={{ fontFamily: "Arial" }}>
-                      All rights, not otherwise claimed under this Agreement by XXXX PVT.
+                      All rights, not otherwise claimed under this Agreement by INNULLER PVT.
                       LTD., are hereby reserved. Any information or advertisements contained
                       on, distributed through, or linked, downloaded or accessed from any of
                       the services contained on the Web Site or any offer displayed on or in
@@ -1192,7 +1192,7 @@ export default function TermsAndConditionsPage() {
                     <span style={{ fontFamily: "Arial" }}>
                       ") is intended, solely to provide general information for the personal
                       use of the User(s), who fully accept any and all responsibility and
-                      liabilities arising from and out of the use of such Information. XXXX
+                      liabilities arising from and out of the use of such Information. INNULLER
                       PVT. LTD. does not represent, warrant or endorse in any manner the
                       accuracy or reliability of Website Information, or the quality of any
                       products and/or services obtained by the User(s) as a result of any
@@ -1215,14 +1215,14 @@ export default function TermsAndConditionsPage() {
                       and fitness for a particular purpose. Nothing contained in the Agreement
                       shall to any extent substitute for the independent investigations and
                       the sound technical and business judgment of the User(s). In no event
-                      shall XXXX PVT. LTD. be liable for any direct, indirect, incidental,
+                      shall INNULLER PVT. LTD. be liable for any direct, indirect, incidental,
                       punitive, or consequential damages of any kind whatsoever with respect
-                      to XXXX PVT. LTD.’s Services. User(s) hereby acknowledge that any
+                      to INNULLER PVT. LTD.’s Services. User(s) hereby acknowledge that any
                       reliance upon the Information shall be at their sole risk and further
                       understand and acknowledge that the Information has been compiled from
-                      publicly aired and published sources. XXXX PVT. LTD. respects the rights
+                      publicly aired and published sources. INNULLER PVT. LTD. respects the rights
                       of such entities and cannot be deemed to be infringing on the respective
-                      copyrights or businesses of such entities. XXXX PVT. LTD. reserves the
+                      copyrights or businesses of such entities. INNULLER PVT. LTD. reserves the
                       right, in its sole discretion and without any obligation, to make
                       improvements to, or correct any error or omissions in any portion of the
                       Information.
@@ -1265,8 +1265,8 @@ export default function TermsAndConditionsPage() {
                       </strong>
                       <br />
                       <span style={{ fontFamily: "Arial" }}>
-                        "XXXX" and related icons and logos are registered trademarks or
-                        trademarks or service marks of XXXX PVT. LTD. in various jurisdictions
+                        "INNULLER" and related icons and logos are registered trademarks or
+                        trademarks or service marks of INNULLER PVT. LTD. in various jurisdictions
                         and are protected under applicable copyright, trademark and other
                         proprietary and intellectual property rights laws. The unauthorized
                         adoption copying, modification, use or publication of these marks is
@@ -1307,7 +1307,7 @@ export default function TermsAndConditionsPage() {
                       <br />
                       <span style={{ fontFamily: "Arial" }}>
                         All Web Site Content including Website Information is copyrighted to
-                        XXXX PVT. LTD. excluding any third-party content and any links to any
+                        INNULLER PVT. LTD. excluding any third-party content and any links to any
                         third-party websites being made available or contained on the Web
                         Site. User(s) may not use any trademark, service mark or logo of any
                         independent third parties without prior written approval from such
@@ -1316,17 +1316,17 @@ export default function TermsAndConditionsPage() {
                       <br />
                       <br />
                       <span style={{ fontFamily: "Arial" }}>
-                        User(s) acknowledge and agree that XXXX PVT. LTD. is not an arbiter or
+                        User(s) acknowledge and agree that INNULLER PVT. LTD. is not an arbiter or
                         judge of disputes concerning intellectual property rights and as such
                         cannot verify that User(s) selling or supplying merchandise or
                         providing services on the Web Site have the right to sell the
-                        merchandise or provide the services offered by such User(s). XXXX PVT.
-                        LTD. encourages User(s) to assist XXXX PVT. LTD. in identifying
+                        merchandise or provide the services offered by such User(s). INNULLER PVT.
+                        LTD. encourages User(s) to assist INNULLER PVT. LTD. in identifying
                         listings on the Web Site which in the User(s) knowledge or belief
                         infringe their rights. User(s) further acknowledge and agree by taking
-                        down a listing, XXXX PVT. LTD. does not and cannot be deemed to be
+                        down a listing, INNULLER PVT. LTD. does not and cannot be deemed to be
                         endorsing a claim of infringement and further that in those instances
-                        in which XXXX PVT. LTD. declines to take down a listing, XXXX PVT.
+                        in which INNULLER PVT. LTD. declines to take down a listing, INNULLER PVT.
                         LTD. does not and cannot be deemed to be endorsing that the listing is
                         not infringing of third party rights or endorsing any sale or supply
                         of merchandise or services pursuant to or on account of such listing.
@@ -1334,7 +1334,7 @@ export default function TermsAndConditionsPage() {
                       <br />
                       <br />
                       <span style={{ fontFamily: "Arial" }}>
-                        XXXX PVT. LTD. respects the intellectual property rights of others,
+                        INNULLER PVT. LTD. respects the intellectual property rights of others,
                         and we expect our User(s) to do the same. User(s) agree to not copy,
                         download or reproduce the Web Site Content, Information or any other
                         material, text, images, video clips, directories, files, databases or
@@ -1348,12 +1348,12 @@ export default function TermsAndConditionsPage() {
                       <span style={{ fontFamily: "Arial" }}>
                         ") for the purpose of re-selling or re-distributing, mass mailing (via
                         email, wireless text messages, physical mail or otherwise) operating a
-                        business competing with XXXX PVT. LTD., or otherwise commercially
-                        exploiting the XXXX PVT. LTD. Content unless otherwise agreed between
-                        the parties. Systematic retrieval of XXXX PVT. LTD. Content to create
+                        business competing with INNULLER PVT. LTD., or otherwise commercially
+                        exploiting the INNULLER PVT. LTD. Content unless otherwise agreed between
+                        the parties. Systematic retrieval of INNULLER PVT. LTD. Content to create
                         or compile, directly or indirectly, a collection, compilation,
                         database or directory (whether through robots, spiders, automatic
-                        devices or manual processes) without written permission from XXXX PVT.
+                        devices or manual processes) without written permission from INNULLER PVT.
                         LTD. is prohibited.
                       </span>
                       <br />
@@ -1367,18 +1367,18 @@ export default function TermsAndConditionsPage() {
                       </a>
                       <br />
                       <span style={{ fontFamily: "Arial" }}>
-                        In addition, use of the XXXX PVT. LTD. Content for any purpose not
-                        expressly permitted in this Agreement is prohibited and entitles XXXX
+                        In addition, use of the INNULLER PVT. LTD. Content for any purpose not
+                        expressly permitted in this Agreement is prohibited and entitles INNULLER
                         PVT. LTD. to initiate appropriate legal action. User(s) agree that as
-                        a condition of their access to and use of XXXX PVT. LTD.'s Services,
-                        they will not use XXXX PVT. LTD.’s Services to infringe the
-                        intellectual property rights of any third parties in any way. XXXX
+                        a condition of their access to and use of INNULLER PVT. LTD.'s Services,
+                        they will not use INNULLER PVT. LTD.’s Services to infringe the
+                        intellectual property rights of any third parties in any way. INNULLER
                         PVT. LTD. reserves the right to terminate the right of any User(s) to
-                        access or use XXXX PVT. LTD.’s Services for any infringement of the
-                        rights of third parties in conjunction with use of the XXXX PVT.
-                        LTD.’s Service, or in the event XXXX PVT. LTD. is of the believes that
-                        User(s) conduct is prejudicial to the interests of XXXX PVT. LTD., its
-                        affiliates, or other User(s), or for any other reason, at XXXX PVT.
+                        access or use INNULLER PVT. LTD.’s Services for any infringement of the
+                        rights of third parties in conjunction with use of the INNULLER PVT.
+                        LTD.’s Service, or in the event INNULLER PVT. LTD. is of the believes that
+                        User(s) conduct is prejudicial to the interests of INNULLER PVT. LTD., its
+                        affiliates, or other User(s), or for any other reason, at INNULLER PVT.
                         LTD.’s sole discretion, with or without cause.
                       </span>
                     </p>
@@ -1409,19 +1409,19 @@ export default function TermsAndConditionsPage() {
                       </strong>
                       <br />
                       <span style={{ fontFamily: "Arial" }}>
-                        URL’s/ Sub-domain names assigned by XXXX PVT. LTD. to User(s)
+                        URL’s/ Sub-domain names assigned by INNULLER PVT. LTD. to User(s)
                         (including both paid and free User(s)) are the exclusive property of
-                        XXXX PVT. LTD. and it cannot be assumed to be permanent in any case.
-                        XXXX PVT. LTD. reserves the right, without prior notice, at any point
+                        INNULLER PVT. LTD. and it cannot be assumed to be permanent in any case.
+                        INNULLER PVT. LTD. reserves the right, without prior notice, at any point
                         of time, to suspend or terminate or restrict access to or edit any
-                        URL's/Sub-domain names. IN ALL SUCH CASES, XXXX PVT. LTD. WILL NOT BE
+                        URL's/Sub-domain names. IN ALL SUCH CASES, INNULLER PVT. LTD. WILL NOT BE
                         LIABLE TO ANY PARTY FOR ANY DIRECT, INDIRECT, SPECIAL OR OTHER
                         CONSEQUENTIAL DAMAGES, INCLUDING, WITHOUT LIMITATION, ANY LOST
                         PROFITS, BUSINESS INTERRUPTION OR OTHERWISE.
                       </span>
                       <br />
                       <span style={{ fontFamily: "Arial" }}>
-                        XXXX PVT. LTD. may allow User(s) access to content, products or
+                        INNULLER PVT. LTD. may allow User(s) access to content, products or
                         services offered by third parties through hyperlinks (in the form of
                         word link, banners, channels or otherwise) to the websites offered by
                         such third parties ("
@@ -1430,10 +1430,10 @@ export default function TermsAndConditionsPage() {
                         <span style={{ fontFamily: "Arial" }}>Third Party Websites</span>
                       </strong>
                       <span style={{ fontFamily: "Arial" }}>
-                        "). XXXX PVT. LTD. advises its User(s) to read the terms and
+                        "). INNULLER PVT. LTD. advises its User(s) to read the terms and
                         conditions of use and/or privacy policies applicable in respect of
                         such Third Party Websites prior to using or accessing such Third Party
-                        Websites. Users acknowledge and agree that XXXX PVT. LTD. has no
+                        Websites. Users acknowledge and agree that INNULLER PVT. LTD. has no
                         control over any content offered on Third Party Websites, does not
                         monitor such Third Party Websites, and shall in no manner be deemed to
                         be liable or responsible to any person for such Third Party Sites, or
@@ -1487,14 +1487,14 @@ export default function TermsAndConditionsPage() {
                     <br />
                     <span style={{ fontFamily: "Arial" }}>
                       Links to third party sites are provided on Web Site as a convenience to
-                      User(s). User(s) acknowledge and agree that XXXX PVT. LTD. does not have
+                      User(s). User(s) acknowledge and agree that INNULLER PVT. LTD. does not have
                       any control over the content of such websites and/ or any information,
                       resources or materials provided therein.
                     </span>
                     <br />
                     <br />
                     <span style={{ fontFamily: "Arial" }}>
-                      XXXX PVT. LTD. may allow User(s) access to content, products or services
+                      INNULLER PVT. LTD. may allow User(s) access to content, products or services
                       offered by third parties through hyperlinks (in the form of word link,
                       banners, channels or otherwise) to the websites offered by such third
                       parties ("
@@ -1503,10 +1503,10 @@ export default function TermsAndConditionsPage() {
                       <span style={{ fontFamily: "Arial" }}>Third Party Websites</span>
                     </strong>
                     <span style={{ fontFamily: "Arial" }}>
-                      "). XXXX PVT. LTD. advises its User(s) to read the terms and conditions
+                      "). INNULLER PVT. LTD. advises its User(s) to read the terms and conditions
                       of use and/or privacy policies applicable in respect of such Third Party
                       Websites prior to using or accessing such Third Party Websites. Users
-                      acknowledge and agree that XXXX PVT. LTD. has no control over any
+                      acknowledge and agree that INNULLER PVT. LTD. has no control over any
                       content offered on Third Party Websites, does not monitor such Third
                       Party Websites, and shall in no manner be deemed to be liable or
                       responsible to any person for such Third Party Sites, or any content,
@@ -1531,21 +1531,21 @@ export default function TermsAndConditionsPage() {
                     <br />
                     <span style={{ fontFamily: "Arial" }}>
                       Most content and some of the features on the Web Site are made available
-                      to User(s) free of charge. However, XXXX PVT. LTD. reserves the right to
+                      to User(s) free of charge. However, INNULLER PVT. LTD. reserves the right to
                       terminate access to certain areas or features of the Web Site (to paying
                       or registered User(s)) at any time without assigning any reason and with
-                      or without notice to such User(s). XXXX PVT. LTD. also reserves the
+                      or without notice to such User(s). INNULLER PVT. LTD. also reserves the
                       universal right to deny access to particular User(s) to any or all of
                       its services or content without any prior notice or explanation in order
-                      to protect the interests of XXXX PVT. LTD. and/ or other User(s) of the
-                      Web Site. XXXX PVT. LTD. further reserves the right to limit, deny or
+                      to protect the interests of INNULLER PVT. LTD. and/ or other User(s) of the
+                      Web Site. INNULLER PVT. LTD. further reserves the right to limit, deny or
                       create different access to the Web Site and its features with respect to
                       different User(s), or to change any or all of the features of the Web
                       Site or introduce new features without any prior notice to User(s).
                     </span>
                     <br />
                     <span style={{ fontFamily: "Arial" }}>
-                      XXXX PVT. LTD. reserves the right to terminate the
+                      INNULLER PVT. LTD. reserves the right to terminate the
                       membership/subscription of any User(s) temporarily or permanently for
                       any of the following reasons:
                     </span>
@@ -1561,7 +1561,7 @@ export default function TermsAndConditionsPage() {
                     <br />
                     <span style={{ fontFamily: "Arial" }}>
                       (a) If any false information in connection with their account registered
-                      with XXXX PVT. LTD. is provided by such User(s), or if such User(s) are
+                      with INNULLER PVT. LTD. is provided by such User(s), or if such User(s) are
                       engaged in fraudulent or illegal activities/transactions.
                     </span>
                     <br />
@@ -1610,14 +1610,14 @@ export default function TermsAndConditionsPage() {
                     </span>
                     <br />
                     <span style={{ fontFamily: "Arial" }}>
-                      If XXXX PVT. LTD. terminates the membership of any registered User(s)
+                      If INNULLER PVT. LTD. terminates the membership of any registered User(s)
                       including those User(s) who have subscribed for the paid services of
-                      XXXX PVT. LTD., such person will not have the right to re-enrol or join
+                      INNULLER PVT. LTD., such person will not have the right to re-enrol or join
                       the Web Site under a new account or name unless invited to do so in
-                      writing by XXXX PVT. LTD.. In any case of termination, no
+                      writing by INNULLER PVT. LTD.. In any case of termination, no
                       subscription/membership fee/charges paid by the User(s) will be
                       refunded. However, In case of discontinuation of services due to the
-                      reasons other than mentioned hereinabove, XXXX PVT. LTD. may on its
+                      reasons other than mentioned hereinabove, INNULLER PVT. LTD. may on its
                       discretion, process the pro rata refund after adjustment of such other
                       charges as it deems fit.
                     </span>
@@ -1625,7 +1625,7 @@ export default function TermsAndConditionsPage() {
                     <span style={{ fontFamily: "Arial" }}>
                       User(s) acknowledge that inability to use the Web Site wholly or
                       partially for whatever reason may have adverse effects on their
-                      business. User(s) hereby agree that in no event shall XXXX PVT. LTD. be
+                      business. User(s) hereby agree that in no event shall INNULLER PVT. LTD. be
                       liable to any User(s) or any third parties for any inability to use the
                       Web Site (whether due to disruption, limited access, changes to or
                       termination of any features on the Web Site or otherwise), any delays,
@@ -1660,10 +1660,10 @@ export default function TermsAndConditionsPage() {
                     <span style={{ fontFamily: "Arial" }}>
                       User(s) can become registered User(s) by filling an on-line registration
                       form on the Web Site by providing the required information (including
-                      name, contact information, details of User(s) business, etc.). XXXX PVT.
+                      name, contact information, details of User(s) business, etc.). INNULLER PVT.
                       LTD. will establish an account ("Account") for the User(s) upon
                       successful registration and will assign a user alias ("User ID") and
-                      password ("Password") for log-in access to the User(s)’s Account. XXXX
+                      password ("Password") for log-in access to the User(s)’s Account. INNULLER
                       PVT. LTD. may at its sole discretion assign to User(s) upon registration
                       a web-based email or messaging account (“Email Account”) with limited
                       storage space to send or receive emails or messages. Users will be
@@ -1686,7 +1686,7 @@ export default function TermsAndConditionsPage() {
                       bind such business entity this Agreement; (b) the address provided by
                       such User(s) at the time of registration is the principal place of
                       business of such business entity; and (c) all other information provided
-                      to XXXX PVT. LTD. during the registration process is true, accurate,
+                      to INNULLER PVT. LTD. during the registration process is true, accurate,
                       current and complete. For purposes of this provision, a branch or
                       representative office of a User(s) will not be considered a separate
                       entity and the principal place of business of the User(s) will be deemed
@@ -1704,25 +1704,25 @@ export default function TermsAndConditionsPage() {
                     <br />
                     <span style={{ fontFamily: "Arial" }}>
                       User(s) agree that by registering on the Web Site, they consent to the
-                      inclusion of their personal data in XXXX PVT. LTD.’s on-line database
-                      and authorize XXXX PVT. LTD. to share such information with other
-                      User(s). XXXX PVT. LTD. may refuse registration and deny the membership
+                      inclusion of their personal data in INNULLER PVT. LTD.’s on-line database
+                      and authorize INNULLER PVT. LTD. to share such information with other
+                      User(s). INNULLER PVT. LTD. may refuse registration and deny the membership
                       and associated User ID and Password to any User(s) for whatever reason.
-                      XXXX PVT. LTD. may suspend or terminate a registered membership at any
-                      time without any prior notification in interest of XXXX PVT. LTD. or
+                      INNULLER PVT. LTD. may suspend or terminate a registered membership at any
+                      time without any prior notification in interest of INNULLER PVT. LTD. or
                       general interest of its User(s) without assigning any reason thereof and
-                      there shall arise no further liability on XXXX PVT. LTD. of whatsoever
+                      there shall arise no further liability on INNULLER PVT. LTD. of whatsoever
                       nature due to the suspension or termination of the User account. User(s)
                       registered on the Web Site are in no manner a part of or affiliated to
-                      XXXX PVT. LTD..
+                      INNULLER PVT. LTD..
                     </span>
                     <br />
                     <br />
                     <span style={{ fontFamily: "Arial" }}>
-                      User(s) further agree and consent to be contacted by XXXX PVT. LTD.
+                      User(s) further agree and consent to be contacted by INNULLER PVT. LTD.
                       through phone calls, SMS notifications or any other means of
-                      communication, in respect to the services provided by XXXX PVT. LTD.
-                      even if contact number(s) provided to XXXX PVT. LTD. upon registration
+                      communication, in respect to the services provided by INNULLER PVT. LTD.
+                      even if contact number(s) provided to INNULLER PVT. LTD. upon registration
                       are on Do Not Call Registry.
                     </span>
                     <br />
@@ -1744,7 +1744,7 @@ export default function TermsAndConditionsPage() {
                     <br />
                     <span style={{ fontFamily: "Arial" }}>
                       Personal information supplied by User(s) during the use of the Web Site
-                      is governed by XXXX PVT. LTD.’s privacy policy ("
+                      is governed by INNULLER PVT. LTD.’s privacy policy ("
                     </span>
                     <strong>
                       <span style={{ fontFamily: "Arial" }}>Privacy Policy</span>
@@ -1785,16 +1785,16 @@ export default function TermsAndConditionsPage() {
                     <br />
                     <br />
                     <span style={{ fontFamily: "Arial" }}>
-                      User(s) understand and agree that XXXX PVT. LTD. in such case is not the
-                      author of the content and that neither XXXX PVT. LTD. nor any of its
+                      User(s) understand and agree that INNULLER PVT. LTD. in such case is not the
+                      author of the content and that neither INNULLER PVT. LTD. nor any of its
                       affiliates, directors, officers or employees have entered into any
                       arrangement including any agreement of sale or agency with such third
                       parties by virtue of the display of such content on the Web Site.
-                      User(s) further understand and agree XXXX PVT. LTD. is not responsible
+                      User(s) further understand and agree INNULLER PVT. LTD. is not responsible
                       for the accuracy, propriety, lawfulness or truthfulness of any third
                       party content made available on the Web Site and shall not be liable to
                       any User(s) in connection with any damage suffered by the User(s) on
-                      account of the User(s)’s reliance on such content. XXXX PVT. LTD. shall
+                      account of the User(s)’s reliance on such content. INNULLER PVT. LTD. shall
                       not be liable for a User(s) activities on the Web Site, and shall not be
                       liable to any person in connection with any damage suffered by any
                       person as a result of any User's conduct.
@@ -1807,7 +1807,7 @@ export default function TermsAndConditionsPage() {
                     <br />
                     <br />
                     <span style={{ fontFamily: "Arial" }}>
-                      (a) provide XXXX PVT. LTD. with true, accurate, current and complete
+                      (a) provide INNULLER PVT. LTD. with true, accurate, current and complete
                       information to be displayed on the Web Site;
                     </span>
                     <br />
@@ -1817,7 +1817,7 @@ export default function TermsAndConditionsPage() {
                     </span>
                     <br />
                     <span style={{ fontFamily: "Arial" }}>
-                      User(s) hereby grant XXXX PVT. LTD. an irrevocable, perpetual, worldwide
+                      User(s) hereby grant INNULLER PVT. LTD. an irrevocable, perpetual, worldwide
                       and royalty-free, sub-licensable (through multiple tiers) license to
                       display and use all information provided by them in accordance with the
                       purposes set forth in the Agreement and to exercise the copyright,
@@ -1851,15 +1851,15 @@ export default function TermsAndConditionsPage() {
                     <br />
                     <br />
                     <span style={{ fontFamily: "Arial" }}>
-                      User(s) agree that they will not use XXXX PVT. LTD. Content and/or XXXX
+                      User(s) agree that they will not use INNULLER PVT. LTD. Content and/or INNULLER
                       PVT. LTD.’s Services to send junk mail, chain letters or spamming.
                       Further, registered User(s) of the Web Site agree that they will not use
                       the Email Account to publish, distribute, transmit or circulate any
                       unsolicited advertising or promotional information. User(s) further
                       hereby represent, warrant and agree (i) to host, display, upload,
                       modify, publish, transmit, store, update or share ; or (ii) submit to
-                      XXXX PVT. LTD. for display on the Web Site or transmit or sought to be
-                      transmitted through XXXX PVT. LTD.’s Services any content, material or
+                      INNULLER PVT. LTD. for display on the Web Site or transmit or sought to be
+                      transmitted through INNULLER PVT. LTD.’s Services any content, material or
                       information that does not and shall at no point:
                     </span>
                     <br />
@@ -2206,7 +2206,7 @@ export default function TermsAndConditionsPage() {
                       </span>
                       <span style={{ fontFamily: "Arial" }}>
                         Solicit business from any User(s) in connection with a commercial
-                        activity that competes with XXXX PVT. LTD.;
+                        activity that competes with INNULLER PVT. LTD.;
                       </span>
                     </p>
                   </div>
@@ -2294,7 +2294,7 @@ export default function TermsAndConditionsPage() {
                       <span style={{ fontFamily: "Arial" }}>
                         Link directly or indirectly to or include descriptions of goods or
                         services that are prohibited under the prevailing law; or Otherwise
-                        create any liability for XXXX PVT. LTD. or its affiliates.
+                        create any liability for INNULLER PVT. LTD. or its affiliates.
                       </span>
                     </p>
                   </div>
@@ -2317,11 +2317,11 @@ export default function TermsAndConditionsPage() {
                       }}
                     >
                       <span style={{ fontFamily: "Arial",  }}>
-                        XXXX PVT. LTD. reserves the right in its sole discretion to remove any
-                        material/content/photos/offers displayed on the Web Site which in XXXX
-                        PVT. LTD.’s reasonable belief is unlawful or could subject XXXX PVT.
+                        INNULLER PVT. LTD. reserves the right in its sole discretion to remove any
+                        material/content/photos/offers displayed on the Web Site which in INNULLER
+                        PVT. LTD.’s reasonable belief is unlawful or could subject INNULLER PVT.
                         LTD. to liability or in violation of the Agreement or is otherwise
-                        found inappropriate in XXXX PVT. LTD.'s opinion. XXXX PVT. LTD.
+                        found inappropriate in INNULLER PVT. LTD.'s opinion. INNULLER PVT. LTD.
                         reserves the right to cooperate fully with governmental authorities,
                         private investigators and/or injured third parties in the
                         investigation of any suspected criminal or civil wrongdoing.
@@ -2329,12 +2329,12 @@ export default function TermsAndConditionsPage() {
                       <br />
                       <br />
                       <span style={{ fontFamily: "Arial",  }}>
-                        In connection with any of the foregoing, XXXX PVT. LTD. reserves the
+                        In connection with any of the foregoing, INNULLER PVT. LTD. reserves the
                         right to suspend or terminate the Account of any User(s) as deemed
-                        appropriate by XXXX PVT. LTD. at its sole discretion. User(s) agree
-                        that XXXX PVT. LTD. shall have no liability to any User(s), including
+                        appropriate by INNULLER PVT. LTD. at its sole discretion. User(s) agree
+                        that INNULLER PVT. LTD. shall have no liability to any User(s), including
                         liability in respect of consequential or any other damages, in the
-                        event XXXX PVT. LTD. takes any of the actions mentioned in this
+                        event INNULLER PVT. LTD. takes any of the actions mentioned in this
                         provision.
                       </span>
                       <br />
@@ -2342,8 +2342,8 @@ export default function TermsAndConditionsPage() {
                       <span style={{ fontFamily: "Arial",  }}>
                         User(s) understand and agree that the Web Site acts as a content
                         integrator and is not responsible for the information provided by
-                        User(s) displayed on the Web Site. XXXX PVT. LTD. does not have any
-                        role in developing the content displayed on the Web Site. XXXX PVT.
+                        User(s) displayed on the Web Site. INNULLER PVT. LTD. does not have any
+                        role in developing the content displayed on the Web Site. INNULLER PVT.
                         LTD. has the right to promote any content including text, images,
                         videos, brochures etc. provided by User(s) on various platforms owned
                         by the company.
@@ -2367,10 +2367,10 @@ export default function TermsAndConditionsPage() {
                     >
                       <br />
                       <span style={{ fontFamily: "Arial", fontSize: "10pt" }}>
-                        XXXX PVT. LTD. provides an on-line platform to facilitate interaction
-                        between buyers and suppliers of products and services. XXXX PVT. LTD.
+                        INNULLER PVT. LTD. provides an on-line platform to facilitate interaction
+                        between buyers and suppliers of products and services. INNULLER PVT. LTD.
                         does not represent the seller or the buyer in transactions and does
-                        not charge any commission for enabling any transaction. XXXX PVT. LTD.
+                        not charge any commission for enabling any transaction. INNULLER PVT. LTD.
                         does not control and is not liable to or responsible for the quality,
                         safety, lawfulness or availability of the products or services offered
                         for sale on the Web Site or the ability of the suppliers to complete a
@@ -2378,9 +2378,9 @@ export default function TermsAndConditionsPage() {
                         cautioned that there may be risks of dealing with foreign nationals or
                         people acting under false pretences on the Web Site. Web Site uses
                         several tools and techniques to verify the accuracy and authenticity
-                        of the information provided by User(s). XXXX PVT. LTD. however, cannot
+                        of the information provided by User(s). INNULLER PVT. LTD. however, cannot
                         and does not confirm each User(s)’s purported identity on the Web
-                        Site. XXXX PVT. LTD. encourages User(s) to evaluate the User(s) with
+                        Site. INNULLER PVT. LTD. encourages User(s) to evaluate the User(s) with
                         whom they would like to deal with and use the common prudence while
                         dealing with them.
                       </span>
@@ -2511,7 +2511,7 @@ export default function TermsAndConditionsPage() {
                     }}
                   >
                     <span style={{ fontFamily: "Arial" }}>
-                      User(s) agree that XXXX PVT. LTD. shall not be liable or responsible for
+                      User(s) agree that INNULLER PVT. LTD. shall not be liable or responsible for
                       any damages, liabilities, costs, harms, inconveniences, business
                       disruptions or expenditures of any kind that may occur/arise as a result
                       of or in connection with any Transaction Risks. User(s) are solely
@@ -2521,7 +2521,7 @@ export default function TermsAndConditionsPage() {
                       limitation, terms regarding payment, returns, warranties, shipping,
                       insurance, fees, taxes, title, licenses, fines, permits, handling,
                       transportation and storage. In the event of a dispute with any party to
-                      a transaction, User(s) agrees to release and indemnify XXXX PVT. LTD.
+                      a transaction, User(s) agrees to release and indemnify INNULLER PVT. LTD.
                       (and our agents, affiliates, directors, officers and employees) from all
                       claims, demands, actions, proceedings, costs, expenses and damages
                       (including without limitation any actual, special, incidental or
@@ -2539,8 +2539,8 @@ export default function TermsAndConditionsPage() {
                     <br />
                     <br />
                     <span style={{ fontFamily: "Arial" }}>
-                      XXXX reserves the right to add/modify/discontinue any of the features
-                      offered on XXXX PVT. LTD.’s Services.
+                      INNULLER reserves the right to add/modify/discontinue any of the features
+                      offered on INNULLER PVT. LTD.’s Services.
                     </span>
                     <br />
                     <br />
@@ -2561,25 +2561,25 @@ export default function TermsAndConditionsPage() {
                     <br />
                     <span style={{ fontFamily: "Arial" }}>
                       The features and services on the Web Site are provided on an " as is "
-                      and " as available " basis, and XXXX PVT. LTD. hereby expressly
+                      and " as available " basis, and INNULLER PVT. LTD. hereby expressly
                       disclaims any and all warranties, express or implied, including but not
                       limited to any warranties of condition, quality, durability,
                       performance, accuracy, reliability, merchantability or fitness for a
                       particular purpose. All such warranties, representations, conditions,
-                      undertakings and terms are hereby excluded. XXXX PVT. LTD. makes no
+                      undertakings and terms are hereby excluded. INNULLER PVT. LTD. makes no
                       representations or warranties about the validity, accuracy, correctness,
                       reliability, quality, stability or completeness of any information
                       provided on or through the Web Site including display or listing of
-                      tenders on the Web Site which in no manner is endorsed by XXXX PVT.
-                      LTD.. XXXX PVT. LTD. has no association of whatsoever nature with the
-                      publisher and/or the published contents. Moreover, XXXX PVT. LTD. does
+                      tenders on the Web Site which in no manner is endorsed by INNULLER PVT.
+                      LTD.. INNULLER PVT. LTD. has no association of whatsoever nature with the
+                      publisher and/or the published contents. Moreover, INNULLER PVT. LTD. does
                       not facilitate or participate in any sale, delivery, transaction and /
                       or storage related to any product including but not limited to
                       controversial weapons, cluster munitions or anti-personnel mines and
-                      other such defense equipment. XXXX PVT. LTD. does not represent or
+                      other such defense equipment. INNULLER PVT. LTD. does not represent or
                       warrant that the manufacture, importation, distribution, offer, display,
                       purchase, sale and/or use of products or services offered or displayed
-                      on the Web Site does not violate any Third Party Rights; and XXXX PVT.
+                      on the Web Site does not violate any Third Party Rights; and INNULLER PVT.
                       LTD. makes no representations or warranties of any kind concerning any
                       product or service offered or displayed on the Web site. Any material
                       downloaded or otherwise obtained through the Web site is at the User(s)
@@ -2593,7 +2593,7 @@ export default function TermsAndConditionsPage() {
                     <br />
                     <br />
                     <span style={{ fontFamily: "Arial" }}>
-                      Under no circumstances shall XXXX PVT. LTD. be held liable for any delay
+                      Under no circumstances shall INNULLER PVT. LTD. be held liable for any delay
                       or failure or disruption of the content or services delivered through
                       the Web Site resulting directly or indirectly from acts of nature,
                       forces or causes beyond its reasonable control, including without
@@ -2603,35 +2603,35 @@ export default function TermsAndConditionsPage() {
                       materials, fires, flood, storms, explosions, Acts of God, natural
                       calamities, war, governmental actions, orders of domestic or foreign
                       courts or tribunals or non-performance of third parties. User(s) hereby
-                      agree to indemnify and save XXXX PVT. LTD., its affiliates, directors,
+                      agree to indemnify and save INNULLER PVT. LTD., its affiliates, directors,
                       officers and employees harmless, from any and all losses, claims,
                       liabilities (including legal costs on a full indemnity basis) which may
                       arise from their use of the Web Site (including but not limited to the
                       display of User(s) information on the Web Site) or from User(s)’s breach
                       of any of the terms and conditions of this Agreement. User(s) hereby
-                      further agree to indemnify and save XXXX PVT. LTD., its affiliates,
+                      further agree to indemnify and save INNULLER PVT. LTD., its affiliates,
                       directors, officers and employees harmless, from any and all losses,
                       claims, liabilities (including legal costs on a full indemnity basis)
                       which may arise from User(s)’s breach of any representations and
-                      warranties made by the User(s) to XXXX PVT. LTD..
+                      warranties made by the User(s) to INNULLER PVT. LTD..
                     </span>
                     <br />
                     <br />
                     <span style={{ fontFamily: "Arial" }}>
-                      User(s) hereby further agree to indemnify and save XXXX PVT. LTD., its
+                      User(s) hereby further agree to indemnify and save INNULLER PVT. LTD., its
                       affiliates, directors, officers and employees harmless, from any and all
                       losses, claims, liabilities (including legal costs on a full indemnity
                       basis) which may arise, directly or indirectly, as a result of any
                       claims asserted by Third Party Rights claimants or other third parties
                       relating to products offered or displayed on the Web Site. User(s)
-                      hereby further agree that XXXX PVT. LTD. is not responsible and shall
+                      hereby further agree that INNULLER PVT. LTD. is not responsible and shall
                       have no liability for any material posted by other User(s) or any other
                       person, including defamatory, offensive or illicit material and that the
-                      risk of damage from such material rests entirely with the User(s). XXXX
+                      risk of damage from such material rests entirely with the User(s). INNULLER
                       PVT. LTD. reserves the right, at its own expense, to assume the
                       exclusive defense and control of any matter otherwise subject to
                       indemnification by any User(s), in which event such User(s) shall
-                      cooperate with XXXX PVT. LTD. in asserting any available defences.
+                      cooperate with INNULLER PVT. LTD. in asserting any available defences.
                     </span>
                     <br />
                     <br />
@@ -2644,7 +2644,7 @@ export default function TermsAndConditionsPage() {
                       />
                     </a>
                     <span style={{ fontFamily: "Arial" }}>
-                      &nbsp;XXXX PVT. LTD. shall not be liable for any special, direct,
+                      &nbsp;INNULLER PVT. LTD. shall not be liable for any special, direct,
                       indirect, punitive, incidental or consequential damages or any damages
                       whatsoever (including but not limited to damages for loss of profits or
                       savings, business interruption, loss of information), whether in
@@ -2854,9 +2854,9 @@ export default function TermsAndConditionsPage() {
                     </a>
                     <br />
                     <span style={{ fontFamily: "Arial" }}>
-                      All notices or demands to or upon XXXX PVT. LTD. shall be effective if
-                      in writing and shall be deemed to be duly made when sent to XXXX PVT.
-                      LTD. to XXXX Address, India.
+                      All notices or demands to or upon INNULLER PVT. LTD. shall be effective if
+                      in writing and shall be deemed to be duly made when sent to INNULLER PVT.
+                      LTD. to INNULLER Address, India.
                     </span>
                     <br />
                     <br />
@@ -2904,7 +2904,7 @@ export default function TermsAndConditionsPage() {
                     <br />
                     <span style={{ fontFamily: "Arial" }}>
                       This Agreement and the Privacy Policy shall be governed in all respects
-                      by the laws of Indian Territory. XXXX PVT. LTD. considers itself and
+                      by the laws of Indian Territory. INNULLER PVT. LTD. considers itself and
                       intends itself to be subject to the jurisdiction of the Courts of
                       Jaipur, Rajasthan, India only. The parties to this Agreement hereby
                       submit to the exclusive jurisdiction of the courts of Jaipur, Rajasthan,
@@ -2978,10 +2978,10 @@ export default function TermsAndConditionsPage() {
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                       </span>
                       <span style={{ fontFamily: "Arial" }}>
-                        XXXX PVT. LTD.’s failure to enforce any right or failure to act with
+                        INNULLER PVT. LTD.’s failure to enforce any right or failure to act with
                         respect to any breach by a User(s) under the Agreement and/or Privacy
-                        Policy will not be deemed to be a XXXX PVT. LTD.’s waiver of that
-                        right or XXXX PVT. LTD.'s waiver of the right to act with respect with
+                        Policy will not be deemed to be a INNULLER PVT. LTD.’s waiver of that
+                        right or INNULLER PVT. LTD.'s waiver of the right to act with respect with
                         subsequent or similar breaches.
                       </span>
                     </p>
@@ -3027,8 +3027,8 @@ export default function TermsAndConditionsPage() {
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                       </span>
                       <span style={{ fontFamily: "Arial" }}>
-                        XXXX PVT. LTD. shall have the right to assign its obligations and
-                        duties in this Agreement and in any other agreement relating XXXX PVT.
+                        INNULLER PVT. LTD. shall have the right to assign its obligations and
+                        duties in this Agreement and in any other agreement relating INNULLER PVT.
                         LTD.’s Services to any person or entity
                       </span>
                     </p>
@@ -3083,9 +3083,9 @@ export default function TermsAndConditionsPage() {
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                       </span>
                       <span style={{ fontFamily: "Arial" }}>
-                        All calls to XXXX are completely confidential. However, Your call may
+                        All calls to INNULLER are completely confidential. However, Your call may
                         be recorded to ensure quality of service. Further, for training
-                        purpose and to ensure excellent customer service, calls from XXXX may
+                        purpose and to ensure excellent customer service, calls from INNULLER may
                         be monitored and recorded.
                       </span>
                     </p>
@@ -3111,7 +3111,7 @@ export default function TermsAndConditionsPage() {
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                       </span>
                       <span style={{ fontFamily: "Arial", fontSize: "10pt" }}>
-                        Mr. xxxxx is the designated&nbsp;
+                        Mr. INNULLERx is the designated&nbsp;
                       </span>
                       <strong>
                         <span style={{ fontFamily: "Arial", fontSize: "10pt" }}>
@@ -3119,13 +3119,13 @@ export default function TermsAndConditionsPage() {
                         </span>
                       </strong>
                       <span style={{ fontFamily: "Arial", fontSize: "10pt" }}>
-                        &nbsp;in respect of XXXX PVT. LTD.’s Services. Any complaints or
-                        concerns with regards to any content on XXXX PVT. LTD.’s Services or
+                        &nbsp;in respect of INNULLER PVT. LTD.’s Services. Any complaints or
+                        concerns with regards to any content on INNULLER PVT. LTD.’s Services or
                         any breach of this Agreement or Privacy Policy can be directed to the
-                        designated Grievance Officer in writing at XXXX Address, India or
+                        designated Grievance Officer in writing at INNULLER Address, India or
                         through an email signed with the electronic signature sent to&nbsp;
                       </span>
-                      <a href="mailto:contact@XXXX.com" style={{ textDecoration: "none" }}>
+                      <a href="mailto:contact@INNULLER.com" style={{ textDecoration: "none" }}>
                         <u>
                           <span
                             style={{
@@ -3134,7 +3134,7 @@ export default function TermsAndConditionsPage() {
                               color: "rgb(255, 255 255)"
                             }}
                           >
-                            contact@XXXX.com
+                            contact@INNULLER.com
                           </span>
                         </u>
                       </a>
@@ -3163,7 +3163,7 @@ export default function TermsAndConditionsPage() {
                       </span>
                       <span style={{ fontFamily: "Arial" }}>
                         The Agreement and the Privacy Policy constitute the entire agreement
-                        between the User(s) and XXXX PVT. LTD. with respect to access to and
+                        between the User(s) and INNULLER PVT. LTD. with respect to access to and
                         use of the Web Site, superseding any prior written or oral agreements
                         in relation to the same subject matter herein
                       </span>
@@ -3210,16 +3210,16 @@ export default function TermsAndConditionsPage() {
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                       </span>
                       <span style={{ fontFamily: "Arial" }}>
-                        Under BB banner, XXXX PVT. LTD. shall develop a microsite for the
+                        Under BB banner, INNULLER PVT. LTD. shall develop a microsite for the
                         User(s) company ("
                       </span>
                       <strong>
                         <span style={{ fontFamily: "Arial" }}>BB Company</span>
                       </strong>
                       <span style={{ fontFamily: "Arial" }}>
-                        ") on the Web Site. XXXX PVT. LTD. shall display all the leads of the
+                        ") on the Web Site. INNULLER PVT. LTD. shall display all the leads of the
                         BB Company on the microsite, to enable the BB Company to find out
-                        suppliers in a short period of time.BB Company hereby grants XXXX PVT.
+                        suppliers in a short period of time.BB Company hereby grants INNULLER PVT.
                         LTD. the right to use its intellectual property on the microsite and
                         Web Site in relation to the requirements posted by the BB Company on
                         Web Site. It is clarified that all intellectual property rights in the
@@ -3250,7 +3250,7 @@ export default function TermsAndConditionsPage() {
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                       </span>
                       <span style={{ fontFamily: "Arial" }}>
-                        BB Company shall ensure that the contents provided to XXXX PVT. LTD.
+                        BB Company shall ensure that the contents provided to INNULLER PVT. LTD.
                         shall not contain any material which is offensive, derogator, explicit
                         or perverse to any specific race, gender or class of persons or
                         degrading to public conscience or morals and does not breach any
@@ -3280,8 +3280,8 @@ export default function TermsAndConditionsPage() {
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                       </span>
                       <span style={{ fontFamily: "Arial" }}>
-                        XXXX PVT. LTD. makes no representations or warranties to BB Company
-                        with respect to services provided by XXXX PVT. LTD. under BB banner.
+                        INNULLER PVT. LTD. makes no representations or warranties to BB Company
+                        with respect to services provided by INNULLER PVT. LTD. under BB banner.
                       </span>
                     </p>
                   </div>
@@ -3307,10 +3307,10 @@ export default function TermsAndConditionsPage() {
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                       </span>
                       <span style={{ fontFamily: "Arial" }}>
-                        XXXX PVT. LTD. hereby disclaims all warranties express and implied,
+                        INNULLER PVT. LTD. hereby disclaims all warranties express and implied,
                         including the implied warranties of merchantability, fitness for a
                         particular purpose, and non-infringement with respect to the services
-                        provided by XXXX PVT. LTD. under the BB banner.
+                        provided by INNULLER PVT. LTD. under the BB banner.
                       </span>
                     </p>
                   </div>
@@ -3336,7 +3336,7 @@ export default function TermsAndConditionsPage() {
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                       </span>
                       <span style={{ fontFamily: "Arial" }}>
-                        In no event shall XXXX PVT. LTD. be liable to BB Company for any
+                        In no event shall INNULLER PVT. LTD. be liable to BB Company for any
                         special, exemplary, indirect, incidental, consequential, punitive
                         damages or for any damages arising out of or in connection with
                         respect to the above mentioned service.
@@ -3428,13 +3428,13 @@ export default function TermsAndConditionsPage() {
                     <br />
                     <br />
                     <span style={{ fontFamily: "Arial", fontSize: "10pt" }}>
-                      XXXX PVT. LTD. shall not be responsible for any information, content or
+                      INNULLER PVT. LTD. shall not be responsible for any information, content or
                       material in respect of or related to any pharmaceutical product posted,
                       provided or displayed by User(s) on the Web Site. Accordingly, the User
                       posting the content shall ensure that the content so posted does not
                       violate any statue in the rules made thereunder including the Act(s) as
                       referred above, so that no consequences of any nature could be
-                      attributed to XXXX PVT. LTD. in any manner whatsoever.
+                      attributed to INNULLER PVT. LTD. in any manner whatsoever.
                     </span>
                     <a name="xviii">
                       <img
@@ -3452,24 +3452,24 @@ export default function TermsAndConditionsPage() {
                       medicines and/or drugs mentioned in any of the Schedules of the Drug
                       Rules without a prescription issued by a registered medical practitioner
                       and in accordance with the conditions laid down in such rules. In the
-                      event of breach of such condition, XXXX PVT. LTD. shall not be liable
+                      event of breach of such condition, INNULLER PVT. LTD. shall not be liable
                       and responsible in any manner whatsoever.
                     </span>
                     <br />
                     <br />
                     <span style={{ fontFamily: "Arial", fontSize: "10pt" }}>
-                      Users(s) undertake and agree to indemnify and hold harmless XXXX PVT.
+                      Users(s) undertake and agree to indemnify and hold harmless INNULLER PVT.
                       LTD. and/or any of its affiliates, directors, officers, employees or
                       representatives from and against any and all losses, liabilities,
                       damages, claims, costs and expenses (including attorney’s fees and
-                      expenses, any third party claims), which XXXX PVT. LTD. may incur or
+                      expenses, any third party claims), which INNULLER PVT. LTD. may incur or
                       suffer as a result of or in connection with any illegal sales of drugs
                       and/or medicines.
                     </span>
                     <br />
                     <br />
                     <span style={{ fontFamily: "Arial", fontSize: "10pt" }}>
-                      XXXX PVT. LTD. does not offer any guarantees or warranties on the
+                      INNULLER PVT. LTD. does not offer any guarantees or warranties on the
                       medicinal products or services displayed or listed on the Web Site and
                       is not liable for any relevant transaction between the User(s),
                       including transactions involving sale of any medicine(s) restricted
@@ -3505,10 +3505,10 @@ export default function TermsAndConditionsPage() {
                     <br />
                     <span style={{ fontFamily: "Arial" }}>
                       The Customer relationship management service (“CRM Service”) offered by
-                      XXXX encompasses cloud-based software and applications accessible to
+                      INNULLER encompasses cloud-based software and applications accessible to
                       Users for business use. Access to the CRM Service is facilitated through
                       a unified user account which serves as the key to unlocking various
-                      services provided by XXXX.
+                      services provided by INNULLER.
                     </span>
                     <br />
                     <span style={{ fontFamily: '"Times New Roman"', fontSize: "12pt" }}>
@@ -3579,7 +3579,7 @@ export default function TermsAndConditionsPage() {
                         and warrant that they possess the necessary consents, authorizations,
                         or proprietary rights with respect to the content and information that
                         they create, store, transmit, or share using the CRM Platform.
-                        Additionally, Users hereby confer upon XXXX the explicit and
+                        Additionally, Users hereby confer upon INNULLER the explicit and
                         irrevocable permission to access, duplicate, disseminate, store,
                         transmit, reformat, and publicly exhibit the aforementioned content
                         and information. This permission is granted for the purpose of
@@ -3616,7 +3616,7 @@ export default function TermsAndConditionsPage() {
                         Users acknowledge and accept that they retain sole and absolute
                         responsibility for the integrity, legality, accuracy, and
                         appropriateness of all content and information that is disseminated
-                        through CRM Services. While XXXX does not exercise editorial control
+                        through CRM Services. While INNULLER does not exercise editorial control
                         over such content, Users acknowledge that any content deemed in
                         violation of these terms or relevant laws may be subject to removal
                         without prior notice.
@@ -3651,13 +3651,13 @@ export default function TermsAndConditionsPage() {
                         prohibited from transferring, sublicensing, or assigning any of their
                         rights, access, or entitlements related to the CRM Service to any
                         third party without obtaining explicit prior written consent from
-                        XXXX.
+                        INNULLER.
                       </span>
                       <br />
                       <span style={{ fontFamily: "Arial" }}>
                         b) Responsibility for System Impact: Users shall refrain from any
                         actions or activities that could potentially lead to damage, overload,
-                        disablement, impairment, or any form of harm to XXXX’s servers,
+                        disablement, impairment, or any form of harm to INNULLER’s servers,
                         networks, computer systems, or operational resources.
                       </span>
                       <br />
@@ -3687,7 +3687,7 @@ export default function TermsAndConditionsPage() {
                     <span style={{ fontFamily: "Arial" }}>Indemnification</span>
                     <br />
                     <span style={{ fontFamily: "Arial" }}>
-                      Users shall indemnify, defend, and hold harmless XXXX, its affiliates,
+                      Users shall indemnify, defend, and hold harmless INNULLER, its affiliates,
                       officers, directors, employees, and agents from any and all claims,
                       liabilities, damages, losses, costs, and expenses (including reasonable
                       legal fees) arising from or related to their use of the CRM Service.

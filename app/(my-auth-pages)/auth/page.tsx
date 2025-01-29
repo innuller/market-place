@@ -75,8 +75,8 @@ export default function AuthOptionsPage() {
                             <div>
                                 <Button
                                     className="w-full bg-[#7AB80E] hover:bg-[#63a029] text-white"
-                                    // onClick={() => handleNavigation('/registration-form')}
-                                    onClick={handleEmailClick}
+                                    onClick={() => handleNavigation('/companies/signup')}
+                                    // onClick={handleEmailClick}
                                     disabled={isLoading}
                                 >
                                     Sign Up
