@@ -347,7 +347,7 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
           </Select>
         </div>
         <div className="flex gap-2 w-full sm:w-auto">
-          <Dialog
+          {/* <Dialog
             open={messageDialogOpen}
             onOpenChange={(isOpen) => {
               if (!currentUserId || selectedCompanies.length < 1) return;
@@ -394,7 +394,7 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
                 </Button>
               </DialogFooter>
             </DialogContent>
-          </Dialog>
+          </Dialog> */}
 
           <Dialog
             open={quoteDialogOpen}
@@ -579,7 +579,7 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
                     </DialogContent>
                   </Dialog>
                   <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-                    <Button
+                    {/* <Button
                       variant="outline"
                       className={`w-full sm:w-auto text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white ${!currentUserId ? "opacity-50 cursor-not-allowed" : ""}`}
                       onClick={() => {
@@ -590,7 +590,7 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
                     >
                       <MessageSquare className="h-4 w-4 mr-2" />
                       Send Message
-                    </Button>
+                    </Button> */}
                     <Button
                       variant="outline"
                       className={`w-full sm:w-auto text-white bg-[#7AB80E] border-white/20 hover:bg-[#63a029] hover:text-white ${!currentUserId ? "opacity-50 cursor-not-allowed" : ""}`}

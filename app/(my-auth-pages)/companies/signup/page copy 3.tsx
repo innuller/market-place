@@ -5,10 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
-import { useToast } from "@/components/ui/use-toast"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Toaster } from "@/components/ui/toaster"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 
 export default function CompanySignUp() {
   const [organizationName, setOrganizationName] = useState('')
@@ -17,70 +14,21 @@ export default function CompanySignUp() {
   const [address, setAddress] = useState('')
   const [website, setWebsite] = useState('')
   const [reason, setReason] = useState('')
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSubmitted, setIsSubmitted] = useState(false)
-  const { toast } = useToast()
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    setIsSubmitting(true)
+    
+    const subject = encodeURIComponent('New Company Sign Up Request')
+    const body = encodeURIComponent(`
+Organization Name: ${organizationName}
+Email: ${email}
+Phone: ${phone}
+Address: ${address}
+Website: ${website}
+Reason for Registration: ${reason}
+    `)
 
-    const formData = {
-      organizationName,
-      email,
-      phone,
-      address,
-      website,
-      reason
-    }
-
-    try {
-      const response = await fetch('/api/send-signup-email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      })
-
-      if (response.ok) {
-        setIsSubmitted(true)
-        toast({
-          title: "Request Submitted",
-          description: "Your sign-up request has been sent successfully.",
-        })
-        // Reset form fields
-        setOrganizationName('')
-        setEmail('')
-        setPhone('')
-        setAddress('')
-        setWebsite('')
-        setReason('')
-      } else {
-        throw new Error('Failed to send email')
-      }
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "There was a problem submitting your request. Please try again.",
-        variant: "destructive",
-      })
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
-
-  if (isSubmitted) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-[#003853] p-4">
-        <Alert className="w-full max-w-md bg-white/5 text-white border-white/10">
-          <AlertTitle>Thank you for your submission!</AlertTitle>
-          <AlertDescription>
-            Your request has been received. Please wait for approval from our team. We will contact you soon.
-          </AlertDescription>
-        </Alert>
-      </div>
-    )
+    window.location.href = `mailto:umeshtak34@gmail.com?subject=${subject}&body=${body}`
   }
 
   return (
@@ -155,12 +103,8 @@ export default function CompanySignUp() {
                 rows={4}
               />
             </div>
-            <Button 
-              type="submit" 
-              className="w-full bg-[#7AB80E] hover:bg-[#8BC727] text-white"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? 'Submitting...' : 'Submit Request'}
+            <Button type="submit" className="w-full bg-[#7AB80E] hover:bg-[#8BC727] text-white">
+              Submit Request
             </Button>
           </form>
         </CardContent>
@@ -173,7 +117,6 @@ export default function CompanySignUp() {
           </p>
         </CardFooter>
       </Card>
-      <Toaster />
     </div>
   )
 }

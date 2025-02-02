@@ -17,7 +17,10 @@ import { X, Plus, Eye, EyeOff, Upload } from "lucide-react"
 import { createClient } from "@/utils/supabase/client";
 import { Session } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 // import { redirect } from "next/navigation"
+import { useToast } from "@/components/ui/use-toast"
+import { Toaster } from "@/components/ui/toaster"
 
 
 const categories = [
@@ -301,6 +304,7 @@ const formSchema = z.object({
 export default function ExtendedRegistrationForm() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false)
 
   const [mainCategories, setMainCategories] = useState<any[]>([]);
   const [subCategories, setSubCategories] = useState<any[]>([]);
@@ -322,6 +326,7 @@ export default function ExtendedRegistrationForm() {
   const [loading, setLoading] = useState(true)
 
   const router = useRouter()
+  const { toast } = useToast()
 
   useEffect(() => {
     // Fetch main categories on load
@@ -737,6 +742,9 @@ export default function ExtendedRegistrationForm() {
       if (orgData) {
         console.log(values);
         console.log('Successfully inserted data:', orgData);
+        console.log('add feedback that user has been registered and is waiting for approval');
+        setIsSubmitted(true)
+        // router.push('/')
       }
 
       // Update user metadata with organization_id
@@ -745,19 +753,51 @@ export default function ExtendedRegistrationForm() {
           data: { organization_id: orgData[0].id }
         })
 
-        if (updateError) throw updateError
+        if (updateError) {
+          console.log('updateError: ', updateError)
+        } 
+        setIsSubmitted(true)
+
       } else {
         throw new Error("Failed to create organization record")
       }
 
+      // TODO: From here it goes to catch block
       console.log('Successfully inserted data:', orgData)
-      router.push('/landing-page')
+      console.log('add feedback that user has been registered and is waiting for approval');
+      setIsSubmitted(true)
+      router.push('/')
 
-    } catch (error) {
-      console.error('Error in form submission --->', error);
+
+    } catch (error: any) {
+      console.error('Error in form submission --->', error)
+      if (error.code === '23505' || error.message.includes('organizations_main_email_key')) {
+        toast({
+          title: "Registration Error",
+          description: "You are already registered. Please use a different email address.",
+          variant: "destructive",
+        })
+      } else {
+        toast({
+          title: "Error",
+          description: "There was a problem submitting your request. Please try again.",
+          variant: "destructive",
+        })
+      }
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false)
     }
+  }
+
+  if (isSubmitted) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+          <strong className="font-bold">Thank you for your registration!</strong>
+          <p className="block sm:inline">Please confrim your mail from the link we sent on your mail and then Please wait for approval from our team. Keep checking your email. <Link href="/" className="text-blue-500 hover:text-foreground underline underline-offset-1 ">Go back to the Homepage</Link></p>
+        </div>
+      </div>
+    )
   }
 
 
