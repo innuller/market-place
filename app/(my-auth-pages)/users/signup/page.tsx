@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Eye, EyeOff } from 'lucide-react'
 import Link from 'next/link'
 
@@ -17,14 +18,16 @@ export default function UserSignUp() {
   const [password, setPassword] = useState('')
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
+  const [isSubmitted, setIsSubmitted] = useState(false)
   const [error, setError] = useState(null)
+  const [data, setData] = useState(null)
   const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
 
-  const handleSignUp = async (e:any) => {
+  const handleSignUp = async (e: any) => {
     e.preventDefault()
     try {
-      const { data, error } = await supabase.auth.signUp({
+      const { data: userData, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -35,21 +38,54 @@ export default function UserSignUp() {
           }
         }
       })
-      
-      if (error){
-        console.log('babuuuu: ',error)
+
+      if (error) {
+        console.log('Error in singing up new user: ', error)
+      }
+
+      if (userData) {
+        setData(userData)
+        setIsSubmitted(true)
+        console.log(data.user.aud);
       }
 
       // router.push('/search')
     } catch (error: any) {
       setError(error.message)
       console.log('Error signing up:', error.message);
-      
+
     }
   }
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword)
+  }
+
+  if (isSubmitted) {
+
+    if (data.user.aud == "authenticated") {
+      return (
+        <div className="flex items-center justify-center min-h-screen bg-[#003853] p-4">
+          <Alert className="w-full max-w-md bg-white/5 text-white border-white/10">
+            <AlertTitle className='font-bold'>You are already registred</AlertTitle>
+            <AlertDescription>
+              Please go to Users <Link href="/users/signin" className='underline underline-offset-4 text-[#7AB80E] font-bold'>Sign In page to login.</Link>
+            </AlertDescription>
+          </Alert>
+        </div>
+      )
+    }
+
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-[#003853] p-4">
+        <Alert className="w-full max-w-md bg-white/5 text-white border-white/10">
+          <AlertTitle>Thank you for your registration</AlertTitle>
+          <AlertDescription>
+            Please verify your email address to complete the registration process. Open mail for verification.
+          </AlertDescription>
+        </Alert>
+      </div>
+    )
   }
 
   return (

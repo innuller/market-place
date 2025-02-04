@@ -15,12 +15,13 @@ import * as z from "zod"
 import { Badge } from "@/components/ui/badge"
 import { X, Plus, Eye, EyeOff, Upload } from "lucide-react"
 import { createClient } from "@/utils/supabase/client";
-import { Session } from "@supabase/supabase-js";
+import { PostgrestError, Session } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 // import { redirect } from "next/navigation"
 import { useToast } from "@/components/ui/use-toast"
 import { Toaster } from "@/components/ui/toaster"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
 
 const categories = [
@@ -305,6 +306,7 @@ export default function ExtendedRegistrationForm() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [orgErr, setOrgErr] = useState<PostgrestError | null>(null)
 
   const [mainCategories, setMainCategories] = useState<any[]>([]);
   const [subCategories, setSubCategories] = useState<any[]>([]);
@@ -733,12 +735,12 @@ export default function ExtendedRegistrationForm() {
       ]).select()
         .returns<Organization[]>();
       console.log("Insert operation result Data: ", orgData, " Error: ", orgError); // Add this line
+      setOrgErr(orgError)
 
-      if (orgError) {
-        console.log(values);
-        console.error('Error inserting data:', orgError.message);
-        throw orgError
-      }
+      console.log(values);
+      console.error('Error inserting data:', orgError);
+      throw orgError
+
       if (orgData) {
         console.log(values);
         console.log('Successfully inserted data:', orgData);
@@ -755,7 +757,7 @@ export default function ExtendedRegistrationForm() {
 
         if (updateError) {
           console.log('updateError: ', updateError)
-        } 
+        }
         setIsSubmitted(true)
 
       } else {
@@ -795,6 +797,17 @@ export default function ExtendedRegistrationForm() {
         <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
           <strong className="font-bold">Thank you for your registration!</strong>
           <p className="block sm:inline">Please confrim your mail from the link we sent on your mail and then Please wait for approval from our team. Keep checking your email. <Link href="/" className="text-blue-500 hover:text-foreground underline underline-offset-1 ">Go back to the Homepage</Link></p>
+        </div>
+      </div>
+    )
+  }
+
+  if (orgErr?.code === '23505') {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+          <strong className="font-bold">You are already Registered </strong>
+          <p className="block sm:inline">Please signup with your mail. <Link href="/companies/signin" className="text-blue-500 hover:text-foreground underline underline-offset-1 ">Go back to the Signin</Link></p>
         </div>
       </div>
     )

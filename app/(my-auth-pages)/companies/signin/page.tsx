@@ -95,7 +95,7 @@ export default function CompanySignIn() {
         <CardFooter>
           <p className="text-sm text-center w-full">
             Don't have an account?{' '}
-            <a href="/signup/company" className="text-[#7AB80E] hover:underline">
+            <a href="/companies/signup" className="text-[#7AB80E] hover:underline">
               Sign Up
             </a>
           </p>

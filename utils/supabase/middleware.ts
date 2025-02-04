@@ -95,6 +95,10 @@ export const updateSession = async (request: NextRequest) => {
       return NextResponse.redirect(new URL("/protected", request.url));
     }
 
+    if (request.nextUrl.pathname === "/auth" && !user.error) {
+      return NextResponse.redirect(new URL("/protected", request.url));
+    }
+
     // if (request.nextUrl.pathname.startsWith("/admin") && user.error) {
     //   return NextResponse.redirect(new URL("/users/signin", request.url));
     // }
