@@ -21,7 +21,7 @@ export async function POST(req: Request) {
   const mailOptions = {
     from: process.env.EMAIL_USER,
     // to: 'contact@innuller.com',
-    to: 'renisonreni@gmail.com',
+    to: 'contact@innuller.com',
     subject: 'New Company Sign Up Request',
     text: `
       Organization Name: ${organizationName}
