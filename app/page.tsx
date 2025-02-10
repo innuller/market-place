@@ -314,7 +314,7 @@ export default function Index() {
               © 2023 Your Company Name. All rights reserved.
             </div>
             <div className="mt-2 text-center text-white/60">
-              Website last modified on DD/MM/YYYY
+              Website last modified on 28/01/2025
             </div>
           </div>
         </footer>
