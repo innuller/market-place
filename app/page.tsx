@@ -214,17 +214,17 @@ export default function Index() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
               <div className="bg-white/10 rounded-lg p-6">
                 <Users className="w-12 h-12 text-[#7AB80E] mx-auto mb-4" />
-                <h3 className="text-3xl md:text-4xl font-bold text-white mb-2">50,000+</h3>
+                <h3 className="text-3xl md:text-4xl font-bold text-white mb-2">1,000+</h3>
                 <p className="text-white/80">Registered Suppliers</p>
               </div>
               <div className="bg-white/10 rounded-lg p-6">
                 <Book className="w-12 h-12 text-[#7AB80E] mx-auto mb-4" />
-                <h3 className="text-3xl md:text-4xl font-bold text-white mb-2">100,000+</h3>
+                <h3 className="text-3xl md:text-4xl font-bold text-white mb-2">2,000+</h3>
                 <p className="text-white/80">Available Catalogs</p>
               </div>
               <div className="bg-white/10 rounded-lg p-6">
                 <ShoppingCart className="w-12 h-12 text-[#7AB80E] mx-auto mb-4" />
-                <h3 className="text-3xl md:text-4xl font-bold text-white mb-2">200,000+</h3>
+                <h3 className="text-3xl md:text-4xl font-bold text-white mb-2">5,000+</h3>
                 <p className="text-white/80">Registered Buyers</p>
               </div>
             </div>
@@ -311,7 +311,7 @@ export default function Index() {
               </div>
             </div>
             <div className="mt-12 text-center text-white/60">
-              © 2023 Your Company Name. All rights reserved.
+              © 2023 Innuller. All rights reserved.
             </div>
             <div className="mt-2 text-center text-white/60">
               Website last modified on 28/01/2025
