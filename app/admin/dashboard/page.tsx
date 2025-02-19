@@ -2,7 +2,7 @@
 
 'use client'
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Organization } from "@/types/types";
 import { Button } from "@/components/ui/button"
@@ -11,46 +11,113 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Loader2, ChevronDown, ChevronUp } from 'lucide-react';
 import { redirect } from "next/navigation";
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Separator } from "@/components/ui/separator"
+import { cn } from "@/utils/cn"
 
 // New component for displaying metadata
-const MetadataDisplay: React.FC<{ metadata: any }> = ({ metadata }) => {
-  const formatValue = (value: any): string => {
-    if (Array.isArray(value)) {
-      return value.map(item => {
-        if (typeof item === 'object' && item !== null) {
-          return Object.entries(item)
-            .map(([k, v]) => `${k}: ${v}`)
-            .join(', ');
+function MetadataDisplay({ metadata }: { metadata: Record<string, any> }) {
+    const formatValue = (value: any, key: any): React.ReactNode => {
+        // Function to detect URLs in text and convert them to clickable links
+        const convertUrlsToLinks = (text: string) => {
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            const parts = text.split(urlRegex);
+
+            return parts.map((part, index) => {
+                if (part.match(urlRegex)) {
+                    return (
+                        <a
+                            key={index}
+                            href={part}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-500 hover:text-blue-600 transition-colors relative z-10"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                window.open(part, '_blank');
+                            }}
+                        >
+                            {part}
+                        </a>
+                    );
+                }
+                return part;
+            });
+        };
+
+        if (key === 'products_services' && Array.isArray(value)) {
+            return (
+                <div className="space-y-2">
+                    {value.map((item, index) => (
+                        <div key={index} className="flex items-center justify-between">
+                            <span className="font-medium relative z-10">{item.name}</span>
+                            {item.catalog ? (
+                                <button
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        window.open(item.catalog, '_blank');
+                                    }}
+                                    className="text-blue-500 hover:text-blue-600 transition-colors cursor-pointer relative z-10"
+                                >
+                                    Preview Catalog
+                                </button>
+                            ) : (
+                                <span className="text-gray-400 relative z-10">No catalog</span>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            );
         }
-        return String(item);
-      }).join('; ');
-    } else if (typeof value === 'object' && value !== null) {
-      return Object.entries(value)
-        .map(([k, v]) => `${k}: ${formatValue(v)}`)
-        .join(', ');
-    }
-    return String(value);
-  };
 
-  const formatKey = (key: string): string => {
-    return key.split("_").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
-  };
+        if (Array.isArray(value)) {
+            return value.map(item => {
+                if (typeof item === 'object' && item !== null) {
+                    return Object.entries(item)
+                        .map(([k, v]) => `${k}: ${v}`)
+                        .join(', ');
+                }
+                return String(item);
+            }).join('; ');
+        } else if (typeof value === 'object' && value !== null) {
+            return Object.entries(value)
+                .map(([k, v]) => `${k}: ${formatValue(v, k)}`)
+                .join(', ');
+        }
+        const stringValue = String(value);
+        if (typeof value === 'string' && stringValue.match(/(https?:\/\/[^\s]+)/g)) {
+            return convertUrlsToLinks(stringValue);
+        }
+        return stringValue;
+    };
 
-  return (
-    <div className="space-y-2">
-      {Object.entries(metadata).map(([key, value]) => (
-        <div key={key} className="bg-gray-100 p-2 rounded">
-          <span className="font-semibold">{formatKey(key)}:</span>{" "}
-          <span>{formatValue(value)}</span>
-          {/* {formatKey == null ?}  */}
-          <span>{formatValue(value)}</span>
+    const formatKey = (key: string): string => {
+        return key.split("_").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+    };
+
+    return (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {Object.entries(metadata).map(([key, value]) => (
+                <div
+                    key={key}
+                    className="relative bg-white/5 backdrop-blur-sm border border-gray-200/10 p-4 rounded-lg shadow-sm
+                     hover:shadow-md hover:border-gray-200/20 transition-all duration-200"
+                >
+                    <div className="relative z-10"/>
+                    <h4 className="text-sm font-medium text-gray-500 mb-1">{formatKey(key)}</h4>
+                    {/* <p className="text-base font-semibold text-gray-900 break-words cursor-text"> */}
+                    <div className="text-base font-semibold text-gray-900 break-words">
+                        {formatValue(value, key)}
+                    </div>
+                    {/* </p> */}
+                </div>
+            ))}
         </div>
-      ))}
-    </div>
-  );
-};
+    );
+}
 
-const AdminDashboard: React.FC = () => {
+export default function AdminDashboard() {
     const supabase = createClient();
 
     const [organizations, setOrganizations] = useState<Organization[]>([]);
@@ -148,92 +215,119 @@ const AdminDashboard: React.FC = () => {
     return (
         <div className="p-4 space-y-4">
             <h1 className="text-2xl font-bold">Pending Organization Approvals</h1>
-
-            {organizations.length === 0 ? (
-                <Card>
-                    <CardContent className="py-8">
-                        <p className="text-center text-muted-foreground">No pending approvals</p>
-                    </CardContent>
-                </Card>
-            ) : (
-                <div className="space-y-4">
-                    {organizations.map((org) => (
-                        <Card key={org.id}>
-                            <CardHeader>
-                                <div className="flex justify-between items-center">
-                                    <div>
-                                        <CardTitle>{org.organization_name}</CardTitle>
-                                        <CardDescription>{org.email}</CardDescription>
+            <ScrollArea className="h-[calc(100vh-8rem)]">
+                {organizations.length === 0 ? (
+                    <Card>
+                        <CardContent className="py-8">
+                            <p className="text-center text-muted-foreground">No pending approvals</p>
+                        </CardContent>
+                    </Card>
+                ) : (
+                    <div className="space-y-4">
+                        {organizations.map((org) => (
+                            <Card key={org.id} className={cn(
+                                "relative overflow-hidden",
+                                "hover:shadow-md transition-shadow duration-200"
+                            )}>
+                                <CardHeader>
+                                    <div className="flex justify-between items-center">
+                                        <div>
+                                            <CardTitle>{org.organization_name}</CardTitle>
+                                            <CardDescription>{org.email}</CardDescription>
+                                        </div>
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => toggleExpand(org.id)}
+                                        >
+                                            {expandedOrgs.has(org.id) ? (
+                                                <>
+                                                    <ChevronUp className="h-4 w-4 mr-2" />
+                                                    Contract
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <ChevronDown className="h-4 w-4 mr-2" />
+                                                    Expand
+                                                </>
+                                            )}
+                                        </Button>
                                     </div>
+                                </CardHeader>
+                                {expandedOrgs.has(org.id) && (
+                                    <CardContent>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            <Card>
+                                                <CardHeader>
+                                                    <CardTitle className="text-sm">Contact Information</CardTitle>
+                                                </CardHeader>
+                                                <CardContent className="space-y-4">
+                                                    <div className="flex items-center space-x-2">
+                                                        <span className="text-muted-foreground">📞</span>
+                                                        <span>{org.phone || 'N/A'}</span>
+                                                    </div>
+                                                    <div className="flex items-start space-x-2">
+                                                        <span className="text-muted-foreground">📍</span>
+                                                        <span>{org.address || 'N/A'}</span>
+                                                    </div>
+                                                    <div className="flex items-center space-x-2">
+                                                        <span className="text-muted-foreground">🌐</span>
+                                                        <Button
+                                                            variant="link"
+                                                            className="h-auto p-0"
+                                                            onClick={() => window.open(org.website, '_blank')}
+                                                        >
+                                                            {org.website || 'N/A'}
+                                                        </Button>
+                                                    </div>
+                                                </CardContent>
+                                            </Card>
+                                            <Card>
+                                                <CardHeader>
+                                                    <CardTitle className="text-sm">Timestamps</CardTitle>
+                                                </CardHeader>
+                                                <CardContent className="space-y-4">
+                                                    <div className="flex justify-between items-center">
+                                                        <span className="text-muted-foreground">Created:</span>
+                                                        <span>
+                                                            {new Date(org.created_at).toLocaleString()}
+                                                        </span>
+                                                    </div>
+                                                    <div className="flex justify-between items-center">
+                                                        <span className="text-muted-foreground">Updated:</span>
+                                                        <span>
+                                                            {new Date(org.updated_at).toLocaleString()}
+                                                        </span>
+                                                    </div>
+                                                </CardContent>
+                                            </Card>
+                                        </div>
+                                        <Separator className="my-6" />
+                                        <div>
+                                            <h3 className="text-lg font-semibold mb-4">Additional Information</h3>
+                                            <MetadataDisplay metadata={org.metadata} />
+                                        </div>
+                                    </CardContent>
+                                )}
+                                <CardFooter className="flex justify-end space-x-2">
                                     <Button
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={() => toggleExpand(org.id)}
+                                        className="bg-green-600 hover:bg-green-500"
+                                        onClick={() => openConfirmDialog(org, "approve")}
                                     >
-                                        {expandedOrgs.has(org.id) ? (
-                                            <>
-                                                <ChevronUp className="h-4 w-4 mr-2" />
-                                                Contract
-                                            </>
-                                        ) : (
-                                            <>
-                                                <ChevronDown className="h-4 w-4 mr-2" />
-                                                Expand
-                                            </>
-                                        )}
+                                        Approve
                                     </Button>
-                                </div>
-                            </CardHeader>
-                            {expandedOrgs.has(org.id) && (
-                                <CardContent>
-                                    <Table>
-                                        <TableBody>
-                                            <TableRow>
-                                                <TableCell className="font-medium">Phone</TableCell>
-                                                <TableCell>{org.phone}</TableCell>
-                                            </TableRow>
-                                            <TableRow>
-                                                <TableCell className="font-medium">Address</TableCell>
-                                                <TableCell>{org.address}</TableCell>
-                                            </TableRow>
-                                            <TableRow>
-                                                <TableCell className="font-medium">Website</TableCell>
-                                                <TableCell>{org.website}</TableCell>
-                                            </TableRow>
-                                            <TableRow>
-                                                <TableCell className="font-medium">Created At</TableCell>
-                                                <TableCell>{new Date(org.created_at).toLocaleString()}</TableCell>
-                                            </TableRow>
-                                            <TableRow>
-                                                <TableCell className="font-medium">Updated At</TableCell>
-                                                <TableCell>{new Date(org.updated_at).toLocaleString()}</TableCell>
-                                            </TableRow>
-                                        </TableBody>
-                                    </Table>
-                                    <div className="mt-4">
-                                        <h3 className="text-lg font-semibold mb-2">Additional Information</h3>
-                                        <MetadataDisplay metadata={org.metadata} />
-                                    </div>
-                                </CardContent>
-                            )}
-                            <CardFooter className="flex justify-end space-x-2">
-                                <Button
-                                    className="bg-green-600 hover:bg-green-500"
-                                    onClick={() => openConfirmDialog(org, "approve")}
-                                >
-                                    Approve
-                                </Button>
-                                <Button
-                                    variant="destructive"
-                                    onClick={() => openConfirmDialog(org, "reject")}
-                                >
-                                    Reject
-                                </Button>
-                            </CardFooter>
-                        </Card>
-                    ))}
-                </div>
-            )}
+                                    <Button
+                                        variant="destructive"
+                                        onClick={() => openConfirmDialog(org, "reject")}
+                                    >
+                                        Reject
+                                    </Button>
+                                </CardFooter>
+                            </Card>
+                        ))}
+                    </div>
+                )}
+            </ScrollArea>
 
             {/* Confirmation Dialog */}
             <Dialog open={isConfirmDialogOpen} onOpenChange={setConfirmDialogOpen}>
@@ -270,6 +364,4 @@ const AdminDashboard: React.FC = () => {
             </Dialog>
         </div>
     );
-};
-
-export default AdminDashboard;
+}
