@@ -83,12 +83,18 @@ export default function UserSignIn() {
             </Button>
           </form>
         </CardContent>
-        <CardFooter>
+        <CardFooter className='flex flex-col'>
           <p className="text-sm text-center w-full">
             Don't have an account?{' '}
             <Link href="/users/signup" className="text-[#7AB80E] hover:underline">
               Sign Up
             </Link>
+          </p>
+          <p className="text-sm text-center w-full">
+            Forgot Password?{' '}
+            <a href="/forgot-password" className="text-[#7AB80E] hover:underline">
+              Reset the password
+            </a>
           </p>
         </CardFooter>
       </Card>
