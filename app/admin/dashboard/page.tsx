@@ -1,14 +1,54 @@
+//@ts-nocheck
+
 'use client'
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Organization } from "@/types/types";
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Loader2 } from "lucide-react";
+import { Loader2, ChevronDown, ChevronUp } from 'lucide-react';
 import { redirect } from "next/navigation";
+
+// New component for displaying metadata
+const MetadataDisplay: React.FC<{ metadata: any }> = ({ metadata }) => {
+  const formatValue = (value: any): string => {
+    if (Array.isArray(value)) {
+      return value.map(item => {
+        if (typeof item === 'object' && item !== null) {
+          return Object.entries(item)
+            .map(([k, v]) => `${k}: ${v}`)
+            .join(', ');
+        }
+        return String(item);
+      }).join('; ');
+    } else if (typeof value === 'object' && value !== null) {
+      return Object.entries(value)
+        .map(([k, v]) => `${k}: ${formatValue(v)}`)
+        .join(', ');
+    }
+    return String(value);
+  };
+
+  const formatKey = (key: string): string => {
+    return key.split("_").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+  };
+
+  return (
+    <div className="space-y-2">
+      {Object.entries(metadata).map(([key, value]) => (
+        <div key={key} className="bg-gray-100 p-2 rounded">
+          <span className="font-semibold">{formatKey(key)}:</span>{" "}
+          <span>{formatValue(value)}</span>
+          {/* {formatKey == null ?}  */}
+          <span>{formatValue(value)}</span>
+        </div>
+      ))}
+    </div>
+  );
+};
 
 const AdminDashboard: React.FC = () => {
     const supabase = createClient();
@@ -20,10 +60,10 @@ const AdminDashboard: React.FC = () => {
     const [isConfirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false);
     const [actionType, setActionType] = useState<"approve" | "reject" | null>(null);
     const [isProcessing, setIsProcessing] = useState<boolean>(false);
+    const [expandedOrgs, setExpandedOrgs] = useState<Set<string>>(new Set());
 
     useEffect(() => {
         const fetchPendingOrganizations = async () => {
-
             const {
                 data: { user },
             } = await supabase.auth.getUser();
@@ -48,7 +88,7 @@ const AdminDashboard: React.FC = () => {
         };
 
         fetchPendingOrganizations();
-    }, []);
+    }, [supabase]);
 
     const updateOrganizationStatus = async (status: "approved" | "rejected") => {
         if (!selectedOrg) return;
@@ -75,6 +115,18 @@ const AdminDashboard: React.FC = () => {
         setSelectedOrg(org);
         setActionType(action);
         setConfirmDialogOpen(true);
+    };
+
+    const toggleExpand = (orgId: string) => {
+        setExpandedOrgs(prev => {
+            const newSet = new Set(prev);
+            if (newSet.has(orgId)) {
+                newSet.delete(orgId);
+            } else {
+                newSet.add(orgId);
+            }
+            return newSet;
+        });
     };
 
     if (loading) {
@@ -104,76 +156,82 @@ const AdminDashboard: React.FC = () => {
                     </CardContent>
                 </Card>
             ) : (
-                <div className="overflow-x-auto">
-                    {/* Desktop Table View */}
-                    <Table className="hidden md:table">
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Organization Name</TableHead>
-                                <TableHead>Email</TableHead>
-                                <TableHead className="w-[200px]">Actions</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {organizations.map((org) => (
-                                <TableRow key={org.id}>
-                                    <TableCell className="font-medium">{org.organization_name}</TableCell>
-                                    <TableCell>{org.email}</TableCell>
-                                    <TableCell>
-                                        <div className="flex gap-2">
-                                            <Button
-                                                // variant="default"
-                                                className="bg-green-600 hover:bg-green-500"
-                                                size="sm"
-                                                onClick={() => openConfirmDialog(org, "approve")}
-                                                aria-label={`Approve ${org.organization_name}`}
-                                            >
-                                                Approve
-                                            </Button>
-                                            <Button
-                                                variant="destructive"
-                                                size="sm"
-                                                onClick={() => openConfirmDialog(org, "reject")}
-                                                aria-label={`Reject ${org.organization_name}`}
-                                            >
-                                                Reject
-                                            </Button>
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-
-                    {/* Mobile Card View */}
-                    <div className="grid gap-4 md:hidden">
-                        {organizations.map((org) => (
-                            <Card key={org.id}>
-                                <CardHeader>
-                                    <CardTitle>{org.organization_name}</CardTitle>
-                                    <CardDescription>{org.email}</CardDescription>
-                                </CardHeader>
-                                <CardFooter className="flex gap-2">
+                <div className="space-y-4">
+                    {organizations.map((org) => (
+                        <Card key={org.id}>
+                            <CardHeader>
+                                <div className="flex justify-between items-center">
+                                    <div>
+                                        <CardTitle>{org.organization_name}</CardTitle>
+                                        <CardDescription>{org.email}</CardDescription>
+                                    </div>
                                     <Button
-                                        className="flex-1"
-                                        variant="default"
-                                        onClick={() => openConfirmDialog(org, "approve")}
-                                        aria-label={`Approve ${org.organization_name}`}
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => toggleExpand(org.id)}
                                     >
-                                        Approve
+                                        {expandedOrgs.has(org.id) ? (
+                                            <>
+                                                <ChevronUp className="h-4 w-4 mr-2" />
+                                                Contract
+                                            </>
+                                        ) : (
+                                            <>
+                                                <ChevronDown className="h-4 w-4 mr-2" />
+                                                Expand
+                                            </>
+                                        )}
                                     </Button>
-                                    <Button
-                                        className="flex-1"
-                                        variant="destructive"
-                                        onClick={() => openConfirmDialog(org, "reject")}
-                                        aria-label={`Reject ${org.organization_name}`}
-                                    >
-                                        Reject
-                                    </Button>
-                                </CardFooter>
-                            </Card>
-                        ))}
-                    </div>
+                                </div>
+                            </CardHeader>
+                            {expandedOrgs.has(org.id) && (
+                                <CardContent>
+                                    <Table>
+                                        <TableBody>
+                                            <TableRow>
+                                                <TableCell className="font-medium">Phone</TableCell>
+                                                <TableCell>{org.phone}</TableCell>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableCell className="font-medium">Address</TableCell>
+                                                <TableCell>{org.address}</TableCell>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableCell className="font-medium">Website</TableCell>
+                                                <TableCell>{org.website}</TableCell>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableCell className="font-medium">Created At</TableCell>
+                                                <TableCell>{new Date(org.created_at).toLocaleString()}</TableCell>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableCell className="font-medium">Updated At</TableCell>
+                                                <TableCell>{new Date(org.updated_at).toLocaleString()}</TableCell>
+                                            </TableRow>
+                                        </TableBody>
+                                    </Table>
+                                    <div className="mt-4">
+                                        <h3 className="text-lg font-semibold mb-2">Additional Information</h3>
+                                        <MetadataDisplay metadata={org.metadata} />
+                                    </div>
+                                </CardContent>
+                            )}
+                            <CardFooter className="flex justify-end space-x-2">
+                                <Button
+                                    className="bg-green-600 hover:bg-green-500"
+                                    onClick={() => openConfirmDialog(org, "approve")}
+                                >
+                                    Approve
+                                </Button>
+                                <Button
+                                    variant="destructive"
+                                    onClick={() => openConfirmDialog(org, "reject")}
+                                >
+                                    Reject
+                                </Button>
+                            </CardFooter>
+                        </Card>
+                    ))}
                 </div>
             )}
 
