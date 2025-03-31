@@ -3,7 +3,7 @@ import nodemailer from 'nodemailer'
 
 export async function POST(req: Request) {
   const body = await req.json()
-  const { organizationName, email, phone, address, website, reason } = body
+  const { organizationName, email, phone, address, website, reason, gstNumber } = body
 
   // Create a Nodemailer transporter
   const transporter = nodemailer.createTransport({
@@ -29,6 +29,7 @@ export async function POST(req: Request) {
       Phone: ${phone}
       Address: ${address}
       Website: ${website}
+      GST Number: ${gstNumber}
       Reason for Registration: ${reason}
     `,
   }

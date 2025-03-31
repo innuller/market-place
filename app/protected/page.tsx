@@ -1,14 +1,21 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { createClient } from "@/utils/supabase/server";
+'use client';
+
+import { useState, useEffect } from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { createClient } from "@/utils/supabase/client";
 import { redirect } from "next/navigation";
-import { InfoIcon, Mail, Phone, Calendar, Clock } from 'lucide-react';
+import { InfoIcon, Mail, Phone, Calendar, Clock, Percent, Edit2, Save, X } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Input } from "@/components/ui/input";
 
 interface UserMetadata {
     name?: string;
     phone_number?: string;
+    first_name?: string;
+    last_name?: string;
+    gst_number?: string;
 }
 
 interface UserData {
@@ -18,12 +25,35 @@ interface UserData {
     user_metadata?: UserMetadata;
 }
 
-export default async function Component() {
-    const supabase = await createClient();
+export default function Component() {
+    const supabase = createClient();
+    const [user, setUser] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
+    const [editMode, setEditMode] = useState<{[key: string]: boolean}>({});
+    const [formData, setFormData] = useState<{[key: string]: string}>({});
+    const [error, setError] = useState<string | null>(null);
 
-    const {
-        data: { user },
-    } = await supabase.auth.getUser();
+    useEffect(() => {
+        const getUser = async () => {
+            const { data: { user }, error } = await supabase.auth.getUser();
+            if (error) {
+                console.error('Error fetching user:', error.message);
+                return redirect("/signin");
+            }
+            if (user) {
+                setUser(user);
+                setFormData({
+                    gst_number: user.user_metadata?.gst_number || ''
+                });
+            }
+            setLoading(false);
+        };
+        getUser();
+    }, []);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
 
     if (!user) {
         return redirect("/signin");
@@ -40,9 +70,39 @@ export default async function Component() {
         });
     };
 
+    const handleEdit = (field: string) => {
+        setEditMode({ ...editMode, [field]: true });
+        setFormData({ ...formData, [field]: user[field] || user.user_metadata?.[field] || '' });
+    };
+
+    const handleCancel = (field: string) => {
+        setEditMode({ ...editMode, [field]: false });
+        setError(null);
+    };
+
+    const handleSave = async (field: string) => {
+        try {
+            if (field === 'gst_number') {
+                const { error } = await supabase.auth.updateUser({
+                    data: { [field]: formData[field] }
+                });
+                if (error) throw error;
+                setUser({
+                    ...user,
+                    user_metadata: {
+                        ...user.user_metadata,
+                        [field]: formData[field]
+                    }
+                });
+                setEditMode({ ...editMode, [field]: false });
+                setError(null);
+            }
+        } catch (error: any) {
+            setError(error.message);
+        }
+    };
+
     const name = `${user?.user_metadata?.first_name} ${user?.user_metadata?.last_name}` || 'User';
-    const email = user?.email || 'Not provided';
-    const phone = user?.user_metadata?.phone_number || 'Not provided';
     const lastSignIn = formatDate(user?.last_sign_in_at);
     const accountCreated = formatDate(user?.created_at);
 
@@ -57,21 +117,92 @@ export default async function Component() {
                     <CardTitle className="mt-4 text-2xl font-bold text-[#7AB80E]">{name}</CardTitle>
                 </CardHeader>
                 <CardContent className="pt-6">
+                    {error && <div className="text-red-500 mb-4">{error}</div>}
                     <dl className="space-y-4">
-                        <div className="flex items-center">
-                            <Mail className="w-5 h-5 mr-3 text-[#7AB80E]" />
-                            <div>
-                                <dt className="text-sm font-medium text-white/60">Email</dt>
-                                <dd className="mt-1 text-sm text-white">{email}</dd>
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center flex-grow">
+                                <Mail className="w-5 h-5 mr-3 text-[#7AB80E]" />
+                                <div className="flex-grow">
+                                    <dt className="text-sm font-medium text-white/60">Email</dt>
+                                    <dd className="mt-1 text-sm text-white">{user.email}</dd>
+                                </div>
+                            </div>
+                            {/* <div className="flex ml-2">
+                                {editMode.email ? (
+                                    <>
+                                        <Button
+                                            onClick={() => handleSave('email')}
+                                            size="sm"
+                                            className="mr-1 bg-[#7AB80E] hover:bg-[#8BC727]"
+                                        >
+                                            <Save className="h-4 w-4" />
+                                        </Button>
+                                        <Button
+                                            onClick={() => handleCancel('email')}
+                                            size="sm"
+                                            variant="destructive"
+                                        >
+                                            <X className="h-4 w-4" />
+                                        </Button>
+                                    </>
+                                ) : (
+                                    <Button
+                                        onClick={() => handleEdit('email')}
+                                        size="sm"
+                                        className="bg-transparent hover:bg-white/10"
+                                    >
+                                        <Edit2 className="h-4 w-4" />
+                                    </Button>
+                                )}
+                            </div> */}
+                        </div>
+
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center flex-grow">
+                                <Percent className="w-5 h-5 mr-3 text-[#7AB80E]" />
+                                <div className="flex-grow">
+                                    <dt className="text-sm font-medium text-white/60">GST</dt>
+                                    {editMode.gst_number ? (
+                                        <Input
+                                            value={formData.gst_number}
+                                            onChange={(e) => setFormData({ ...formData, gst_number: e.target.value })}
+                                            className="mt-1 bg-white/10 border-white/20 text-white"
+                                        />
+                                    ) : (
+                                        <dd className="mt-1 text-sm text-white">{user.user_metadata?.gst_number}</dd>
+                                    )}
+                                </div>
+                            </div>
+                            <div className="flex ml-2">
+                                {editMode.gst_number ? (
+                                    <>
+                                        <Button
+                                            onClick={() => handleSave('gst_number')}
+                                            size="sm"
+                                            className="mr-1 bg-[#7AB80E] hover:bg-[#8BC727]"
+                                        >
+                                            <Save className="h-4 w-4" />
+                                        </Button>
+                                        <Button
+                                            onClick={() => handleCancel('gst_number')}
+                                            size="sm"
+                                            variant="destructive"
+                                        >
+                                            <X className="h-4 w-4" />
+                                        </Button>
+                                    </>
+                                ) : (
+                                    <Button
+                                        onClick={() => handleEdit('gst_number')}
+                                        size="sm"
+                                        className="bg-transparent hover:bg-white/10"
+                                    >
+                                        <Edit2 className="h-4 w-4" />
+                                    </Button>
+                                )}
                             </div>
                         </div>
-                        <div className="flex items-center">
-                            <Phone className="w-5 h-5 mr-3 text-[#7AB80E]" />
-                            <div>
-                                <dt className="text-sm font-medium text-white/60">Phone</dt>
-                                <dd className="mt-1 text-sm text-white">{phone}</dd>
-                            </div>
-                        </div>
+
                         <div className="flex items-center">
                             <Clock className="w-5 h-5 mr-3 text-[#7AB80E]" />
                             <div>
@@ -79,6 +210,7 @@ export default async function Component() {
                                 <dd className="mt-1 text-sm text-white">{lastSignIn}</dd>
                             </div>
                         </div>
+
                         <div className="flex items-center">
                             <Calendar className="w-5 h-5 mr-3 text-[#7AB80E]" />
                             <div>
@@ -97,5 +229,5 @@ export default async function Component() {
                 </CardFooter>
             </Card>
         </div>
-    )
+    );
 }

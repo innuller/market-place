@@ -22,6 +22,7 @@ export default function UserSignUp() {
   const [error, setError] = useState(null)
   const [data, setData] = useState(null)
   const [showPassword, setShowPassword] = useState(false)
+  const [gstNumber, setGstNumber] = useState('')
   const router = useRouter()
 
   const handleSignUp = async (e: any) => {
@@ -34,7 +35,8 @@ export default function UserSignUp() {
           data: {
             first_name: firstName,
             last_name: lastName,
-            user_type: 'user'
+            user_type: 'user',
+            gst_number: gstNumber
           }
         }
       })
@@ -132,6 +134,19 @@ export default function UserSignUp() {
                 className="bg-white/10 text-white border-white/20"
               />
             </div>
+
+            <div>
+              <Label htmlFor="gstNumber">GST Number</Label>
+              <Input
+                id="gstNumber"
+                type="text"
+                value={gstNumber}
+                onChange={(e) => setGstNumber(e.target.value)}
+                placeholder="Enter your GST Number"
+                className="bg-white/10 text-white border-white/20"
+              />
+            </div>
+
             <div>
               <Label htmlFor="password">Password</Label>
               <div className="relative">
@@ -152,6 +167,7 @@ export default function UserSignUp() {
                 </button>
               </div>
             </div>
+
             {error && <p className="text-red-500">{error}</p>}
             <Button type="submit" className="w-full bg-[#7AB80E] hover:bg-[#8BC727] text-white">
               Sign Up

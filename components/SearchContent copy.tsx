@@ -56,47 +56,12 @@ export default function SearchContent() {
     }
   
     try {
-      // Fetch filter definitions to identify numeric filters
-      const { data: filterDefinitions, error: filterError } = await supabase
-        .from('filters')
-        .select('*');
-      
-      if (filterError) {
-        console.error('Error fetching filter definitions:', filterError);
-        return;
-      }
-
-      // Create a map of filter fields to their types
-      const filterTypes = filterDefinitions.reduce((acc: Record<string, string>, filter: any) => {
-        acc[filter.field] = filter.type;
-        return acc;
-      }, {});
-      
-      // Format filters and convert numeric values
       const formattedFilters = Object.entries(filters).reduce((acc, [key, values]) => {
-        // Handle nested object array filters (e.g., major_projects.name)
-        if (key.includes('.')) {
-          const [arrayField, objectKey] = key.split('.');
-          acc[arrayField] = {
-            key: objectKey,
-            values: Array.isArray(values) ? values : [values],
-            type: 'object_array'
-          };
-        }
-        // Check if this is a numeric filter
-        else if (filterTypes[key] === 'number') {
-          // Convert string values to numbers for numeric filters
-          acc[key] = Array.isArray(values) 
-            ? values.map(val => parseFloat(val) || 0) 
-            : [parseFloat(values[0]) || 0];
-        } else {
-          // Keep as strings for non-numeric filters
-          acc[key] = Array.isArray(values) ? values : [values];
-        }
+        acc[key] = Array.isArray(values) ? values : [values];
         return acc;
-      }, {} as Record<string, any>);
+      }, {} as Record<string, string[]>);
   
-      console.log('Formatted filters with type conversion:', formattedFilters);
+      console.log('Formatted filters:', formattedFilters);
   
       const { data, error } = await supabase.rpc('filter_organizations', {
         filters: formattedFilters,

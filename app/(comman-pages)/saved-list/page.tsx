@@ -47,12 +47,16 @@ export default function SavedCompaniesPage() {
         }
 
         fetchUserAndCompanies()
-        const subscription = subscribeToSavedCompanies()
+    }, [])
 
+    useEffect(() => {
+        if (!userId) return
+        
+        const subscription = subscribeToSavedCompanies()
         return () => {
             subscription.unsubscribe()
         }
-    }, [])
+    }, [userId])
 
     const fetchSavedCompanies = async (userId: string) => {
         const { data, error } = await supabase
@@ -77,7 +81,7 @@ export default function SavedCompaniesPage() {
 
     const subscribeToSavedCompanies = () => {
         return supabase
-            .channel('saved_companies_changes')
+            .channel(`saved_companies_changes_${userId}`)
             .on('postgres_changes',
                 {
                     event: '*',
@@ -85,11 +89,23 @@ export default function SavedCompaniesPage() {
                     table: 'saved_companies',
                     filter: `user_id=eq.${userId}`
                 },
-                (payload) => {
+                async (payload) => {
                     if (payload.eventType === 'DELETE') {
                         setSavedCompanies(prev => prev.filter(company => company.id !== payload.old.company_id))
+                        console.log('Company removed from list:', payload.old.company_id)
                     } else if (payload.eventType === 'INSERT') {
-                        fetchSavedCompanies(userId!)
+                        const { data, error } = await supabase
+                            .from('saved_companies')
+                            .select(`
+                                company_id,
+                                organizations_main (id, organization_name, email, metadata)
+                            `)
+                            .eq('company_id', payload.new.company_id)
+                            .single()
+                        
+                        if (!error && data) {
+                            setSavedCompanies(prev => [...prev, data.organizations_main as Organization])
+                        }
                     }
                 }
             )
@@ -142,14 +158,17 @@ export default function SavedCompaniesPage() {
                                             </CardDescription>
                                         </div>
                                         <div className="flex items-center space-x-2">
-                                            {/* <Button
+                                            <Button
                                                 variant="ghost"
                                                 size="icon"
-                                                onClick={() => handleRemoveCompany(org.id)}
+                                                onClick={async () => {
+                                                    await handleRemoveCompany(org.id);
+                                                    window.location.reload();
+                                                }}
                                                 className="text-[#7AB80E] hover:text-white hover:bg-white/10"
                                             >
                                                 <Save className={`h-4 w-4 ${savedCompanies.includes(org.id) ? 'text-[#7AB80E]' : ''}`} />
-                                            </Button> */}
+                                            </Button>
                                         </div>
                                     </CardHeader>
                                     <CardContent>

@@ -36,7 +36,7 @@ export function Header() {
     router.push('/')
   }
 
-  // console.log('User:', user)
+  console.log('User:', user)
 
   return (
     <header className="bg-[#003853] border-b border-white/10">
@@ -50,38 +50,34 @@ export function Header() {
             </SheetTrigger>
             <SheetContent side="left" className="bg-[#003853] text-white">
               <div className="flex flex-col gap-4 mt-8">
-                {(!user || user?.user_metadata?.user_type === 'user') && (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger className="text-lg">For Buyers</DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <DropdownMenuItem>
-                        <Link href="/search" className="w-full">Find Product/Service</Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <Link href="/search" className="w-full">Find Supplier</Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <Link href="/search" className="w-full">Find Catalog</Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <Link href="#" className="w-full">Contact Us</Link>
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                )}
-                {(!user || user?.user_metadata?.user_type === 'company') && (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger className="text-lg">For Suppliers</DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <DropdownMenuItem>
-                        <Link href="/auth" className="w-full">Register Your Business</Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <Link href="#" className="w-full">Contact Us</Link>
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                )}
+                <DropdownMenu>
+                  <DropdownMenuTrigger className="text-lg">For Buyers</DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem>
+                      <Link href="/search" className="w-full">Find Product/Service</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Link href="/search" className="w-full">Find Supplier</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Link href="/search" className="w-full">Find Catalog</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Link href="#" className="w-full">Contact Us</Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+                <DropdownMenu>
+                  <DropdownMenuTrigger className="text-lg">For Suppliers</DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem>
+                      <Link href="/auth" className="w-full">Register Your Business</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Link href="#" className="w-full">Contact Us</Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
                 <Link href="/about" className="text-lg">About Us</Link>
                 <Link href="/auth" className="text-lg">Register your business</Link>
               </div>
@@ -92,38 +88,34 @@ export function Header() {
             <Image src="/images/i/bg-Innuler-1.png" alt="Innuller" width={150} height={40} />
           </Link>
           <nav className="hidden lg:flex items-center gap-6 text-white/90">
-            {(!user || user?.user_metadata?.user_type === 'user') && (
-              <DropdownMenu>
-                <DropdownMenuTrigger className="hover:text-white">For Buyers</DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem>
-                    <Link href="/search" className="w-full">Find Product/Service</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Link href="/search" className="w-full">Find Supplier</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Link href="/search" className="w-full">Find Catalog</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Link href="#" className="w-full">Contact Us</Link>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
-            {(!user || user?.user_metadata?.user_type === 'company') && (
-              <DropdownMenu>
-                <DropdownMenuTrigger className="hover:text-white">For Suppliers</DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem>
-                    <Link href="/auth" className="w-full">Register Your Business</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Link href="#" className="w-full">Contact Us</Link>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
+            <DropdownMenu>
+              <DropdownMenuTrigger className="hover:text-white">For Buyers</DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem>
+                  <Link href="/search" className="w-full">Find Product/Service</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link href="/search" className="w-full">Find Supplier</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link href="/search" className="w-full">Find Catalog</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link href="#" className="w-full">Contact Us</Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="hover:text-white">For Suppliers</DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem>
+                  <Link href="/auth" className="w-full">Register Your Business</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link href="#" className="w-full">Contact Us</Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </nav>
         </div>
         <div className="flex items-center gap-2 md:gap-4">
