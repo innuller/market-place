@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Loader2, ChevronDown, ChevronUp } from 'lucide-react';
+import { Loader2, ChevronDown, ChevronUp, Trash2 } from 'lucide-react';
 import { redirect } from "next/navigation";
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
@@ -125,7 +125,7 @@ export default function AdminDashboard() {
     const [error, setError] = useState<string | null>(null);
     const [selectedOrg, setSelectedOrg] = useState<Organization | null>(null);
     const [isConfirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false);
-    const [actionType, setActionType] = useState<"approve" | "reject" | null>(null);
+    const [actionType, setActionType] = useState<"approve" | "reject" | "delete" | null>(null);
     const [isProcessing, setIsProcessing] = useState<boolean>(false);
     const [expandedOrgs, setExpandedOrgs] = useState<Set<string>>(new Set());
 
@@ -143,7 +143,7 @@ export default function AdminDashboard() {
             const { data, error } = await supabase
                 .from("organizations_main")
                 .select("*")
-                .eq("status", "pending");
+                // .neq("status", "deleted");
 
             if (error) {
                 setError("Error fetching pending organizations");
@@ -157,21 +157,39 @@ export default function AdminDashboard() {
         fetchPendingOrganizations();
     }, [supabase]);
 
-    const updateOrganizationStatus = async (status: "approved" | "rejected") => {
+    const updateOrganizationStatus = async (status: "approved" | "rejected" | "deleted") => {
         if (!selectedOrg) return;
 
         setIsProcessing(true);
-        const { error } = await supabase
-            .from("organizations_main")
-            .update({ status })
-            .eq("id", selectedOrg.id);
+        
+        if (status === "deleted" && selectedOrg.status === "deleted") {
+            // Permanently delete the record
+            const { error } = await supabase
+                .from("organizations_main")
+                .delete()
+                .eq("id", selectedOrg.id);
 
-        if (error) {
-            console.error(`Error updating organization status: ${error.message}`);
-            // TODO: Add error toast notification here
+            if (error) {
+                console.error(`Error deleting organization: ${error.message}`);
+                // TODO: Add error toast notification here
+            } else {
+                setOrganizations(organizations.filter((org) => org.id !== selectedOrg.id));
+                // TODO: Add success toast notification here
+            }
         } else {
-            setOrganizations(organizations.filter((org) => org.id !== selectedOrg.id));
-            // TODO: Add success toast notification here
+            // Update status
+            const { error } = await supabase
+                .from("organizations_main")
+                .update({ status })
+                .eq("id", selectedOrg.id);
+
+            if (error) {
+                console.error(`Error updating organization status: ${error.message}`);
+                // TODO: Add error toast notification here
+            } else {
+                setOrganizations(organizations.filter((org) => org.id !== selectedOrg.id));
+                // TODO: Add success toast notification here
+            }
         }
         setIsProcessing(false);
         setConfirmDialogOpen(false);
@@ -214,7 +232,7 @@ export default function AdminDashboard() {
 
     return (
         <div className="p-4 space-y-4">
-            <h1 className="text-2xl font-bold">Pending Organization Approvals</h1>
+            <h1 className="text-2xl font-bold">Organization Approvals Lists</h1>
             <ScrollArea className="h-[calc(100vh-8rem)]">
                 {organizations.length === 0 ? (
                     <Card>
@@ -257,7 +275,7 @@ export default function AdminDashboard() {
                                 {expandedOrgs.has(org.id) && (
                                     <CardContent>
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                            <Card>
+                                            {/* <Card>
                                                 <CardHeader>
                                                     <CardTitle className="text-sm">Contact Information</CardTitle>
                                                 </CardHeader>
@@ -281,8 +299,8 @@ export default function AdminDashboard() {
                                                         </Button>
                                                     </div>
                                                 </CardContent>
-                                            </Card>
-                                            <Card>
+                                            </Card> */}
+                                            {/* <Card>
                                                 <CardHeader>
                                                     <CardTitle className="text-sm">Timestamps</CardTitle>
                                                 </CardHeader>
@@ -300,7 +318,7 @@ export default function AdminDashboard() {
                                                         </span>
                                                     </div>
                                                 </CardContent>
-                                            </Card>
+                                            </Card> */}
                                         </div>
                                         <Separator className="my-6" />
                                         <div>
@@ -310,18 +328,32 @@ export default function AdminDashboard() {
                                     </CardContent>
                                 )}
                                 <CardFooter className="flex justify-end space-x-2">
-                                    <Button
-                                        className="bg-green-600 hover:bg-green-500"
-                                        onClick={() => openConfirmDialog(org, "approve")}
-                                    >
-                                        Approve
-                                    </Button>
-                                    <Button
-                                        variant="destructive"
-                                        onClick={() => openConfirmDialog(org, "reject")}
-                                    >
-                                        Reject
-                                    </Button>
+                                    {(org.status === "approved" || org.status === "deleted") && (
+                                        <Button
+                                            variant="outline"
+                                            size="icon"
+                                            onClick={() => openConfirmDialog(org, "delete")}
+                                            className="hover:bg-destructive hover:text-destructive-foreground"
+                                        >
+                                            <Trash2 className="h-4 w-4" />
+                                        </Button>
+                                    )}
+                                    {(!org.status || org.status === "pending") && (
+                                        <>
+                                            <Button
+                                                className="bg-green-600 hover:bg-green-500"
+                                                onClick={() => openConfirmDialog(org, "approve")}
+                                            >
+                                                Approve
+                                            </Button>
+                                            <Button
+                                                variant="destructive"
+                                                onClick={() => openConfirmDialog(org, "reject")}
+                                            >
+                                                Reject
+                                            </Button>
+                                        </>
+                                    )}
                                 </CardFooter>
                             </Card>
                         ))}
@@ -336,10 +368,12 @@ export default function AdminDashboard() {
                         <DialogTitle>
                             {actionType === "approve"
                                 ? `Approve ${selectedOrg?.organization_name}`
-                                : `Reject ${selectedOrg?.organization_name}`}
+                                : actionType === "reject"
+                                ? `Reject ${selectedOrg?.organization_name}`
+                                : `Delete ${selectedOrg?.organization_name}`}
                         </DialogTitle>
                         <DialogDescription>
-                            Are you sure you want to {actionType === "approve" ? "approve" : "reject"} this organization?
+                            Are you sure you want to {actionType === "approve" ? "approve" : actionType === "reject" ? "reject" : "delete"} this organization?
                             This action cannot be undone.
                         </DialogDescription>
                     </DialogHeader>
@@ -353,11 +387,11 @@ export default function AdminDashboard() {
                         </Button>
                         <Button
                             variant={actionType === "approve" ? "default" : "destructive"}
-                            onClick={() => updateOrganizationStatus(actionType === "approve" ? "approved" : "rejected")}
+                            onClick={() => updateOrganizationStatus(actionType === "approve" ? "approved" : actionType === "reject" ? "rejected" : "deleted")}
                             disabled={isProcessing}
                         >
                             {isProcessing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                            {actionType === "approve" ? "Approve" : "Reject"}
+                            {actionType === "approve" ? "Approve" : actionType === "reject" ? "Reject" : "Delete"}
                         </Button>
                     </DialogFooter>
                 </DialogContent>

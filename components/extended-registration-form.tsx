@@ -200,8 +200,8 @@ const formSchema = z.object({
   dunsNumber: z.string().optional(),
   isMSME: z.enum(["yes", "no"]),
   msmeAttachment: z.any().optional(),
-  panNumber: z.string(),
-  cinNumber: z.string(),
+  panNumber: z.string().optional(),
+  cinNumber: z.string().optional(),
   website: z.string().url({ message: "Please enter a valid URL" }),
   contactNumber: z.string(),
   fax: z.string().optional(),
@@ -210,16 +210,16 @@ const formSchema = z.object({
     message: "Please enter a valid email address for the director.",
   }),
   directorContactNumber: z.string(),
-  managementName: z.string(),
+  managementName: z.string().optional(),
   managementEmail: z.string().email({
     message: "Please enter a valid email address for the management.",
-  }),
-  managementContactNumber: z.string(),
-  emergencyPersonName: z.string(),
+  }).optional(),
+  managementContactNumber: z.string().optional(),
+  emergencyPersonName: z.string().optional(),
   emergencyPersonEmail: z.string().email({
     message: "Please enter a valid email address for the emergency contact.",
-  }),
-  emergencyPersonContactNumber: z.string(),
+  }).optional(),
+  emergencyPersonContactNumber: z.string().optional(),
   totalEmployees: z.string(),
   departments: z.array(z.string()).min(1, {
     message: "Please select at least one department.",
@@ -251,7 +251,7 @@ const formSchema = z.object({
     name: z.string().min(1, { message: "Sub-supplier name is required" }),
     location: z.string().min(1, { message: "Sub-supplier location is required" }),
     sourcingPercentage: z.number().min(0).max(100, { message: "Percentage must be between 0 and 100" }),
-  })),
+  })).optional(),
   majorProjects: z.array(z.object({
     name: z.string().min(1, { message: "Project name is required" }),
     location: z.string().min(1, { message: "Project location is required" }),
@@ -286,9 +286,9 @@ const formSchema = z.object({
   bankName: z.string().min(1, "Bank name is required"),
   bankBranchAddress: z.string().min(1, "Bank branch address is required"),
   turnoverLastThreeYears: z.array(z.object({
-    year: z.string(),
-    turnover: z.string().min(1, "Turnover is required"),
-  })).length(3),
+    year: z.string().optional(),
+    turnover: z.string().optional(),
+  })).length(3).optional(),
   childLabor: z.enum(["yes", "no"]),
   forcedLabor: z.enum(["yes", "no"]),
   nonDiscrimination: z.enum(["yes", "no"]),
@@ -302,8 +302,12 @@ const formSchema = z.object({
   otherDocumentation: z.any().optional(),
 })
 
-export default function ExtendedRegistrationForm() {
+interface ExtendedRegistrationFormProps {
+  initialData?: any;
+  isEditMode?: boolean;
+}
 
+export default function ExtendedRegistrationForm({ initialData, isEditMode = false }: ExtendedRegistrationFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [orgErr, setOrgErr] = useState<PostgrestError | null>(null)

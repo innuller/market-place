@@ -13,16 +13,28 @@ import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
 import { createClient } from '@/utils/supabase/client';
-
+import { filterConfigurations } from '@/utils/static-filters';
 const supabase = createClient();
 
 type FilterType = 'array' | 'string' | 'number' | 'boolean' | 'object';
+
+interface SubFilter {
+  id: string;
+  name: string;
+  field: string;
+  type: FilterType;
+  options?: string[];
+  min?: number;
+  max?: number;
+  step?: number;
+}
 
 interface Filter {
   id: string;
   name: string;
   field: string;
   type: FilterType;
+  subFilters?: SubFilter[];
   options?: string[];
   min?: number;
   max?: number;
@@ -42,6 +54,23 @@ interface FilterSectionProps {
 }
 
 const FilterSection = ({ filter, selectedFilters, onFilterChange }: FilterSectionProps) => {
+  if (filter.type === 'object' && filter.subFilters) {
+    return (
+      <div className="space-y-4">
+        {filter.subFilters.map((subFilter) => (
+          <div key={subFilter.id} className="space-y-2">
+            <h4 className="text-sm font-medium text-white/70">{subFilter.name}</h4>
+            <FilterSection
+              filter={subFilter}
+              selectedFilters={selectedFilters}
+              onFilterChange={(field, value) => onFilterChange(`${filter.field}.${field}`, value)}
+            />
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   switch (filter.type) {
     case 'array':
       return (

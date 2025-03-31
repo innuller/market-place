@@ -81,8 +81,8 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
               "Pan India presence: Services offered all over India across 100+ cities.",
-              "Attractive value proposition for local MSMEs: Justdial's value-added offerings of huge online visibility, customized website, mobile site and mobile app; all packaged together, make it an attractive value proposition for MSMEs, several of whom have continuous associations with INNULLER.",
-              "Local Expertise: With a strong and widespread sales force, years of experience and in-depth local market knowledge, Justdial enjoys significant expertise across all regions of the country.",
+              "Attractive value proposition for local MSMEs: Innuller's value-added offerings of huge online visibility, customized website, mobile site and mobile app; all packaged together, make it an attractive value proposition for MSMEs, several of whom have continuous associations with INNULLER.",
+              "Local Expertise: With a strong and widespread sales force, years of experience and in-depth local market knowledge, Innuller enjoys significant expertise across all regions of the country.",
               "Long operating history with a proven monetization model.",
               "Experienced management team"
             ].map((highlight, index) => (

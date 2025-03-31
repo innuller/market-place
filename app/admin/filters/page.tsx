@@ -28,6 +28,9 @@ interface Filter {
   min: number | null;
   max: number | null;
   step: number | null;
+  isNested?: boolean;
+  parentField?: string;
+  nestedField?: string;
 }
 
 export default function ManageFilters() {
@@ -88,6 +91,9 @@ export default function ManageFilters() {
             min: null,
             max: null,
             step: null,
+            isNested: false,
+            parentField: '',
+            nestedField: '',
           });
           setDialogOpen(true);
         }}>
@@ -152,15 +158,67 @@ export default function ManageFilters() {
                 }
               />
             </div>
-            <div>
-              <Label htmlFor="field">Field</Label>
-              <Input
-                id="field"
-                value={editFilter?.field || ''}
-                onChange={(e) =>
-                  setEditFilter((prev) => prev && { ...prev, field: e.target.value })
-                }
-              />
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="isNested">Is Nested Field?</Label>
+                <input
+                  type="checkbox"
+                  id="isNested"
+                  checked={editFilter?.isNested || false}
+                  onChange={(e) =>
+                    setEditFilter((prev) =>
+                      prev && { ...prev, isNested: e.target.checked })
+                  }
+                  className="ml-2"
+                />
+              </div>
+              {editFilter?.isNested ? (
+                <>
+                  <div>
+                    <Label htmlFor="parentField">Parent Field</Label>
+                    <Input
+                      id="parentField"
+                      value={editFilter?.parentField || ''}
+                      onChange={(e) =>
+                        setEditFilter((prev) =>
+                          prev && {
+                            ...prev,
+                            parentField: e.target.value,
+                            field: `${e.target.value}.${prev.nestedField || ''}`
+                          })
+                      }
+                      placeholder="e.g., major_projects"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="nestedField">Nested Field</Label>
+                    <Input
+                      id="nestedField"
+                      value={editFilter?.nestedField || ''}
+                      onChange={(e) =>
+                        setEditFilter((prev) =>
+                          prev && {
+                            ...prev,
+                            nestedField: e.target.value,
+                            field: `${prev.parentField || ''}.${e.target.value}`
+                          })
+                      }
+                      placeholder="e.g., location"
+                    />
+                  </div>
+                </>
+              ) : (
+                <div>
+                  <Label htmlFor="field">Field</Label>
+                  <Input
+                    id="field"
+                    value={editFilter?.field || ''}
+                    onChange={(e) =>
+                      setEditFilter((prev) => prev && { ...prev, field: e.target.value })
+                    }
+                  />
+                </div>
+              )}
             </div>
             <div>
               <Label htmlFor="type">Type</Label>

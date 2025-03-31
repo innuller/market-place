@@ -26,7 +26,7 @@ export default function PrivacyPolicy() {
                 }}
               >
                 <span
-                  style={{ fontFamily: "Arial", fontWeight: "bold", color: "#606060" }}
+                  style={{ fontFamily: "Arial", fontWeight: "bold", color: "#7AB80E" }}
                 >
                   {/* Privacy Policy */}
                 </span>
@@ -2992,7 +2992,7 @@ export default function PrivacyPolicy() {
                 >
                   <strong>
                     <span
-                      style={{ fontFamily: "Calibri", fontSize: "9pt", color: "#606060" }}
+                      style={{ fontFamily: "Calibri", fontSize: "9pt", color: "#7AB80E" }}
                     >
                       Processing of personal data of children:
                     </span>
@@ -4145,7 +4145,7 @@ export default function PrivacyPolicy() {
                   }}
                 >
                   <strong>
-                    <span style={{ fontSize: "9pt", color: "#606060" }}>
+                    <span style={{ fontSize: "9pt", color: "#7AB80E" }}>
                       Privacy by Design:
                     </span>
                   </strong>
@@ -4234,7 +4234,7 @@ export default function PrivacyPolicy() {
                   }}
                 >
                   <strong>
-                    <span style={{ fontSize: "9pt", color: "#606060" }}>
+                    <span style={{ fontSize: "9pt", color: "#7AB80E" }}>
                       Transparency:
                     </span>
                   </strong>{" "}
@@ -4350,7 +4350,7 @@ export default function PrivacyPolicy() {
                   }}
                 >
                   <strong>
-                    <span style={{ fontSize: "9pt", color: "#606060" }}>
+                    <span style={{ fontSize: "9pt", color: "#7AB80E" }}>
                       Security Safeguards:
                     </span>
                   </strong>{" "}
@@ -4376,7 +4376,7 @@ export default function PrivacyPolicy() {
                   }}
                 >
                   <strong>
-                    <span style={{ fontSize: "9pt", color: "#606060" }}>
+                    <span style={{ fontSize: "9pt", color: "#7AB80E" }}>
                       Personal Data Breach:
                     </span>
                   </strong>{" "}
@@ -4399,7 +4399,7 @@ export default function PrivacyPolicy() {
                   }}
                 >
                   <strong>
-                    <span style={{ fontSize: "9pt", color: "#606060" }}>
+                    <span style={{ fontSize: "9pt", color: "#7AB80E" }}>
                       Record-Keeping:
                     </span>
                   </strong>{" "}
@@ -4420,12 +4420,12 @@ export default function PrivacyPolicy() {
                   }}
                 >
                   <strong>
-                    <span style={{ fontSize: "9pt", color: "#606060" }}>
+                    <span style={{ fontSize: "9pt", color: "#7AB80E" }}>
                       Data Audits:
                     </span>
                   </strong>
                   <strong>
-                    <span style={{ fontSize: "9pt", color: "#606060" }}>&nbsp;</span>
+                    <span style={{ fontSize: "9pt", color: "#7AB80E" }}>&nbsp;</span>
                   </strong>
                   INNULLER shall have its policies and the conduct of its processing of
                   personal data audited annually by an independent data auditor. The data
@@ -4469,7 +4469,7 @@ export default function PrivacyPolicy() {
                   }}
                 >
                   <strong>
-                    <span style={{ fontSize: "9pt", color: "#606060" }}>
+                    <span style={{ fontSize: "9pt", color: "#7AB80E" }}>
                       Dispute Resolution &amp; Recourse:
                     </span>
                   </strong>
@@ -4501,12 +4501,12 @@ export default function PrivacyPolicy() {
                   }}
                 >
                   <strong>
-                    <span style={{ fontSize: "9pt", color: "#606060" }}>
+                    <span style={{ fontSize: "9pt", color: "#7AB80E" }}>
                       Dispute Resolution &amp; Escalation Process for Employees:
                     </span>
                   </strong>
                   <strong>
-                    <span style={{ fontSize: "9pt", color: "#606060" }}>&nbsp;</span>
+                    <span style={{ fontSize: "9pt", color: "#7AB80E" }}>&nbsp;</span>
                   </strong>
                   Employees with enquiries or complaints about the processing of their
                   personal information shall first discuss the matter with their immediate
@@ -4527,13 +4527,13 @@ export default function PrivacyPolicy() {
                   }}
                 >
                   <strong>
-                    <span style={{ fontSize: "9pt", color: "#606060" }}>
+                    <span style={{ fontSize: "9pt", color: "#7AB80E" }}>
                       Dispute Resolution &amp; Escalation Process for Customer / Third
                       Party:
                     </span>
                   </strong>
                   <strong>
-                    <span style={{ fontSize: "9pt", color: "#606060" }}>&nbsp;</span>
+                    <span style={{ fontSize: "9pt", color: "#7AB80E" }}>&nbsp;</span>
                   </strong>
                   Customers / Third Party with inquiries or complaints about the
                   processing of their personal information shall bring the matter to the
@@ -4636,7 +4636,7 @@ export default function PrivacyPolicy() {
                   style={{
                     fontFamily: '"Times New Roman"',
                     fontSize: "12pt",
-                    color: "#424242"
+                    // color: "#424242"
                   }}
                 >
                   1. In accordance with Information Technology Act 2000 and rules &amp;
@@ -4649,7 +4649,7 @@ export default function PrivacyPolicy() {
                   style={{
                     fontFamily: '"Times New Roman"',
                     fontSize: "12pt",
-                    color: "#424242"
+                    // color: "#424242"
                   }}
                 >
                   Name : Mr. Umesh T
@@ -4659,7 +4659,7 @@ export default function PrivacyPolicy() {
                   style={{
                     fontFamily: '"Times New Roman"',
                     fontSize: "12pt",
-                    color: "#424242"
+                    // color: "#424242"
                   }}
                 >
                   Address: 692 Udaipura, Puroshottampura at Aleewas, Rajasthan 303903
@@ -4670,7 +4670,7 @@ export default function PrivacyPolicy() {
                   style={{
                     fontFamily: '"Times New Roman"',
                     fontSize: "12pt",
-                    color: "#424242"
+                    // color: "#424242"
                   }}
                 >
                   Email:
@@ -4679,7 +4679,7 @@ export default function PrivacyPolicy() {
                   style={{
                     fontFamily: '"Times New Roman"',
                     fontSize: "12pt",
-                    color: "#424242"
+                    // color: "#424242"
                   }}
                 >
                   &nbsp;
@@ -4690,7 +4690,7 @@ export default function PrivacyPolicy() {
                       style={{
                         fontFamily: '"Times New Roman"',
                         fontSize: "9pt",
-                        color: "#0000ff"
+                        // color: "#0000ff"
                       }}
                     >
                       Contact@innuller.com
@@ -4710,7 +4710,7 @@ export default function PrivacyPolicy() {
                   style={{
                     fontFamily: '"Times New Roman"',
                     fontSize: "12pt",
-                    color: "#424242"
+                    // color: "#424242"
                   }}
                 >
                   2. If you have a query, issue, concern, or complaint in relation to
@@ -4722,7 +4722,7 @@ export default function PrivacyPolicy() {
                   style={{
                     fontFamily: '"Times New Roman"',
                     fontSize: "12pt",
-                    color: "#424242"
+                    // color: "#424242"
                   }}
                 >
                   &nbsp;
@@ -4733,7 +4733,7 @@ export default function PrivacyPolicy() {
                       style={{
                         fontFamily: '"Times New Roman"',
                         fontSize: "9pt",
-                        color: "#0000ff"
+                        // color: "#0000ff"
                       }}
                     >
                       privacy@innuller.com
@@ -4755,7 +4755,7 @@ export default function PrivacyPolicy() {
                   style={{
                     fontFamily: '"Times New Roman"',
                     fontSize: "12pt",
-                    color: "#424242"
+                    // color: "#424242"
                   }}
                 >
                   /
@@ -4769,7 +4769,7 @@ export default function PrivacyPolicy() {
                       style={{
                         fontFamily: '"Times New Roman"',
                         fontSize: "9pt",
-                        color: "#0000ff"
+                        // color: "#0000ff"
                       }}
                     >
                       grievanceofficer@innuller.com.

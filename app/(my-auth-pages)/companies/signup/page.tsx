@@ -16,6 +16,7 @@ export default function CompanySignUp() {
   const [phone, setPhone] = useState('')
   const [address, setAddress] = useState('')
   const [website, setWebsite] = useState('')
+  const [gstNumber, setGstNumber] = useState('')
   const [reason, setReason] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
@@ -31,6 +32,7 @@ export default function CompanySignUp() {
       phone,
       address,
       website,
+      gstNumber,
       reason
     }
 
@@ -55,6 +57,7 @@ export default function CompanySignUp() {
         setPhone('')
         setAddress('')
         setWebsite('')
+        setGstNumber('')
         setReason('')
       } else {
         throw new Error('Failed to send email')
@@ -81,6 +84,16 @@ export default function CompanySignUp() {
         </Alert>
       </div>
     )
+  }
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/[^0-9]/g, '')
+    setPhone(value)
+  }
+  
+  const handleGSTChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/[^0-9]/g, '')
+    setGstNumber(value)
   }
 
   return (
@@ -120,7 +133,7 @@ export default function CompanySignUp() {
                 id="phone"
                 type="tel"
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                onChange={handlePhoneChange}
                 className="bg-white/10 text-white border-white/20"
               />
             </div>
@@ -141,6 +154,17 @@ export default function CompanySignUp() {
                 type="url"
                 value={website}
                 onChange={(e) => setWebsite(e.target.value)}
+                className="bg-white/10 text-white border-white/20"
+              />
+            </div>
+            <div>
+              <Label htmlFor="gstNumber">GST Number</Label>
+              <Input
+                id="gstNumber"
+                type="text"
+                value={gstNumber}
+                onChange={handleGSTChange}
+                required
                 className="bg-white/10 text-white border-white/20"
               />
             </div>
@@ -177,3 +201,5 @@ export default function CompanySignUp() {
     </div>
   )
 }
+
+
