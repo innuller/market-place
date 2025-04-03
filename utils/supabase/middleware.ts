@@ -46,7 +46,7 @@ export const updateSession = async (request: NextRequest) => {
       return NextResponse.redirect(new URL("/users/signin", request.url));
     }
 
-    if (request.nextUrl.pathname.startsWith("/admin") && user.data.user.email !== "Registration@innuller.com") {
+    if (request.nextUrl.pathname.startsWith("/admin") && user.data.user.email !== "umeshtak34@gmail.com") {
       return NextResponse.redirect(new URL("/", request.url));
     }
     // if (request.nextUrl.pathname.startsWith("/forgot-password") && user.error) {
