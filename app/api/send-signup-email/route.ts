@@ -17,11 +17,11 @@ export async function POST(req: Request) {
       pass: process.env.EMAIL_PASS,
     },
   })
-
+ 
   const mailOptions = {
     from: process.env.EMAIL_USER,
     // to: 'contact@innuller.com',
-    to: 'contact@innuller.com',
+    to: `${email}`,
     subject: 'New Company Sign Up Request',
     text: `
       Organization Name: ${organizationName}
@@ -31,6 +31,7 @@ export async function POST(req: Request) {
       Website: ${website}
       GST Number: ${gstNumber}
       Reason for Registration: ${reason}
+      Follow this link to Register your Company : https://www.innuller.com/registration-form
     `,
   }
 
