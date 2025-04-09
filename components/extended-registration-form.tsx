@@ -308,6 +308,7 @@ interface ExtendedRegistrationFormProps {
 }
 
 export default function ExtendedRegistrationForm({ initialData, isEditMode = false }: ExtendedRegistrationFormProps) {
+  const [showRegistrationPopup, setShowRegistrationPopup] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [orgErr, setOrgErr] = useState<PostgrestError | null>(null)
@@ -583,6 +584,7 @@ export default function ExtendedRegistrationForm({ initialData, isEditMode = fal
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Extract top-level fields
+    setShowRegistrationPopup(true)
     setIsSubmitting(true)
     const { organizationName, email, ...restValues } = values;
 
@@ -743,8 +745,8 @@ export default function ExtendedRegistrationForm({ initialData, isEditMode = fal
 
       console.log(values);
       console.error('Error inserting data:', orgError);
-      throw orgError
-
+      // console.log("f")
+      
       if (orgData) {
         console.log(values);
         console.log('Successfully inserted data:', orgData);
@@ -752,29 +754,29 @@ export default function ExtendedRegistrationForm({ initialData, isEditMode = fal
         setIsSubmitted(true)
         // router.push('/')
       }
-
+      
       // Update user metadata with organization_id
       if (orgData && orgData[0]) {
         const { error: updateError } = await supabase.auth.updateUser({
           data: { organization_id: orgData[0].id }
         })
-
+        
         if (updateError) {
           console.log('updateError: ', updateError)
         }
         setIsSubmitted(true)
-
+        
       } else {
         throw new Error("Failed to create organization record")
       }
-
+      
       // TODO: From here it goes to catch block
       console.log('Successfully inserted data:', orgData)
       console.log('add feedback that user has been registered and is waiting for approval');
       setIsSubmitted(true)
-      router.push('/')
-
-
+      // router.push('/')
+      throw orgError
+      
     } catch (error: any) {
       console.error('Error in form submission --->', error)
       if (error.code === '23505' || error.message.includes('organizations_main_email_key')) {
@@ -795,14 +797,16 @@ export default function ExtendedRegistrationForm({ initialData, isEditMode = fal
     }
   }
 
-  if (isSubmitted) {
+  if (showRegistrationPopup) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-          <strong className="font-bold">Thank you for your registration!</strong>
-          <p className="block sm:inline">Please confrim your mail from the link we sent on your mail and then Please wait for approval from our team. Keep checking your email. <Link href="/" className="text-blue-500 hover:text-foreground underline underline-offset-1 ">Go back to the Homepage</Link></p>
-        </div>
-      </div>
+      <div className="flex items-center justify-center min-h-screen bg-[#003853] p-4">
+              <Alert className="w-full max-w-md bg-white/5 text-white border-white/10">
+                <AlertTitle>Thank you for your submission!</AlertTitle>
+                <AlertDescription>
+                  Your request has been received. Please wait for approval from our team. We will contact you soon.
+                </AlertDescription>
+              </Alert>
+            </div>
     )
   }
 
@@ -3553,14 +3557,31 @@ export default function ExtendedRegistrationForm({ initialData, isEditMode = fal
             />
           </div>
 
-          {form.watch("termsConditions") === "agree" ? (
-            <Button type="submit">Submit</Button>
-          ) :
+          {showRegistrationPopup ? (
+            <div className="flex items-center justify-center min-h-screen bg-[#003853] p-4">
+              <Alert className="w-full max-w-md bg-white/5 text-white border-white/10">
+                <AlertTitle>Thank you for your submission!</AlertTitle>
+                <AlertDescription>
+                  Your request has been received. Please wait for approval from our team. We will contact you soon.
+                </AlertDescription>
+              </Alert>
+            </div>
+          ) : (
             <>
-              <p className="text-sm text-red-500">Please Agree Terms and Condition to Submit Form</p>
-              <Button className="disabled: cursor-not-allowed" disabled>Submit</Button>
+              {form.watch("termsConditions") === "agree" ? (
+                <Button type="submit">Submit</Button>
+              ) : (
+                <>
+                  <p className="text-sm text-red-500">
+                    Please Agree Terms and Conditions to Submit Form
+                  </p>
+                  <Button className="disabled: cursor-not-allowed" disabled>
+                    Submit
+                  </Button>
+                </>
+              )}
             </>
-          }
+          )}
 
         </form>
       </Form>
