@@ -74,12 +74,22 @@ export default function CompanySignUp() {
   }
 
   if (isSubmitted) {
+    // return (
+      // <div className="flex items-center justify-center min-h-screen bg-[#003853] p-4">
+      //   <Alert className="w-full max-w-md bg-white/5 text-white border-white/10">
+      //     <AlertTitle>Thank you for your submission!</AlertTitle>
+      //     <AlertDescription>
+      //       Your request has been received. Please wait for approval from our team. We will contact you soon.
+      //     </AlertDescription>
+      //   </Alert>
+      // </div>
+    // )
     return (
       <div className="flex items-center justify-center min-h-screen bg-[#003853] p-4">
         <Alert className="w-full max-w-md bg-white/5 text-white border-white/10">
-          <AlertTitle>Thank you for your submission!</AlertTitle>
+          <AlertTitle>Thank you for your registration</AlertTitle>
           <AlertDescription>
-            Your request has been received. Please wait for approval from our team. We will contact you soon.
+            Please verify your email address to complete the registration process. Open mail for verification.
           </AlertDescription>
         </Alert>
       </div>
@@ -92,9 +102,11 @@ export default function CompanySignUp() {
   }
   
   const handleGSTChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/[^0-9]/g, '')
-    setGstNumber(value)
-  }
+    const value = e.target.value.toUpperCase(); // GST numbers are uppercase
+    const cleanedValue = value.replace(/[^A-Z0-9]/g, ''); // allow A-Z and 0-9 only
+    setGstNumber(cleanedValue);
+  };
+  
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-[#003853] p-4">
@@ -174,6 +186,7 @@ export default function CompanySignUp() {
                 id="reason"
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
+                maxLength={15}
                 required
                 className="bg-white/10 text-white border-white/20"
                 rows={4}
