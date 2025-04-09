@@ -40,55 +40,42 @@ export default function UserSignUp() {
           }
         }
       })
-
+  
       if (error) {
-        console.log('Error in singing up new user: ', error)
+        console.log('Error in signing up new user: ', error)
+        setError(error.message)
+        return
       }
-
-      if (userData) {
+  
+      if (userData?.user) {
         setData(userData)
         setIsSubmitted(true)
-        console.log(data.user.aud);
       }
-
-      // router.push('/search')
+  
     } catch (error: any) {
       setError(error.message)
-      console.log('Error signing up:', error.message);
-
+      console.log('Error signing up:', error.message)
     }
   }
+  
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword)
   }
 
-  if (isSubmitted) {
-
-    if (data.user.aud == "authenticated") {
-      return (
-        <div className="flex items-center justify-center min-h-screen bg-[#003853] p-4">
-          <Alert className="w-full max-w-md bg-white/5 text-white border-white/10">
-            <AlertTitle className='font-bold'>You are already registred</AlertTitle>
-            <AlertDescription>
-              Please go to Users <Link href="/users/signin" className='underline underline-offset-4 text-[#7AB80E] font-bold'>Sign In page to login.</Link>
-            </AlertDescription>
-          </Alert>
-        </div>
-      )
-    }
-
+  if (isSubmitted && data?.user) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-[#003853] p-4">
         <Alert className="w-full max-w-md bg-white/5 text-white border-white/10">
           <AlertTitle>Thank you for your registration</AlertTitle>
           <AlertDescription>
-            Please verify your email address to complete the registration process. Open mail for verification.
+          You’re all set! Start exploring our features and enjoy the experience 🚀
           </AlertDescription>
         </Alert>
       </div>
     )
   }
+  
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-[#003853] p-4">
@@ -176,7 +163,7 @@ export default function UserSignUp() {
         </CardContent>
         <CardFooter>
           <p className="text-sm text-center w-full">
-            Already have an account?{' '}
+            Already have an account?{''}
             <Link href="/users/signin" className="text-[#7AB80E] hover:underline">
               Sign In
             </Link>
