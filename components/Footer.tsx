@@ -19,17 +19,20 @@ export function FooterComponent() {
                         <div>
                             <h4 className="text-white text-lg font-bold mb-4">Quick Links</h4>
                             <div className="flex flex-col gap-2">
-                                <Link href="#" className="text-white/60 hover:text-white">
+                                <Link href="/" className="text-white/60 hover:text-white">
                                     Home
                                 </Link>
-                                <Link href="#" className="text-white/60 hover:text-white">
-                                    Features
+                                <Link href="/about" className="text-white/60 hover:text-white">
+                                    About Us
                                 </Link>
-                                <Link href="#" className="text-white/60 hover:text-white">
-                                    Pricing
+                                <Link href="/terms-conditions" className="text-white/60 hover:text-white">
+                                    Terms and Conditions
                                 </Link>
-                                <Link href="#" className="text-white/60 hover:text-white">
-                                    Contact
+                                <Link href="/privacy-policy" className="text-white/60 hover:text-white">
+                                    Privacy Policy
+                                </Link>
+                                <Link href="/contact-us" className="text-white/60 hover:text-white">
+                                    Contact Us
                                 </Link>
                             </div>
                         </div>
