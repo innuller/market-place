@@ -311,10 +311,10 @@ export default function Index() {
               </div>
             </div>
             <div className="mt-12 text-center text-white/60">
-              © 2023 Innuller. All rights reserved.
+              © 2025 Innuller. All rights reserved.
             </div>
             <div className="mt-2 text-center text-white/60">
-              Website last modified on 28/01/2025
+              Website last modified on 20/04/2025
             </div>
           </div>
         </footer>
