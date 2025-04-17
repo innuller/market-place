@@ -102,7 +102,7 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
             )
           case 'catalog':
             return org.metadata.products_services?.some(product =>
-              product.catalog?.toLowerCase().includes(lowercasedTerm)
+              product.name?.toLowerCase().includes(lowercasedTerm)
             )
           case 'all':
           default:
