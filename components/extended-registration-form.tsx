@@ -39,6 +39,15 @@ const legalStatuses = [
   "Limited Liability Company (LLC)",
   "Corporation",
   "Non-Profit Organization",
+  "Limited",
+  "Service provider",
+  "Agency",
+  "HUF",
+  "Trust",
+  "PSU/Govt.",
+  "Start-up",
+  "Research Institute",
+  "Other.."
 ]
 
 const weekdays = [
