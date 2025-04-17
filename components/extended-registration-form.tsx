@@ -211,9 +211,9 @@ const formSchema = z.object({
   }),
   directorContactNumber: z.string(),
   managementName: z.string().optional(),
-  // managementEmail: z.string().email({
-  //   message: "Please enter a valid email address for the management.",
-  // }).optional(),
+  managementEmail: z.string().email({
+    message: "Please enter a valid email address for the management.",
+  }).optional(),
   managementContactNumber: z.string().optional(),
   emergencyPersonName: z.string().optional(),
   emergencyPersonEmail: z.string().email({
