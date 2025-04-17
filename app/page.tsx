@@ -284,9 +284,9 @@ export default function Index() {
                   <Link href="/privacy-policy" className="text-white/60 hover:text-white">
                     Privacy Policy
                   </Link>
-                  <Link href="#" className="text-white/60 hover:text-white">
+{/*                   <Link href="#" className="text-white/60 hover:text-white">
                     FAQ
-                  </Link>
+                  </Link> */}
                   <Link href="/contact-us" className="text-white/60 hover:text-white">
                     Contact Us
                   </Link>
