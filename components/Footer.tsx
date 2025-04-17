@@ -48,9 +48,6 @@ export function FooterComponent() {
                                 <Link href="https://x.com/innuller" className="text-white/60 hover:text-white">
                                     Twitter
                                 </Link>
-                                <Link href="https://www.linkedin.com/company/innuller/" className="text-white/60 hover:text-white">
-                    <Linkedin />
-                  </Link>
                             </div>
                         </div>
                     </div>
