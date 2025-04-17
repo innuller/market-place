@@ -211,9 +211,9 @@ const formSchema = z.object({
   }),
   directorContactNumber: z.string(),
   managementName: z.string().optional(),
-  managementEmail: z.string().email({
-    message: "Please enter a valid email address for the management.",
-  }).optional(),
+  // managementEmail: z.string().email({
+  //   message: "Please enter a valid email address for the management.",
+  // }).optional(),
   managementContactNumber: z.string().optional(),
   emergencyPersonName: z.string().optional(),
   emergencyPersonEmail: z.string().email({
@@ -1531,7 +1531,9 @@ export default function ExtendedRegistrationForm({ initialData, isEditMode = fal
             name="website"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Website</FormLabel>
+                <FormLabel>
+                  Website (format-https://www.example.com)
+                  </FormLabel>
                 <FormControl>
                   <Input type="url" {...field} />
                 </FormControl>
@@ -3121,7 +3123,7 @@ export default function ExtendedRegistrationForm({ initialData, isEditMode = fal
                 name="annualTurnover"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Annual Turnover *</FormLabel>
+                    <FormLabel>Annual Turnover * (In Cr.)</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
