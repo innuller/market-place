@@ -298,13 +298,13 @@ export default function Index() {
                   <Link href="#" className="text-white/60 hover:text-white">
                     <Facebook />
                   </Link>
-                  <Link href="#" className="text-white/60 hover:text-white">
+                  <Link href="Https://www.instagram.com/innuller/" className="text-white/60 hover:text-white">
                     <Instagram />
                   </Link>
-                  <Link href="#" className="text-white/60 hover:text-white">
+                  <Link href="https://x.com/innuller" className="text-white/60 hover:text-white">
                     <Twitter />
                   </Link>
-                  <Link href="#" className="text-white/60 hover:text-white">
+                  <Link href="https://www.linkedin.com/company/innuller/" className="text-white/60 hover:text-white">
                     <Linkedin />
                   </Link>
                 </div>
