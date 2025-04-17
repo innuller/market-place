@@ -287,7 +287,7 @@ export default function Index() {
                   <Link href="#" className="text-white/60 hover:text-white">
                     FAQ
                   </Link>
-                  <Link href="#" className="text-white/60 hover:text-white">
+                  <Link href="/contact-us" className="text-white/60 hover:text-white">
                     Contact Us
                   </Link>
                 </div>
