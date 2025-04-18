@@ -72,7 +72,7 @@ export default function TermsAndConditionsPage() {
                     <span style={{ fontFamily: "Arial" }}>
                       "), which promotes business between suppliers and buyers globally. It is
                       an agreement between You as the user of the Web Site/INNULLER PVT. LTD.
-                      Services and INNULLER, xxx Pvt. Ltd.. The expressions “You” “Your” or
+                      Services and Innuller, Innuller Pvt. Ltd.. The expressions “You” “Your” or
                       “User(s)” refers to any person who accesses or uses the Web Site for any
                       purpose.
                     </span>
