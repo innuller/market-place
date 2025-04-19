@@ -36,8 +36,6 @@ export function Header() {
     router.push('/')
   }
 
-  // console.log('User:', user)
-
   return (
     <header className="bg-[#003853] border-b border-white/10">
       <div className="container mx-auto px-4 h-20 flex items-center justify-between">
@@ -54,17 +52,17 @@ export function Header() {
                   <DropdownMenu>
                     <DropdownMenuTrigger className="text-lg">For Buyers</DropdownMenuTrigger>
                     <DropdownMenuContent>
-                      <DropdownMenuItem>
+                      <DropdownMenuItem asChild>
                         <Link href="/search" className="w-full">Find Product/Service</Link>
                       </DropdownMenuItem>
-                      <DropdownMenuItem>
+                      <DropdownMenuItem asChild>
                         <Link href="/search" className="w-full">Find Supplier</Link>
                       </DropdownMenuItem>
-                      <DropdownMenuItem>
+                      <DropdownMenuItem asChild>
                         <Link href="/search" className="w-full">Find Catalog</Link>
                       </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <Link href="#" className="w-full">Contact Us</Link>
+                      <DropdownMenuItem asChild>
+                        <Link href="/contact-us" className="w-full">Contact Us</Link>
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -73,11 +71,11 @@ export function Header() {
                   <DropdownMenu>
                     <DropdownMenuTrigger className="text-lg">For Suppliers</DropdownMenuTrigger>
                     <DropdownMenuContent>
-                      <DropdownMenuItem>
+                      <DropdownMenuItem asChild>
                         <Link href="/auth" className="w-full">Register Your Business</Link>
                       </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <Link href="#" className="w-full">Contact Us</Link>
+                      <DropdownMenuItem asChild>
+                        <Link href="/contact-us" className="w-full">Contact Us</Link>
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -88,7 +86,6 @@ export function Header() {
             </SheetContent>
           </Sheet>
           <Link href="/" className="text-white text-xl md:text-2xl font-bold">
-            {/* Innuller */}
             <Image src="/images/i/bg-Innuler-1.png" alt="Innuller" width={150} height={40} />
           </Link>
           <nav className="hidden lg:flex items-center gap-6 text-white/90">
@@ -96,17 +93,17 @@ export function Header() {
               <DropdownMenu>
                 <DropdownMenuTrigger className="hover:text-white">For Buyers</DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem asChild>
                     <Link href="/search" className="w-full">Find Product/Service</Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem asChild>
                     <Link href="/search" className="w-full">Find Supplier</Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem asChild>
                     <Link href="/search" className="w-full">Find Catalog</Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Link href="#" className="w-full">Contact Us</Link>
+                  <DropdownMenuItem asChild>
+                    <Link href="/contact-us" className="w-full">Contact Us</Link>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -115,11 +112,11 @@ export function Header() {
               <DropdownMenu>
                 <DropdownMenuTrigger className="hover:text-white">For Suppliers</DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem asChild>
                     <Link href="/auth" className="w-full">Register Your Business</Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Link href="#" className="w-full">Contact Us</Link>
+                  <DropdownMenuItem asChild>
+                    <Link href="/contact-us" className="w-full">Contact Us</Link>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
