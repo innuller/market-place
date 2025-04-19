@@ -49,27 +49,31 @@ export default function Index() {
   }
 
   const fetchSuggestions = useCallback(async (query: string) => {
-    if (query.length < 2) {
-      setSuggestions([])
-      return
+  if (query.length < 2) {
+    setSuggestions([])
+    return
+  }
+
+  try {
+    // 👇 Map "catalog" to "product_service" for Supabase RPC
+    const mappedType = searchType === "catalog" ? "product_service" : searchType;
+
+    const { data, error } = await supabase.rpc('search_organizations_2', {
+      search_type: mappedType,
+      search_query: query,
+    });
+
+    if (error) {
+      console.error('Error calling RPC:', error);
+      return;
     }
 
-    try {
-      const { data, error } = await supabase.rpc('search_organizations_2', {
-        search_type: searchType,
-        search_query: query,
-      });
+    setSuggestions(data || []);
+  } catch (err) {
+    console.error('Unexpected error:', err);
+  }
+}, [searchType])
 
-      if (error) {
-        console.error('Error calling RPC:', error);
-        return;
-      }
-
-      setSuggestions(data || []);
-    } catch (err) {
-      console.error('Unexpected error:', err);
-    }
-  }, [searchType])
 
   useEffect(() => {
     const debounceTimer = setTimeout(() => {
