@@ -270,7 +270,7 @@ export default function Index() {
               <div>
                 <h4 className="text-white text-lg font-bold mb-4">About Us</h4>
                 <p className="text-white/60">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris.
+                  Search and Buy with The Leading Industries Exploration Platform.
                 </p>
               </div>
               <div>
