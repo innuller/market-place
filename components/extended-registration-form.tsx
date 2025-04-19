@@ -113,6 +113,7 @@ const complianceStandards = [
   "EN 1090-1",
   "Machine directive 2006/42/EC",
   "ISO 9100:2016",
+  "ISO 22000:2018",
   "Other",
 ]
 
