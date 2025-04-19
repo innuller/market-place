@@ -55,7 +55,7 @@ export function FooterComponent() {
                         © 2025 Innuller. All rights reserved.
                     </div>
                     <div className="mt-2 text-center text-white/60">
-                        Website last modified on 10/04/2025
+                        Website last modified on 18/04/2025
                     </div>
                 </div>
             </footer>
