@@ -14,15 +14,15 @@ export default function ContactPage() {
           <Card className="bg-[#004b6e] border-[#7AB80E]">
             <CardContent className="p-6 space-y-4">
               <h2 className="text-2xl font-semibold text-[#7AB80E] mb-4">Reach Us At</h2>
-              <p className="text-lg">📍 <strong>Address:</strong> 123 Business Park, Sector 99, Noida, India</p>
-              <p className="text-lg">📞 <strong>Phone:</strong> +91-9876543210</p>
+              <p className="text-lg">📍 <strong>Address:</strong> 86, IDSMT, Jaipur – 303901</p>
+              <p className="text-lg">📞 <strong>Phone:</strong> +91-9829337793</p>
               <p className="text-lg">
                 ✉️ <strong>Email:</strong>{' '}
                 <Link href="mailto:contact@innuller.com" className="text-[#7AB80E] hover:underline">
                   contact@innuller.com
                 </Link>
               </p>
-              <p className="text-lg">🌐 <strong>Website:</strong> www.innuller.com</p>
+              <p className="text-lg">🌐 <strong>Website:</strong> https://www.innuller.com</p>
             </CardContent>
           </Card>
         </div>
