@@ -35,6 +35,7 @@ const categories = [
 
 const legalStatuses = [
   "Sole Proprietorship",
+  "Private Limited",
   "Partnership",
   "Limited Liability Company (LLC)",
   "Corporation",
