@@ -29,16 +29,17 @@ export default function ContactPage() {
 
         {/* Full Width Map */}
         <div className="w-full rounded-lg overflow-hidden shadow-lg border border-[#7AB80E]">
-          <iframe
-            src="https://maps.google.com/maps?q=Noida&t=&z=13&ie=UTF8&iwloc=&output=embed"
-            width="100%"
-            height="450"
-            loading="lazy"
-            className="w-full"
-            allowFullScreen
-            style={{ border: '0' }}
-          ></iframe>
-        </div>
+  <iframe
+    src="https://maps.google.com/maps?q=86,IDSMT,Jaipur%20–%20303901&t=&z=15&ie=UTF8&iwloc=&output=embed"
+    width="100%"
+    height="450"
+    loading="lazy"
+    className="w-full"
+    allowFullScreen
+    style={{ border: '0' }}
+  ></iframe>
+</div>
+
       </div>
     </div>
   )
