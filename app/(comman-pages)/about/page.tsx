@@ -103,7 +103,7 @@ export default function AboutPage() {
 
         <section className="text-center">
           <h2 className="text-3xl font-semibold mb-6 text-[#7AB80E]">Join the Team</h2>
-          <p className="mb-6 text-lg">At Innuller, we are always on the lookout for talented individuals who are willing to become a part of our success story. If you share our commitment to empowering businesses, contact us without hesitation on email id <u><Link href="mailto:contact@innullar.com" className="text-[#7AB80E]">contact@innullar.com</Link></u></p>
+          <p className="mb-6 text-lg">At Innuller, we are always on the lookout for talented individuals who are willing to become a part of our success story. If you share our commitment to empowering businesses, contact us without hesitation on email id <u><Link href="mailto:contact@innullar.com" className="text-[#7AB80E]">contact@innuller.com</Link></u></p>
           {/* <Button className="bg-[#7AB80E] text-white px-8 py-3 rounded-lg text-lg hover:bg-[#63a029] transition-colors" onClick={() => window.open('mailto:contact@innullar.com ', '_blank')}>
             Mail Us
           </Button> */}
