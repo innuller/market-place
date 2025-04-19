@@ -1,5 +1,6 @@
 import Link from "next/link"
 import * as React from "react"
+import { Instagram, Facebook, Twitter, Linkedin } from "lucide-react"
 
 export function FooterComponent() {
 
@@ -40,13 +41,16 @@ export function FooterComponent() {
                             <h4 className="text-white text-lg font-bold mb-4">Follow Us</h4>
                             <div className="flex gap-4">
                                 <Link href="#" className="text-white/60 hover:text-white">
-                                    Facebook
+                                    <Facebook />
                                 </Link>
                                 <Link href="Https://www.instagram.com/innuller/" className="text-white/60 hover:text-white">
-                                    Instagram
+                                    <Instagram />
                                 </Link>
                                 <Link href="https://x.com/innuller" className="text-white/60 hover:text-white">
-                                    Twitter
+                                    <Twitter />
+                                </Link>
+                                <Link href="https://www.linkedin.com/company/innuller/" className="text-white/60 hover:text-white">
+                                    <Linkedin />
                                 </Link>
                             </div>
                         </div>
