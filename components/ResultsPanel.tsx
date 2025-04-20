@@ -313,7 +313,7 @@ export default function ResultsPanel({ results }: ResultsPanelProps) {
               <SelectItem value="all">All</SelectItem>
               <SelectItem value="supplier">Supplier</SelectItem>
               <SelectItem value="product_service">Product / Service</SelectItem>
-              <SelectItem value="catalog">Catalog</SelectItem>
+              <SelectItem value="catalog">Catalogue</SelectItem>
             </SelectContent>
           </Select>
           <div className="flex-grow relative">
