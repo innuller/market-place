@@ -100,7 +100,7 @@ export function Header() {
                     <Link href="/search" className="w-full">Find Supplier</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/search" className="w-full">Find Catalog</Link>
+                    <Link href="/search" className="w-full">Find Catalogue</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link href="/contact-us" className="w-full">Contact Us</Link>
