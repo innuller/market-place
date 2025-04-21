@@ -186,7 +186,7 @@ export default function CompanySignUp() {
                 id="reason"
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
-                maxLength={15}
+                maxLength={1000}
                 required
                 className="bg-white/10 text-white border-white/20"
                 rows={4}
