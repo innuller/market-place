@@ -14,7 +14,7 @@ export default function AboutPage() {
           <div className="flex flex-col md:flex-row items-center gap-8">
             <div className="md:w-1/2">
               <p className="mb-4 text-lg">We are fast growing marketplace and a one-stop expert solution for all business needs, empowering suppliers by connecting them buyers across the nation.</p>
-              <p className="text-lg">At the heart of INNULLER is our commitment to creating value for Indian business communities through strong network effects. We make business effortless for all by ensuring access to a wider market, technology, and finance.</p>
+              <p className="text-lg">At the heart of Innuller is our commitment to creating value for Indian business communities through strong network effects. We make business effortless for all by ensuring access to a wider market, technology, and finance.</p>
             </div>
             <div className="md:w-1/2">
               <Image 
