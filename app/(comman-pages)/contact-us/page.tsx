@@ -15,7 +15,7 @@ export default function ContactPage() {
             <CardContent className="p-6 space-y-4">
               <h2 className="text-2xl font-semibold text-[#7AB80E] mb-4">Reach Us At</h2>
               <p className="text-lg">📍 <strong>Address:</strong> 86, IDSMT, Jaipur – 303901</p>
-              <p className="text-lg">📞 <strong>Phone:</strong> +91-9829337793</p>
+              <p className="text-lg">📞 <strong>Phone:</strong> +91-9829307457</p>
               <p className="text-lg">
                 ✉️ <strong>Email:</strong>{' '}
                 <Link href="mailto:contact@innuller.com" className="text-[#7AB80E] hover:underline">
