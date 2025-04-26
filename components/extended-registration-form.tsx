@@ -227,9 +227,9 @@ const formSchema = z.object({
   }).optional(),
   managementContactNumber: z.string().optional(),
   emergencyPersonName: z.string().optional(),
-  emergencyPersonEmail: z.string().email({
+  emergencyPersonEmail: z.string().email.optional()({
     message: "Please enter a valid email address for the emergency contact.",
-  }).optional(),
+  }),
   emergencyPersonContactNumber: z.string().optional(),
   totalEmployees: z.string(),
   departments: z.array(z.string()).min(1, {
