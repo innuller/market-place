@@ -235,47 +235,34 @@ export default function Index() {
           </div>
         </div>
 
-        {/* Client Carousel */}
-const companyNames = [
-  "Innuller",
-  "Sigma Instruments",
-  "Shilp Laser",
-  "Alok Fabrications",
-  "Technofab Engineers",
-  "And Many more...."
-];
-
-<div className="py-16 bg-white/5">
-  <div className="container mx-auto px-4">
-    <h2 className="text-white text-xl sm:text-2xl md:text-3xl font-bold text-center mb-12">
-      Trusted by Industry Leaders
-    </h2>
-  </div>
-
-  <div className="relative overflow-hidden">
-    <div className="flex animate-scroll">
-      {[...Array(2)].map((_, groupIndex) => (
-        <div
-          key={groupIndex}
-          className="flex min-w-full justify-around items-center gap-4 md:gap-8 px-4"
-        >
-          {companyNames.map((name, index) => (
-            <div
-              key={index}
-              className="flex items-center justify-center bg-white/10 rounded-lg p-4 md:p-6 min-w-[120px] md:min-w-[200px] h-16 md:h-24"
-              aria-label={`Client logo ${name}`}
-            >
-              <div className="text-white/80 text-sm md:text-base font-semibold">
-                {name}
-              </div>
+      {/* Client Carousel */}
+        <div className="py-16 bg-white/5">
+          <div className="container mx-auto px-4">
+            <h2 className="text-white text-xl sm:text-2xl md:text-3xl font-bold text-center mb-12">
+              Trusted by Industry Leaders
+            </h2>
+          </div>
+          <div className="relative overflow-hidden">
+            <div className="flex animate-scroll">
+              {[...Array(2)].map((_, groupIndex) => (
+                <div key={groupIndex} className="flex min-w-full justify-around items-center gap-4 md:gap-8 px-4">
+                  {[...Array(6)].map((_, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-center bg-white/10 rounded-lg p-4 md:p-6 min-w-[120px] md:min-w-[200px] h-16 md:h-24"
+                      aria-label={`Client logo ${index + 1}`}
+                    >
+                      <div className="text-white/80 text-sm md:text-base font-semibold">
+                        Company {index + 1}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
-      ))}
-    </div>
-  </div>
-</div>
-
+        
         {/* Footer */}
         <footer className="border-t border-white/10 mt-16">
           <div className="container mx-auto px-4 py-12">
