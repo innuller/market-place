@@ -20,6 +20,15 @@ export const metadata = {
   description: "Find Suppliers and Buyers",
 };
 
+export const metadata = {
+  metadataBase: new URL(defaultUrl),
+  title: "Market Place",
+  description: "Find Suppliers and Buyers",
+  verification: {
+    google: "tTcdCpNydyODSsfVMV6RBKY0zq7GP8_Q7gut4QGBd60", // 
+  },
+};
+
 export default function RootLayout({
   children,
 }: {
